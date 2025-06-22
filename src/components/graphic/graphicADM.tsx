@@ -152,15 +152,15 @@ export function ChartAreaInteractive() {
 
   return (
     <Card className="pt-0">
-      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
-        <div className="grid flex-1 gap-1">
-          <CardTitle>Emoções</CardTitle>
-          <CardDescription>
+      <CardHeader className="flex items-center gap-2 space-y-0 border-b py-3 sm:py-5 sm:flex-row flex-col">
+        <div className="grid flex-1 gap-1 text-center sm:text-left">
+          <CardTitle className="text-lg sm:text-xl">Emoções</CardTitle>
+          <CardDescription className="text-sm">
             Mostra as emoções dos usuários dos últimos 3 meses.
           </CardDescription>
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
-          <SelectTrigger className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex">
+          <SelectTrigger className="w-full sm:w-[160px] rounded-lg sm:ml-auto">
             <SelectValue placeholder="Últimos 3 meses" />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
@@ -176,10 +176,10 @@ export function ChartAreaInteractive() {
           </SelectContent>
         </Select>
       </CardHeader>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+      <CardContent className="px-2 pt-3 sm:px-6 sm:pt-6">
         <ChartContainer
           config={chartConfig}
-          className="aspect-auto h-[250px] w-full"
+          className="aspect-auto h-[200px] sm:h-[250px] lg:h-[300px] w-full"
         >
           <AreaChart data={filteredData}>
             <defs>
@@ -211,7 +211,8 @@ export function ChartAreaInteractive() {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              minTickGap={32}
+              minTickGap={20}
+              tick={{ fontSize: 12 }}
               tickFormatter={(value) => {
                 const date = new Date(value);
                 return date.toLocaleDateString("pt-br", {
@@ -231,6 +232,7 @@ export function ChartAreaInteractive() {
                     });
                   }}
                   indicator="dot"
+                  className="max-w-[200px] text-xs"
                 />
               }
             />
@@ -246,7 +248,12 @@ export function ChartAreaInteractive() {
                 />
               )
             )}
-            <ChartLegend content={<ChartLegendContent />} />
+            <ChartLegend
+              content={
+                <ChartLegendContent className="flex-wrap justify-center gap-2 text-xs" />
+              }
+              wrapperStyle={{ paddingTop: "10px" }}
+            />
           </AreaChart>
         </ChartContainer>
       </CardContent>

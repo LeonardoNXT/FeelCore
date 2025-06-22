@@ -61,7 +61,7 @@ export function ChartPieDonutText() {
   }, []);
 
   return (
-    <Card className="flex flex-col w-1/2">
+    <Card className="flex flex-col w-full h-full">
       <CardHeader className="items-center pb-0">
         <CardTitle>Idade</CardTitle>
         <CardDescription>Janeiro - Junho 2025</CardDescription>

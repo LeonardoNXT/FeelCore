@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import SideBarPage from "@/components/sidebar/links";
 import { useUserStore } from "@/stores/userStore";
@@ -13,6 +13,7 @@ export default function AdminLayout({
 }) {
   const { user, setUser } = useUserStore();
   const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const verify = async () => {
@@ -41,16 +42,25 @@ export default function AdminLayout({
     verify();
   }, [user, setUser, router]);
 
+  const handleMenuToggle = (isOpen: boolean) => {
+    setIsMobileMenuOpen(isOpen);
+  };
+
   return (
     <motion.section
-      className="flex w-full relative"
+      className="flex w-full relative min-h-screen"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      <SideBarPage />
+      <SideBarPage onMenuToggle={handleMenuToggle} />
+
       <motion.main
-        className="w-[85%] h-full flex p-[0.5vw] "
+        className={`
+          flex-1 h-full flex p-[0.5vw] transition-all duration-300
+          md:w-[85%] w-full
+          ${isMobileMenuOpen ? "md:ml-0 ml-0" : "ml-0"}
+        `}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}

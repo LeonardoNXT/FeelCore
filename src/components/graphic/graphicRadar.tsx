@@ -38,7 +38,7 @@ const chartConfig = {
 
 export function ChartRadarDefault() {
   return (
-    <Card className="w-1/2">
+    <Card className="w-full">
       <CardHeader className="items-center pb-4">
         <CardTitle>Transtornos</CardTitle>
         <CardDescription>Mostra 6 months</CardDescription>

@@ -171,55 +171,69 @@ export default function CadastroEmailSenha({ setPagina }: Props) {
   if (funcionario.name) {
     const firstName = funcionario.name.split(" ")[0] || " ";
     return (
-      <div className="flex flex-col items-center" ref={divReference}>
-        <p className="text-[1vw] text-center">
+      <div
+        className="flex flex-col items-center px-4 sm:px-0"
+        ref={divReference}
+      >
+        <p className="text-sm sm:text-base md:text-[1vw] text-center mb-4 sm:mb-0">
           Defina os Identificadores de
           <br />
-          <span className="font-bold text-[7vw] leading-[0.7]">
+          <span className="font-bold text-4xl sm:text-6xl md:text-[7vw] leading-[0.7] block mt-2">
             {firstName}
           </span>
         </p>
-        <div className="flex border-1 rounded-[2vw] gap-[1vw] mt-[1vw] p-[1vw]">
-          <button
-            ref={returnButton}
-            className={`px-[1.5vw] py-[0.8vw] rounded-[2vw] border text-[0.8vw] transition-all duration-300 hover:bg-[#ff8282]`}
-            onClick={returnPage}
-          >
-            Voltar
-          </button>
-          <form className="w-[100%] flex gap-[1vw]">
-            <input
-              ref={inputEmail}
-              onChange={existInput}
-              type="email"
-              placeholder="Email:"
-              className="border-1 px-[2vw] py-[0.8vw] pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6]   rounded-[2vw] text-[0.8vw]  w-full bg-[#000]"
-            />
-            <input
-              ref={inputNumber}
-              type="tel"
-              value={phone}
-              onChange={(e) => {
-                handleChange(e);
-                existInput();
-              }}
-              placeholder="Celular:"
-              className="w-1/2 border-1 px-[1vw] py-[0.8vw] transition-all text-[0.8vw] duration-300 focus:border-[#e6e6e6] text-center rounded-[2vw]  bg-[#000]"
-            />
+
+        <div className="w-full max-w-[100%] sm:max-w-none">
+          <div className="flex flex-col sm:flex-row border-1 rounded-xl sm:rounded-[2vw] gap-3 sm:gap-[1vw] mt-6 sm:mt-[1vw] p-4 sm:p-[1vw]">
+            {/* Botão Voltar - Mobile first */}
             <button
-              ref={submitButton}
-              type="submit"
-              disabled={isDisabled}
-              onClick={changePage}
-              className={`px-[1.5vw] py-[0.8vw] rounded-[2vw] border text-[0.8vw] transition-all duration-300 ${
-                isDisabled
-                  ? "bg-[#000000] text-[#525252] cursor-not-allowed"
-                  : "bg-[#ebebeb] text-[#333] hover:bg-white"
-              }`}
+              ref={returnButton}
+              className="px-6 py-3 sm:px-[1.5vw] sm:py-[0.8vw] rounded-xl sm:rounded-[2vw] border text-sm sm:text-[0.8vw] transition-all duration-300 hover:bg-[#ff8282] active:scale-95 order-3 sm:order-1 w-full sm:w-auto"
+              onClick={returnPage}
             >
-              Próximo
+              Voltar
             </button>
-          </form>
+
+            {/* Form Container */}
+            <form className="w-full flex flex-col sm:flex-row gap-3 sm:gap-[1vw] order-1 sm:order-2">
+              {/* Email Input */}
+              <input
+                ref={inputEmail}
+                onChange={existInput}
+                type="email"
+                placeholder="Email:"
+                className="border-1 px-4 py-3 sm:px-[2vw] sm:py-[0.8vw] sm:pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] focus:outline-none rounded-xl sm:rounded-[2vw] text-sm sm:text-[0.8vw] w-full bg-[#000]"
+              />
+
+              {/* Phone Input */}
+              <input
+                ref={inputNumber}
+                type="tel"
+                value={phone}
+                onChange={(e) => {
+                  handleChange(e);
+                  existInput();
+                }}
+                placeholder="Celular:"
+                className="w-full sm:w-1/2 border-1 px-4 py-3 sm:px-[1vw] sm:py-[0.8vw] transition-all text-sm sm:text-[0.8vw] duration-300 focus:border-[#e6e6e6] focus:outline-none text-center rounded-xl sm:rounded-[2vw] bg-[#000]"
+              />
+
+              {/* Submit Button - Mobile Separate */}
+              <button
+                ref={submitButton}
+                type="submit"
+                disabled={isDisabled}
+                onClick={changePage}
+                className={`px-6 py-3 sm:px-[1.5vw] sm:py-[0.8vw] rounded-xl sm:rounded-[2vw] border text-sm sm:text-[0.8vw] transition-all duration-300 font-medium w-full sm:w-auto ${
+                  isDisabled
+                    ? "bg-[#000000] text-[#525252] cursor-not-allowed"
+                    : "bg-[#ebebeb] text-[#333] hover:bg-white active:scale-95"
+                }`}
+              >
+                Próximo
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     );

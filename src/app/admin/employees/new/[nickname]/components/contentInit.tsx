@@ -100,48 +100,53 @@ export default function CadastroInicio({ setPagina }: Props) {
   return (
     <>
       <div
-        className="w-full h-full flex justify-center items-center flex-col"
+        className="w-full h-full flex justify-center items-center flex-col px-4 sm:px-0"
         ref={divOpacity}
       >
-        <p className="text-center">
-          <span className="text-[4vw]">
+        <p className="text-center mb-4 sm:mb-0">
+          <span className="text-2xl sm:text-3xl md:text-[4vw] font-medium">
             Olá, {user.name}!<br />
           </span>
-          Digite nos campos para cadastrar o novo funcionário.
+          <span className="text-sm sm:text-base">
+            Digite nos campos para cadastrar o novo funcionário.
+          </span>
         </p>
-        <div className="w-1/2">
+
+        <div className="w-full max-w-md sm:w-1/2 sm:max-w-none">
           <form
-            className="flex gap-[1vw] bg-[#05050504] border-1 mb-[1vw] border-[#474747] p-[1vw] rounded-[2vw] mt-[2vw]"
-            onSubmit={(e) => e.preventDefault}
+            className="flex flex-col sm:flex-row gap-3 sm:gap-[1vw] bg-[#05050504] border-1 mb-4 sm:mb-[1vw] border-[#474747] p-4 sm:p-[1vw] rounded-xl sm:rounded-[2vw] mt-6 sm:mt-[2vw]"
+            onSubmit={(e) => e.preventDefault()}
           >
-            <div className="w-1/2">
+            <div className="w-full sm:w-1/2">
               <input
                 ref={inputNameRef}
                 required
                 type="text"
                 placeholder="Nome:"
-                className="border-1 px-[2vw] py-[0.8vw] pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-[2vw] w-full text-[0.8vw] bg-[#000]"
+                className="border-1 px-4 py-3 sm:px-[2vw] sm:py-[0.8vw] sm:pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-xl sm:rounded-[2vw] w-full text-sm sm:text-[0.8vw] bg-[#000] focus:outline-none"
                 onChange={verifyInputs}
               />
             </div>
-            <div className="w-1/2">
+
+            <div className="w-full sm:w-1/2">
               <input
                 ref={inputLastNameRef}
                 required
                 type="text"
                 placeholder="Sobrenome:"
-                className="border-1 px-[2vw] py-[0.8vw] pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-[2vw] text-[0.8vw] w-full bg-[#000]"
+                className="border-1 px-4 py-3 sm:px-[2vw] sm:py-[0.8vw] sm:pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-xl sm:rounded-[2vw] text-sm sm:text-[0.8vw] w-full bg-[#000] focus:outline-none"
                 onChange={verifyInputs}
               />
             </div>
+
             <button
               type="submit"
               disabled={isButtonDisabled}
               onClick={changePage}
-              className={`px-[1.5vw] py-[0.8vw] rounded-[2vw] border text-[0.8vw] transition-all duration-300 ${
+              className={`px-6 py-3 sm:px-[1.5vw] sm:py-[0.8vw] rounded-xl sm:rounded-[2vw] border text-sm sm:text-[0.8vw] transition-all duration-300 font-medium w-full sm:w-auto ${
                 isButtonDisabled
                   ? "bg-[#000000] text-[#525252] cursor-not-allowed"
-                  : "bg-[#ebebeb] text-[#333] hover:bg-white"
+                  : "bg-[#ebebeb] text-[#333] hover:bg-white active:scale-95"
               }`}
             >
               Próximo

@@ -69,25 +69,25 @@ export default function AuthScreen() {
 
   return (
     <div className="w-full h-screen flex justify-center items-center relative">
-      <div className="w-full h-full absolute saturate-0 invert-100">
+      <div className="w-full h-full absolute saturate-0 invert">
         <Iridescence />
       </div>
-      <div className="relative z-10 flex-col bg-[#0f0f0f] rounded-[1vw] w-[28vw] border-[1px] border-[#222121] pb-[3vw] pt-[3vw] pl-[2vw] pr-[2vw]">
+      <div className="relative z-10 flex flex-col bg-[#0f0f0f] rounded-2xl w-[90%] max-w-sm sm:max-w-md md:max-w-lg lg:w-[28vw] lg:rounded-[1vw] border border-[#222121] p-6 sm:p-8 lg:pb-[3vw] lg:pt-[3vw] lg:pl-[2vw] lg:pr-[2vw] mx-4">
         <div
-          className="bg-[#fd7373ee] opacity-0 h-0 overflow-hidden rounded-[0.5vw] transition-all duration-300"
+          className="bg-[#fd7373ee] opacity-0 h-0 overflow-hidden rounded-lg lg:rounded-[0.5vw] transition-all duration-300"
           ref={erro}
         >
-          <p className="p-[1vw]"></p>
+          <p className="p-4 lg:p-[1vw]"></p>
         </div>
         <form
           action=""
-          className="flex gap-[1vw] flex-col pt-[2vw] pb-[2vw]"
+          className="flex gap-4 lg:gap-[1vw] flex-col pt-6 pb-6 lg:pt-[2vw] lg:pb-[2vw]"
           onSubmit={fetchToApi}
         >
           <input
             placeholder="Email"
             type="email"
-            className="outline-none border-0 border-b-[1px] w-full border-b-[#333] text-[1.2rem] text-[#fff] mb-[40px] pt-[0.5vw] pb-[0.5vw]"
+            className="outline-none border-0 border-b w-full border-b-[#333] text-lg lg:text-[1.2rem] text-[#fff] mb-6 lg:mb-[40px] pt-2 pb-2 lg:pt-[0.5vw] lg:pb-[0.5vw] bg-transparent"
             required
             onInput={validateForm}
             ref={email}
@@ -95,18 +95,18 @@ export default function AuthScreen() {
           <input
             placeholder="Senha"
             type="password"
-            className="outline-none border-0 border-b-[1px] w-full border-b-[#333] text-[1.2rem] text-[#fff] pt-[0.5vw] pb-[0.5vw]"
+            className="outline-none border-0 border-b w-full border-b-[#333] text-lg lg:text-[1.2rem] text-[#fff] pt-2 pb-2 lg:pt-[0.5vw] lg:pb-[0.5vw] bg-transparent"
             required
             onInput={validateForm}
             ref={senha}
           />
-          <p className="text-[0.8rem] text-center uppercase mb-[10px] text-[#8a8a8a]">
+          <p className="text-sm lg:text-[0.8rem] text-center uppercase mb-4 lg:mb-[10px] text-[#8a8a8a] px-2">
             Digite todos os dados corretamente para entrar
           </p>
           <button
             ref={button}
             disabled={!isFormValid}
-            className="outline-none border-0 bg-[#c5c5c5] p-[0.5vw] text-[1rem] rounded-[2vw] cursor-pointer transition-[0.2s] disabled:bg-[#141414] disabled:text-[#c5c5c5] disabled:border-[1px] disabled:border-[#202020]"
+            className="outline-none border-0 bg-[#c5c5c5] p-3 lg:p-[0.5vw] text-base lg:text-[1rem] rounded-lg lg:rounded-[2vw] cursor-pointer transition-all duration-200 disabled:bg-[#141414] disabled:text-[#c5c5c5] disabled:border disabled:border-[#202020] disabled:cursor-not-allowed"
           >
             Entrar
           </button>
