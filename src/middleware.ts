@@ -11,17 +11,14 @@ export async function middleware(request: NextRequest) {
   if (token) {
     try {
       // CORREÇÃO: Configuração adequada para cross-origin
-      const response = await fetch(
-        "https://backend-feelflow-core.onrender.com/auth/verify",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // IMPORTANTE: Não usar credentials no middleware, passar o token no body
-          },
-          body: JSON.stringify({ token }),
-        }
-      );
+      const response = await fetch("/api/auth/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // IMPORTANTE: Não usar credentials no middleware, passar o token no body
+        },
+        body: JSON.stringify({ token }),
+      });
 
       if (!response.ok) {
         console.error(

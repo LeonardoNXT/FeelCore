@@ -165,15 +165,12 @@ export default function FotoEConclusaoDoProfissional({ setPagina }: Props) {
         headers["Authorization"] = `Bearer ${token}`;
       }
 
-      const response = await fetch(
-        "backend-feelflow-core.onrender.com/employees",
-        {
-          method: "POST",
-          credentials: "include", // Importante para enviar cookies de autenticação
-          headers,
-          body: formData, // Não definir Content-Type - o browser define automaticamente para multipart/form-data
-        }
-      );
+      const response = await fetch("http://127.0.0.1:3005/employees", {
+        method: "POST",
+        credentials: "include", // Importante para enviar cookies de autenticação
+        headers,
+        body: formData, // Não definir Content-Type - o browser define automaticamente para multipart/form-data
+      });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
