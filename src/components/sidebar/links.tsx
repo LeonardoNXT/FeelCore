@@ -48,10 +48,10 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
-  // Detectar se é mobile
+  // Detectar se é mobile (breakpoint personalizado 1500px)
   useEffect(() => {
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1500);
     };
 
     checkIsMobile();
@@ -167,7 +167,8 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
   const MobileMenuButton = () => (
     <button
       onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-      className="md:hidden fixed top-4 right-4 z-50 p-2 rounded-lg bg-background border shadow-lg hover:bg-accent transition-colors"
+      className="fixed top-4 right-4 z-50 p-2 rounded-lg bg-background border shadow-lg hover:bg-accent transition-colors"
+      style={{ display: isMobile ? "block" : "none" }}
       aria-label="Toggle menu"
     >
       {isMobileMenuOpen ? (
@@ -186,7 +187,7 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="fixed inset-0 bg-black/50 z-40"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
@@ -335,8 +336,11 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
       {/* Overlay para mobile */}
       <MobileOverlay />
 
-      {/* Sidebar Desktop */}
-      <aside className="hidden md:flex w-[15%] relative border-r bg-gradient-to-br from-[#000000] via-[#050505] to-[#0c0c0c]">
+      {/* Sidebar Desktop (>= 1500px) */}
+      <aside
+        className="w-[15%] relative border-r bg-gradient-to-br from-[#000000] via-[#050505] to-[#0c0c0c]"
+        style={{ display: isMobile ? "none" : "flex" }}
+      >
         <div className="w-full h-screen sticky top-0 left-0 flex flex-col">
           {/* Header */}
           <div className="flex h-14 items-center border-b px-4">
@@ -354,7 +358,7 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
         </div>
       </aside>
 
-      {/* Sidebar Mobile */}
+      {/* Sidebar Mobile (< 1500px) */}
       <AnimatePresence>
         {isMobileMenuOpen && isMobile && (
           <motion.aside
@@ -362,7 +366,7 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed left-0 top-0 h-full w-64 z-50 border-r bg-gradient-to-br from-[#000000] via-[#050505] to-[#0c0c0c] md:hidden"
+            className="fixed left-0 top-0 h-full w-64 z-50 border-r bg-gradient-to-br from-[#000000] via-[#050505] to-[#0c0c0c]"
           >
             <div className="w-full h-full flex flex-col">
               {/* Header */}

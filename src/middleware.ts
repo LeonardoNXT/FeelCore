@@ -10,12 +10,15 @@ export async function middleware(request: NextRequest) {
 
   if (token) {
     try {
-      const response = await fetch("http://localhost:3005/auth/verify", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
-      });
+      const response = await fetch(
+        "https://backend-feelflow-core.onrender.com",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token }),
+        }
+      );
 
       if (!response.ok) throw new Error(await response.text());
 

@@ -104,7 +104,7 @@ export default function CadastroInicio({ setPagina }: Props) {
         ref={divOpacity}
       >
         <p className="text-center mb-4 sm:mb-0">
-          <span className="text-2xl sm:text-3xl md:text-[4vw] font-medium">
+          <span className="text-[13vw] sm:text-3xl md:text-[4vw] font-medium">
             Olá, {user.name}!<br />
           </span>
           <span className="text-sm sm:text-base">

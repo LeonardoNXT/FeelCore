@@ -14,6 +14,19 @@ export default function AdminLayout({
   const { user, setUser } = useUserStore();
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detectar se é mobile (breakpoint personalizado 1500px)
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 1500);
+    };
+
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+
+    return () => window.removeEventListener("resize", checkIsMobile);
+  }, []);
 
   useEffect(() => {
     const verify = async () => {
@@ -57,9 +70,9 @@ export default function AdminLayout({
 
       <motion.main
         className={`
-          flex-1 h-full flex p-[0.5vw] transition-all duration-300
-          md:w-[85%] w-full
-          ${isMobileMenuOpen ? "md:ml-0 ml-0" : "ml-0"}
+          flex-1 h-full flex transition-all duration-300
+          ${isMobile ? "w-full p-2" : "w-[85%] p-[0.5vw]"}
+          ${isMobileMenuOpen ? "ml-0" : "ml-0"}
         `}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

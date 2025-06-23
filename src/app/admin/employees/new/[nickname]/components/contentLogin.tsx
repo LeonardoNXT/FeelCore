@@ -13,24 +13,32 @@ interface Props {
 
 export default function CadastroEmailSenha({ setPagina }: Props) {
   const [phone, setPhone] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   const submitButton = useRef<HTMLButtonElement>(null);
   const returnButton = useRef<HTMLButtonElement>(null);
   const inputNumber = useRef<HTMLInputElement>(null);
   const inputEmail = useRef<HTMLInputElement>(null);
+  const inputPassword = useRef<HTMLInputElement>(null);
 
-  const isVerifiedInput = (email: string, number: string) => {
+  const isVerifiedInput = (email: string, number: string, password: string) => {
     return (
       email.includes("@") &&
       email.includes(".com") &&
-      number.replace(/\D/g, "").length >= 11
+      number.replace(/\D/g, "").length >= 11 &&
+      password.length >= 8
     );
   };
+
   const existInput = useCallback(() => {
-    if (inputNumber.current && inputEmail.current) {
+    if (inputNumber.current && inputEmail.current && inputPassword.current) {
       setIsDisabled(
-        !isVerifiedInput(inputEmail.current.value, inputNumber.current.value)
+        !isVerifiedInput(
+          inputEmail.current.value,
+          inputNumber.current.value,
+          inputPassword.current.value
+        )
       );
     }
   }, []);
@@ -58,9 +66,13 @@ export default function CadastroEmailSenha({ setPagina }: Props) {
     }
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const formatted = formatPhone(e.target.value);
     setPhone(formatted);
+  };
+
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
+    setPassword(e.target.value);
   };
 
   const divReference = useRef<HTMLDivElement>(null);
@@ -97,6 +109,7 @@ export default function CadastroEmailSenha({ setPagina }: Props) {
       }
     }
   };
+
   const changePage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (divReference.current) {
@@ -116,10 +129,15 @@ export default function CadastroEmailSenha({ setPagina }: Props) {
           duration: 0.3,
           onComplete: () => {
             setTimeout(() => {
-              if (inputEmail.current && inputNumber.current) {
+              if (
+                inputEmail.current &&
+                inputNumber.current &&
+                inputPassword.current
+              ) {
                 setFuncionario({
                   phone: inputNumber.current?.value,
                   email: inputEmail.current?.value,
+                  password: inputPassword.current?.value,
                 });
               }
               setPagina(3);
@@ -129,6 +147,7 @@ export default function CadastroEmailSenha({ setPagina }: Props) {
       }
     }
   };
+
   useEffect(() => {
     if (divReference.current) {
       const title = divReference.current.querySelector("p");
@@ -158,11 +177,16 @@ export default function CadastroEmailSenha({ setPagina }: Props) {
         );
       }
     }
-    if (inputEmail.current && inputNumber.current) {
+    if (inputEmail.current && inputNumber.current && inputPassword.current) {
       inputEmail.current.value = funcionario.email || "";
       inputNumber.current.value = funcionario.phone || "";
+      inputPassword.current.value = funcionario.password || "";
+
       if (!(inputNumber.current.value.length == 0)) {
         setPhone(formatPhone(funcionario.phone || ""));
+      }
+      if (funcionario.password) {
+        setPassword(funcionario.password);
       }
       existInput();
     }
@@ -178,17 +202,17 @@ export default function CadastroEmailSenha({ setPagina }: Props) {
         <p className="text-sm sm:text-base md:text-[1vw] text-center mb-4 sm:mb-0">
           Defina os Identificadores de
           <br />
-          <span className="font-bold text-4xl sm:text-6xl md:text-[7vw] leading-[0.7] block mt-2">
+          <span className="font-bold text-[20vw] text-4xl sm:text-6xl md:text-[7vw] leading-[0.7] block mt-2">
             {firstName}
           </span>
         </p>
 
-        <div className="w-full max-w-[100%] sm:max-w-none">
+        <div className="w-full max-w-[90vw] sm:max-w-none">
           <div className="flex flex-col sm:flex-row border-1 rounded-xl sm:rounded-[2vw] gap-3 sm:gap-[1vw] mt-6 sm:mt-[1vw] p-4 sm:p-[1vw]">
             {/* Botão Voltar - Mobile first */}
             <button
               ref={returnButton}
-              className="px-6 py-3 sm:px-[1.5vw] sm:py-[0.8vw] rounded-xl sm:rounded-[2vw] border text-sm sm:text-[0.8vw] transition-all duration-300 hover:bg-[#ff8282] active:scale-95 order-3 sm:order-1 w-full sm:w-auto"
+              className="px-6 py-3 sm:px-[1.5vw] sm:py-[0.8vw] rounded-xl sm:rounded-[2vw] border text-sm sm:text-[0.8vw] transition-all duration-300 hover:bg-[#ff8282] active:scale-95 order-4 sm:order-1 w-full sm:w-auto"
               onClick={returnPage}
             >
               Voltar
@@ -205,13 +229,26 @@ export default function CadastroEmailSenha({ setPagina }: Props) {
                 className="border-1 px-4 py-3 sm:px-[2vw] sm:py-[0.8vw] sm:pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] focus:outline-none rounded-xl sm:rounded-[2vw] text-sm sm:text-[0.8vw] w-full bg-[#000]"
               />
 
+              {/* Password Input */}
+              <input
+                ref={inputPassword}
+                type="password"
+                value={password}
+                onChange={(e) => {
+                  handlePasswordChange(e);
+                  existInput();
+                }}
+                placeholder="Senha (min. 8 caracteres):"
+                className="border-1 px-4 py-3 sm:px-[2vw] sm:py-[0.8vw] sm:pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] focus:outline-none rounded-xl sm:rounded-[2vw] text-sm sm:text-[0.8vw] w-full bg-[#000]"
+              />
+
               {/* Phone Input */}
               <input
                 ref={inputNumber}
                 type="tel"
                 value={phone}
                 onChange={(e) => {
-                  handleChange(e);
+                  handlePhoneChange(e);
                   existInput();
                 }}
                 placeholder="Celular:"

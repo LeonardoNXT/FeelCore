@@ -295,29 +295,35 @@ export default function OutrosReqCadastroProfissional({ setPagina }: Props) {
   }, [funcionario]);
 
   return (
-    <div ref={divReference} className="w-full flex flex-col items-center">
-      <p ref={titleRef} className="text-[1vw] text-center ">
+    <div
+      ref={divReference}
+      className="w-full flex flex-col items-center px-4 md:px-0"
+    >
+      <p ref={titleRef} className="text-sm md:text-[1vw] text-center">
         Defina os Identificadores de
         <br />
-        <span className="font-bold text-[7vw] leading-[0.7]">{firstName}</span>
+        <span className="font-bold text-[20vw] md:text-[7vw] leading-[0.7]">
+          {firstName}
+        </span>
       </p>
       <div
         ref={formContainerRef}
-        className="w-[60%] p-[1vw] rounded-[2vw] border-1 relative mt-[2vw]"
+        className="w-full md:w-[60%] p-4 md:p-[1vw] rounded-xl md:rounded-[2vw] border-1 relative mt-6 md:mt-[2vw]"
       >
         <button
           ref={returnButton}
           onClick={returnPage}
-          className={`px-[1.5vw] absolute bottom-[1vw] z-10 py-[0.8vw] rounded-[2vw] border text-[0.8vw] transition-all duration-300 hover:bg-[#ff8282]`}
+          className={`px-4 md:px-[1.5vw] absolute bottom-4 md:bottom-[1vw] z-10 py-3 md:py-[0.8vw] rounded-xl md:rounded-[2vw] border text-sm md:text-[0.8vw] transition-all duration-300 hover:bg-[#ff8282]`}
         >
           Voltar
         </button>
         <form>
-          <div className="w-full mb-[1vw] flex justify-between">
-            <div className="w-[20%] h-auto flex justify-center bg-[#000] rounded-[2vw] border-1 relative p-[0.6vw]">
-              <div className="w-full rounded-[2vw] h-full absolute p-[0.6vw] right-[0] top-1/2 translate-y-[-50%]">
+          <div className="w-full mb-4 md:mb-[1vw] flex flex-col md:flex-row justify-between gap-4 md:gap-0">
+            {/* Toggle Status */}
+            <div className="w-full md:w-[20%] h-12 md:h-auto flex justify-center bg-[#000] rounded-xl md:rounded-[2vw] border-1 relative p-3 md:p-[0.6vw]">
+              <div className="w-full rounded-xl md:rounded-[2vw] h-full absolute p-3 md:p-[0.6vw] right-[0] top-1/2 translate-y-[-50%]">
                 <div
-                  className={`w-[50%] h-full border-1 rounded-[2vw] transition-all duration-300 ${
+                  className={`w-[50%] h-full border-1 rounded-xl md:rounded-[2vw] transition-all duration-300 ${
                     status
                       ? "bg-[#213b1e] translate-x-[0%]"
                       : "bg-[#3b1e1e] translate-x-[100%]"
@@ -325,7 +331,7 @@ export default function OutrosReqCadastroProfissional({ setPagina }: Props) {
                 ></div>
               </div>
               <div
-                className="w-1/2 flex justify-center items-center text-[0.76vw] cursor-pointer text-[#ffffff] relative"
+                className="w-1/2 flex justify-center items-center text-sm md:text-[0.76vw] cursor-pointer text-[#ffffff] relative"
                 onClick={() => {
                   setStatus(true);
                   setFuncionario({ ...funcionario, status: "Ativo" });
@@ -334,7 +340,7 @@ export default function OutrosReqCadastroProfissional({ setPagina }: Props) {
                 Ativo
               </div>
               <div
-                className="w-1/2 flex justify-center items-center text-[0.76vw] cursor-pointer text-[#ffffff] relative"
+                className="w-1/2 flex justify-center items-center text-sm md:text-[0.76vw] cursor-pointer text-[#ffffff] relative"
                 onClick={() => {
                   setStatus(false);
                   setFuncionario({ ...funcionario, status: "Inativo" });
@@ -343,8 +349,10 @@ export default function OutrosReqCadastroProfissional({ setPagina }: Props) {
                 Inativo
               </div>
             </div>
-            <div className="w-[25%] relative">
-              <label className="absolute left-[1vw] top-1/2 translate-y-[-50%]">
+
+            {/* Remuneração */}
+            <div className="w-full md:w-[25%] relative">
+              <label className="absolute left-3 md:left-[1vw] top-1/2 translate-y-[-50%]">
                 R$
               </label>
               <input
@@ -354,11 +362,15 @@ export default function OutrosReqCadastroProfissional({ setPagina }: Props) {
                 value={remuneracao}
                 onChange={handleRemuneracaoChange}
                 placeholder="Remuneração"
-                className="border-1 no-spinner w-full px-[2vw] py-[0.8vw] pl-[2.3vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-[2vw] text-[0.8vw] bg-[#000000]"
+                className="border-1 no-spinner w-full px-6 md:px-[2vw] py-3 md:py-[0.8vw] pl-9 md:pl-[2.3vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-xl md:rounded-[2vw] text-sm md:text-[0.8vw] bg-[#000000]"
               />
             </div>
-            <div className="flex items-center gap-[1vw]">
-              <label className="text-[#ebebeb]">Contratação:</label>
+
+            {/* Data Contratação */}
+            <div className="flex items-center gap-3 md:gap-[1vw]">
+              <label className="text-[#ebebeb] text-sm md:text-base">
+                Contratação:
+              </label>
               <input
                 ref={inputDataContratacao}
                 min={minDate}
@@ -367,16 +379,18 @@ export default function OutrosReqCadastroProfissional({ setPagina }: Props) {
                 value={dataContratacao}
                 onChange={handleDataContratacaoChange}
                 name="hireDate"
-                className="w-full transition-all duration-300 backdrop-blur-sm rounded-[2vw] bg-[#000000] text-[0.8vw] px-[1.5vw] py-[0.8vw] text-[#9c9c9c] focus:border-[#e6e6e6] focus:outline-none focus:ring-2 focus:ring-white/20"
+                className="w-full transition-all duration-300 backdrop-blur-sm rounded-xl md:rounded-[2vw] bg-[#000000] text-sm md:text-[0.8vw] px-4 md:px-[1.5vw] py-3 md:py-[0.8vw] text-[#9c9c9c] focus:border-[#e6e6e6] focus:outline-none focus:ring-2 focus:ring-white/20"
               />
             </div>
           </div>
-          <div className="flex items-stretch w-full gap-[1vw]">
+
+          {/* Segunda linha - Estado, Bairro, Endereço */}
+          <div className="flex flex-col md:flex-row items-stretch w-full gap-4 md:gap-[1vw]">
             <select
               ref={selectEstado}
               value={estadoSelecionado}
               onChange={handleEstadoChange}
-              className="no-select-arrow border-1 rounded-[2vw] px-[1vw] py-[0.8vw] bg-[#000000] text-[#fff] text-[0.8vw] w-[20%] text-center"
+              className="no-select-arrow border-1 rounded-xl md:rounded-[2vw] px-4 md:px-[1vw] py-3 md:py-[0.8vw] bg-[#000000] text-[#fff] text-sm md:text-[0.8vw] w-full md:w-[20%] text-center"
             >
               <option className="text-[#333]" value="">
                 Selecione o estado
@@ -395,7 +409,7 @@ export default function OutrosReqCadastroProfissional({ setPagina }: Props) {
               value={bairro}
               onChange={handleBairroChange}
               placeholder="Bairro:"
-              className="border-1 no-spinner w-[25%] px-[2vw] py-[0.8vw] pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-[2vw] text-[0.8vw] bg-[#000000]"
+              className="border-1 no-spinner w-full md:w-[25%] px-6 md:px-[2vw] py-3 md:py-[0.8vw] pl-4 md:pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-xl md:rounded-[2vw] text-sm md:text-[0.8vw] bg-[#000000]"
             />
 
             <input
@@ -405,15 +419,17 @@ export default function OutrosReqCadastroProfissional({ setPagina }: Props) {
               value={endereco}
               onChange={handleEnderecoChange}
               placeholder="Endereço completo:"
-              className="border-1 no-spinner w-[55%] px-[2vw] py-[0.8vw] pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-[2vw] text-[0.8vw] bg-[#000000]"
+              className="border-1 no-spinner w-full md:w-[55%] px-6 md:px-[2vw] py-3 md:py-[0.8vw] pl-4 md:pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-xl md:rounded-[2vw] text-sm md:text-[0.8vw] bg-[#000000]"
             />
           </div>
-          <div className="mt-[1vw] flex justify-end">
+
+          {/* Botão Próximo */}
+          <div className="mt-4 md:mt-[1vw] flex justify-end">
             <button
               type="submit"
               disabled={isButtonDisabled}
               onClick={changePage}
-              className={`px-[1.5vw] py-[0.8vw] rounded-[2vw] border text-[0.8vw] transition-all duration-300 ${
+              className={`px-4 md:px-[1.5vw] py-3 md:py-[0.8vw] rounded-xl md:rounded-[2vw] border text-sm md:text-[0.8vw] transition-all duration-300 ${
                 isButtonDisabled
                   ? "bg-[#000000] text-[#525252] cursor-not-allowed"
                   : "bg-[#ebebeb] text-[#333] hover:bg-white"

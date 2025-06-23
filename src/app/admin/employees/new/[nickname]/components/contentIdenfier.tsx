@@ -30,24 +30,23 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
 
   // Função para formatar RG brasileiro (XX.XXX.XXX-X)
   const formatRg = (value: string): string => {
-    // Remove tudo que não é número
-    const numbers = value.replace(/\D/g, "");
+    // Remove tudo que não é número ou letra
+    const clean = value.replace(/[^\dA-Za-z]/g, "");
 
-    // Aplica a máscara baseado no tamanho
-    if (numbers.length <= 2) {
-      return numbers;
-    } else if (numbers.length <= 5) {
-      return `${numbers.slice(0, 2)}.${numbers.slice(2)}`;
-    } else if (numbers.length <= 8) {
+    // Aplica a máscara baseado no tamanho (assumindo formato numérico)
+    if (clean.length <= 2) {
+      return clean;
+    } else if (clean.length <= 5) {
+      return `${clean.slice(0, 2)}.${clean.slice(2)}`;
+    } else if (clean.length <= 8) {
+      return `${clean.slice(0, 2)}.${clean.slice(2, 5)}.${clean.slice(5)}`;
+    } else {
+      // Limita a 9 caracteres
+      const numbers = clean.slice(0, 8);
+      const digit = clean.slice(8, 9);
       return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(
         5
-      )}`;
-    } else {
-      // Limita a 9 dígitos
-      return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(
-        5,
-        8
-      )}-${numbers.slice(8, 9)}`;
+      )}-${digit}`;
     }
   };
 
@@ -74,15 +73,45 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
     }
   };
 
+  // Função para validar CPF
+  const isValidCPF = (cpf: string): boolean => {
+    const numbers = cpf.replace(/\D/g, "");
+
+    if (numbers.length !== 11) return false;
+    if (/^(\d)\1{10}$/.test(numbers)) return false;
+
+    let sum = 0;
+    for (let i = 0; i < 9; i++) {
+      sum += parseInt(numbers.charAt(i)) * (10 - i);
+    }
+    let remainder = 11 - (sum % 11);
+    if (remainder === 10 || remainder === 11) remainder = 0;
+    if (remainder !== parseInt(numbers.charAt(9))) return false;
+
+    sum = 0;
+    for (let i = 0; i < 10; i++) {
+      sum += parseInt(numbers.charAt(i)) * (11 - i);
+    }
+    remainder = 11 - (sum % 11);
+    if (remainder === 10 || remainder === 11) remainder = 0;
+    if (remainder !== parseInt(numbers.charAt(10))) return false;
+
+    return true;
+  };
+
   // Função para verificar se os inputs são válidos
-  const isVerifiedInput = (rg: string, cpf: string): boolean => {
-    const rgNumbers = rg.replace(/\D/g, "");
+  const isVerifiedInput = (
+    rg: string,
+    cpf: string,
+    birthday: string
+  ): boolean => {
+    const rgClean = rg.replace(/[^\dA-Za-z]/g, "");
     const cpfNumbers = cpf.replace(/\D/g, "");
-    const birthday = calendar?.current?.value;
 
     return (
-      rgNumbers.length >= 8 &&
-      cpfNumbers.length >= 11 &&
+      rgClean.length >= 8 &&
+      cpfNumbers.length === 11 &&
+      isValidCPF(cpf) &&
       birthday !== undefined &&
       birthday !== null &&
       birthday !== ""
@@ -91,10 +120,13 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
 
   // Função para verificar se existe input válido
   const existInput = useCallback(() => {
-    if (inputRg.current && inputCpf.current) {
-      setIsButtonDisabled(
-        !isVerifiedInput(inputRg.current.value, inputCpf.current.value)
+    if (inputRg.current && inputCpf.current && calendar.current) {
+      const isValid = isVerifiedInput(
+        inputRg.current.value,
+        inputCpf.current.value,
+        calendar.current.value
       );
+      setIsButtonDisabled(!isValid);
     }
   }, []);
 
@@ -102,26 +134,58 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
   const handleRgChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const formatted = formatRg(e.target.value);
     setRg(formatted);
-    existInput();
+
+    // Atualiza o valor do input diretamente
+    if (inputRg.current) {
+      inputRg.current.value = formatted;
+    }
+
+    // Executa a validação após um pequeno delay para garantir que o estado foi atualizado
+    setTimeout(existInput, 0);
   };
 
   // Handler para mudança no CPF
   const handleCpfChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const formatted = formatCpf(e.target.value);
     setCpf(formatted);
-    existInput();
+
+    // Atualiza o valor do input diretamente
+    if (inputCpf.current) {
+      inputCpf.current.value = formatted;
+    }
+
+    // Executa a validação após um pequeno delay para garantir que o estado foi atualizado
+    setTimeout(existInput, 0);
   };
 
   // Função para mudar de página
   const changePage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
     if (inputRg?.current && inputCpf?.current && calendar?.current) {
+      // Verifica se os dados são válidos antes de prosseguir
+      if (
+        !isVerifiedInput(
+          inputRg.current.value,
+          inputCpf.current.value,
+          calendar.current.value
+        )
+      ) {
+        alert("Por favor, preencha todos os campos corretamente.");
+        return;
+      }
+
+      // Remove formatação antes de salvar no store
+      const cleanRg = inputRg.current.value.replace(/[^\dA-Za-z]/g, "");
+      const cleanCpf = inputCpf.current.value.replace(/\D/g, "");
+
       setFuncionario({
-        rg: inputRg.current.value,
-        cpf: inputCpf.current.value,
+        rg: cleanRg,
+        cpf: cleanCpf,
         birthday: calendar.current.value,
       });
     }
+
     if (divReference.current) {
       const title = divReference.current.querySelector("p");
       const div = divReference.current.querySelector("div");
@@ -144,6 +208,7 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
       });
     }
   };
+
   const returnPage = () => {
     if (divReference.current) {
       const title = divReference.current.querySelector("p");
@@ -179,8 +244,10 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
     const dia = String(hoje.getDate()).padStart(2, "0");
 
     setMaxDate(`${ano}-${mes}-${dia}`);
+
     if (ranOnce.current) return;
     ranOnce.current = true;
+
     if (titleRef.current && formContainerRef.current) {
       gsap.fromTo(
         titleRef.current,
@@ -194,78 +261,107 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
         { opacity: 1, duration: 0.3 }
       );
     }
-    console.log(calendar.current?.value);
+
+    // Carrega dados salvos do funcionário
     if (inputRg.current && inputCpf.current && calendar.current) {
       if (funcionario.rg && funcionario.cpf && funcionario.birthday) {
-        inputRg.current.value = funcionario.rg;
-        inputCpf.current.value = funcionario.cpf;
+        // Formata os dados ao carregar
+        const formattedRg = formatRg(funcionario.rg);
+        const formattedCpf = formatCpf(funcionario.cpf);
+
+        inputRg.current.value = formattedRg;
+        inputCpf.current.value = formattedCpf;
         calendar.current.value = funcionario.birthday;
+
+        setRg(formattedRg);
+        setCpf(formattedCpf);
+
+        // Executa validação
+        setTimeout(existInput, 100);
       }
     }
-  }, [funcionario.rg, funcionario.cpf, funcionario.birthday]);
+  }, [funcionario.rg, funcionario.cpf, funcionario.birthday, existInput]);
 
   return (
     <div
       ref={divReference}
-      className="w-full flex flex-col justify-center items-center"
+      className="w-full flex flex-col justify-center items-center px-4 sm:px-0"
     >
-      <p ref={titleRef} className="text-center text-[1vw]">
+      <p
+        ref={titleRef}
+        className="text-center text-sm sm:text-base md:text-[1vw] mb-4 sm:mb-0 over"
+      >
         Coloque os dados de
         <br />
-        <span className="font-bold text-[8vw] leading-[0.7]">
+        <span className="font-bold text-[20vw] w text-4xl sm:text-6xl md:text-[8vw] leading-[0.7] block mt-2">
           {funcionario.name?.split(" ")[0]}
         </span>
       </p>
-      <div
-        className="flex w-[60%] gap-[1vw] p-[1vw] border-1 rounded-[2vw] mt-[1vw]"
-        ref={formContainerRef}
-      >
-        <button
-          ref={returnButton}
-          className={`px-[1.5vw] py-[0.8vw] rounded-[2vw] border text-[0.8vw] transition-all duration-300 hover:bg-[#ff8282]`}
-          onClick={returnPage}
+
+      <div className="w-full max-w-lg sm:w-[60%] sm:max-w-none">
+        <div
+          className="flex flex-col sm:flex-row w-full gap-3 sm:gap-[1vw] p-4 sm:p-[1vw] border-1 rounded-xl sm:rounded-[2vw] mt-6 sm:mt-[1vw]"
+          ref={formContainerRef}
         >
-          Voltar
-        </button>
-        <form className="flex w-full gap-[1vw]">
-          <input
-            ref={inputRg}
-            type="text"
-            value={rg}
-            onChange={handleRgChange}
-            placeholder="RG:"
-            className="border-1 px-[2vw] py-[0.8vw] pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-[2vw] w-full text-[0.8vw] bg-[#000]"
-          />
-          <input
-            ref={inputCpf}
-            type="text"
-            value={cpf}
-            onChange={handleCpfChange}
-            placeholder="CPF:"
-            className="border-1 px-[2vw] py-[0.8vw] pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] rounded-[2vw] w-full text-[0.8vw] bg-[#000]"
-          />
-          <input
-            ref={calendar}
-            onChange={existInput}
-            min="1930-01-01"
-            max={maxDate}
-            type="date"
-            name="hireDate"
-            className="w-1/2 transition-all duration-300 backdrop-blur-sm rounded-[2vw] bg-[#000000] text-[0.8vw] px-[1.5vw] py-[0.8vw] text-[#9c9c9c] focus:border-[#e6e6e6] focus:outline-none focus:ring-2 focus:ring-white/20"
-          />
+          {/* Botão Voltar */}
           <button
-            type="submit"
-            disabled={isButtonDisabled}
-            onClick={changePage}
-            className={`px-[1.5vw] py-[0.8vw] rounded-[2vw] border text-[0.8vw] transition-all duration-300 ${
-              isButtonDisabled
-                ? "bg-[#000000] text-[#525252] cursor-not-allowed"
-                : "bg-[#ebebeb] text-[#333] hover:bg-white"
-            }`}
+            ref={returnButton}
+            className="px-6 py-3 sm:px-[1.5vw] sm:py-[0.8vw] rounded-xl sm:rounded-[2vw] border text-sm sm:text-[0.8vw] transition-all duration-300 hover:bg-[#ff8282] active:scale-95 order-4 sm:order-1 w-full sm:w-auto"
+            onClick={returnPage}
           >
-            Próximo
+            Voltar
           </button>
-        </form>
+
+          {/* Form Container */}
+          <form className="flex flex-col sm:flex-row w-full gap-3 sm:gap-[1vw] order-1 sm:order-2">
+            {/* RG Input */}
+            <input
+              ref={inputRg}
+              type="text"
+              value={rg}
+              onChange={handleRgChange}
+              placeholder="RG: XX.XXX.XXX-X"
+              maxLength={12}
+              className="border-1 px-4 py-3 sm:px-[2vw] sm:py-[0.8vw] sm:pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] focus:outline-none rounded-xl sm:rounded-[2vw] w-full text-sm sm:text-[0.8vw] bg-[#000]"
+            />
+
+            {/* CPF Input */}
+            <input
+              ref={inputCpf}
+              type="text"
+              value={cpf}
+              onChange={handleCpfChange}
+              placeholder="CPF: XXX.XXX.XXX-XX"
+              maxLength={14}
+              className="border-1 px-4 py-3 sm:px-[2vw] sm:py-[0.8vw] sm:pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] focus:outline-none rounded-xl sm:rounded-[2vw] w-full text-sm sm:text-[0.8vw] bg-[#000]"
+            />
+
+            {/* Date Input */}
+            <input
+              ref={calendar}
+              onChange={existInput}
+              min="1930-01-01"
+              max={maxDate}
+              type="date"
+              name="hireDate"
+              className="w-full sm:w-1/2 transition-all duration-300 backdrop-blur-sm rounded-xl sm:rounded-[2vw] bg-[#000000] text-sm sm:text-[0.8vw] px-4 py-3 sm:px-[1.5vw] sm:py-[0.8vw] text-[#9c9c9c] focus:border-[#e6e6e6] focus:outline-none focus:ring-2 focus:ring-white/20 border-1"
+            />
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isButtonDisabled}
+              onClick={changePage}
+              className={`px-6 py-3 sm:px-[1.5vw] sm:py-[0.8vw] rounded-xl sm:rounded-[2vw] border text-sm sm:text-[0.8vw] transition-all duration-300 font-medium w-full sm:w-auto ${
+                isButtonDisabled
+                  ? "bg-[#000000] text-[#525252] cursor-not-allowed"
+                  : "bg-[#ebebeb] text-[#333] hover:bg-white active:scale-95"
+              }`}
+            >
+              Próximo
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
