@@ -32,13 +32,16 @@ export default function AdminLayout({
     const verify = async () => {
       if (!user) {
         try {
-          const res = await fetch("http://127.0.0.1:3005/auth/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include",
-          });
+          const res = await fetch(
+            "https://backend-feelflow-core.onrender.com/auth/verify",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+            }
+          );
 
           if (!res.ok) throw new Error("Não autorizado");
 
