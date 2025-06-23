@@ -11,7 +11,7 @@ export async function middleware(request: NextRequest) {
   if (token) {
     try {
       const response = await fetch(
-        "https://backend-feelflow-core.onrender.com",
+        "https://backend-feelflow-core.onrender.com/auth/verify",
         {
           method: "POST",
           credentials: "include",
