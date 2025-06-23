@@ -1,5 +1,6 @@
 // types/Funcionario.ts
 export interface Funcionario {
+  password: string;
   name: string;
   email: string;
   birthday: string;
@@ -8,10 +9,7 @@ export interface Funcionario {
   phone: string;
   address: string;
   remuneration: number;
-  avatar?: {
-    url?: string;
-    public_id?: string;
-  };
+  avatar?: File | { url?: string; public_id?: string } | null;
   status: "Ativo" | "Inativo";
   hiredata?: string;
 }

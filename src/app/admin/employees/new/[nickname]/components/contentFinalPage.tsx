@@ -17,7 +17,6 @@ export default function FotoEConclusaoDoProfissional({ setPagina }: Props) {
   const divSucess = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Check if avatar exists and is a File object before creating URL
     if (funcionario.avatar && funcionario.avatar instanceof File) {
       const url = URL.createObjectURL(funcionario.avatar);
       setAvatarPreview(url);
