@@ -10,20 +10,32 @@ export async function middleware(request: NextRequest) {
 
   if (token) {
     try {
+      // CORREÇÃO: Configuração adequada para cross-origin
       const response = await fetch(
         "https://backend-feelflow-core.onrender.com/auth/verify",
         {
           method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            // IMPORTANTE: Não usar credentials no middleware, passar o token no body
+          },
           body: JSON.stringify({ token }),
         }
       );
 
-      if (!response.ok) throw new Error(await response.text());
+      if (!response.ok) {
+        console.error(
+          "Auth verification failed:",
+          response.status,
+          response.statusText
+        );
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
       const data = await response.json();
       const userId = data.user._id;
+
+      console.log("Auth successful - User ID:", userId);
 
       const { pathname } = request.nextUrl;
       const segments = pathname.split("/");
@@ -34,13 +46,14 @@ export async function middleware(request: NextRequest) {
 
       if (segments[1] === "admin") {
         const urlId1 = segments[2];
-        console.log(urlId1);
+        console.log("URL ID1:", urlId1);
 
         if (!urlId1) {
           return NextResponse.redirect(
             new URL(`/admin/${userId}`, request.url)
           );
-        } // funcionado
+        }
+
         const isObjectId = /^[a-f\d]{24}$/i.test(urlId1);
 
         if (!["dashboard", "employees"].includes(segments[2])) {
@@ -50,7 +63,8 @@ export async function middleware(request: NextRequest) {
             );
           }
         }
-      } //
+      }
+
       if (segments[2] === "employees") {
         const urlVerified = segments[3]; // (ex: overview, directory, new)
         const urlId = segments[4]; // (ex: ObjectId ou userId)
@@ -69,6 +83,7 @@ export async function middleware(request: NextRequest) {
           return NextResponse.redirect(new URL(redirectBase, request.url));
         }
       }
+
       if (segments[2] === "dashboard") {
         if (segments[3] !== "users" && segments[3] !== "financial") {
           return NextResponse.redirect(
@@ -76,6 +91,7 @@ export async function middleware(request: NextRequest) {
           );
         }
       }
+
       // funcionando corretamente
       if (segments[3] === "users") {
         const urlId = segments[4];
@@ -83,7 +99,8 @@ export async function middleware(request: NextRequest) {
           return NextResponse.redirect(
             new URL(`/admin/dashboard/users/${userId}`, request.url)
           );
-        } // funcionando corretamente
+        }
+
         const isObjectId = /^[a-f\d]{24}$/i.test(urlId);
 
         if (!isObjectId && urlId !== userId) {
@@ -93,10 +110,13 @@ export async function middleware(request: NextRequest) {
         }
       }
     } catch (err) {
-      console.log("Middleware auth error:", err);
-      if (request.nextUrl.pathname.startsWith("/admin")) {
-        return NextResponse.redirect(new URL("/login", request.url));
-      }
+      console.error("Middleware auth error:", err);
+
+      // Remove cookie inválido antes de redirecionar
+      const response = NextResponse.redirect(new URL("/login", request.url));
+      response.cookies.delete("token");
+
+      return response;
     }
   }
 

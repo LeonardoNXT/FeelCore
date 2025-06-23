@@ -17,12 +17,20 @@ export default function FotoEConclusaoDoProfissional({ setPagina }: Props) {
   const divSucess = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (funcionario.avatar && funcionario.avatar instanceof File) {
-      const url = URL.createObjectURL(funcionario.avatar);
-      setAvatarPreview(url);
-
-      // Cleanup da URL quando o componente desmontar
-      return () => URL.revokeObjectURL(url);
+    // Handle both File objects and cloud storage objects
+    if (funcionario.avatar) {
+      if (funcionario.avatar instanceof File) {
+        const url = URL.createObjectURL(funcionario.avatar);
+        setAvatarPreview(url);
+        // Cleanup da URL quando o componente desmontar
+        return () => URL.revokeObjectURL(url);
+      } else if (
+        typeof funcionario.avatar === "object" &&
+        funcionario.avatar.url
+      ) {
+        // If it's a cloud storage object with URL
+        setAvatarPreview(funcionario.avatar.url);
+      }
     }
   }, [funcionario.avatar]);
 
@@ -50,7 +58,7 @@ export default function FotoEConclusaoDoProfissional({ setPagina }: Props) {
     // Armazenar o File no store do funcionário
     setFuncionario({
       ...funcionario,
-      avatar: file,
+      avatar: file, // This should now work with the updated interface
     });
   };
 
@@ -113,8 +121,12 @@ export default function FotoEConclusaoDoProfissional({ setPagina }: Props) {
       Object.keys(funcionario).forEach((key) => {
         const value = funcionario[key as keyof typeof funcionario];
         if (value !== null && value !== undefined && value !== "") {
-          if (key === "avatar" && value instanceof File) {
-            formData.append("avatar", value);
+          if (key === "avatar") {
+            // Handle avatar properly - only add if it's a File
+            if (value instanceof File) {
+              formData.append("avatar", value);
+            }
+            // Skip if it's already a cloud storage object (url/public_id)
           } else {
             // Mapear nomes de campos do frontend para backend se necessário
             let fieldName = key;
@@ -153,12 +165,15 @@ export default function FotoEConclusaoDoProfissional({ setPagina }: Props) {
         headers["Authorization"] = `Bearer ${token}`;
       }
 
-      const response = await fetch("http://127.0.0.1:3005/employees", {
-        method: "POST",
-        credentials: "include", // Importante para enviar cookies de autenticação
-        headers,
-        body: formData, // Não definir Content-Type - o browser define automaticamente para multipart/form-data
-      });
+      const response = await fetch(
+        "backend-feelflow-core.onrender.com/employees",
+        {
+          method: "POST",
+          credentials: "include", // Importante para enviar cookies de autenticação
+          headers,
+          body: formData, // Não definir Content-Type - o browser define automaticamente para multipart/form-data
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
