@@ -41,7 +41,7 @@ export default function AuthScreen() {
       button.current.disabled = true;
 
       const response = await fetch(
-        "backend-feelflow-core.onrender.com/auth/login",
+        "https://backend-feelflow-core.onrender.com/auth/login",
         {
           method: "POST",
           credentials: "include",
