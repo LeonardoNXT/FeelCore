@@ -40,15 +40,12 @@ export default function AuthScreen() {
       button.current.textContent = "Entrando...";
       button.current.disabled = true;
 
-      const response = await fetch(
-        "https://backend-feelflow-core.onrender.com/auth/login",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(user),
-        }
-      );
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
 
       if (!response.ok) {
         throw new Error(await response.text());
