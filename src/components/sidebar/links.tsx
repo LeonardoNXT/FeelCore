@@ -84,6 +84,9 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
     isEmployeesActive: pathname.startsWith("/admin/employees"),
     isAddEmployeeActive: pathname.startsWith("/admin/employees/new"),
     isEmployeesOverviewActive: pathname.startsWith("/admin/employees/overview"),
+    isEmployeesDirectoryActive: pathname.startsWith(
+      "/admin/employees/directory"
+    ),
   };
 
   const NavItem = ({
@@ -269,8 +272,8 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
                     Visualização Geral
                   </SubNavItem>
                   <SubNavItem
-                    href="/admin/employees"
-                    isActive={pathname === "/admin/employees"}
+                    href="/admin/employees/directory"
+                    isActive={routeStates.isEmployeesDirectoryActive}
                     onNavigate={handleMobileNavigation}
                   >
                     <Building2 className="h-4 w-4" />

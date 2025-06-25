@@ -165,7 +165,7 @@ export default function FotoEConclusaoDoProfissional({ setPagina }: Props) {
         headers["Authorization"] = `Bearer ${token}`;
       }
 
-      const response = await fetch("http://127.0.0.1:3005/employees", {
+      const response = await fetch("/api/employees", {
         method: "POST",
         credentials: "include", // Importante para enviar cookies de autenticação
         headers,
