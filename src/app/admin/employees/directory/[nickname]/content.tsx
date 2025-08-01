@@ -50,7 +50,7 @@ export default function ContentDirectory({ data }: ContentDirectoryProps) {
   const ITEMS_PER_PAGE = 9;
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   // Filtrar funcionários baseado na busca
   const filteredEmployees = data.employees.filter(
@@ -97,31 +97,22 @@ export default function ContentDirectory({ data }: ContentDirectoryProps) {
   };
 
   return (
-    <div
-      className="relative bg-[#111111] rounded-[2vw] h-full"
-      style={{
-        backgroundImage: "url('/background1.webp')",
-        backgroundAttachment: "fixed",
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-      }}
-    >
+    <div className="relative border-1 border-[#ffffff] rounded-[2vw] h-full">
       {/* Background Image */}
-      <div className="w-full h-full absolute top-0 left-0 rounded-[2vw] brightness-[100%] bg-cover bg-center bg-no-repeat" />
 
       {/* Overlay and Content */}
-      <div className=" w-full min-h-[98vh] flex flex-col h-auto bg-[#0000005d] backdrop-blur-[50px] rounded-[2vw] p-6">
+      <div className=" w-full min-h-[98vh] flex flex-col h-auto bg-[#e2e2e298] backdrop-blur-[50px] rounded-[2vw] p-6">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-10 mt-4">
-            <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-              <Users className="w-6 h-6 text-white" />
+            <div className="p-3 bg-[#e9e9e9] backdrop-blur-sm rounded-xl border border-[#52525213]">
+              <Users className="w-6 h-6 text-[#333]" />
             </div>
             <div>
-              <h2 className="text-white text-4xl font-bold">
+              <h2 className="text-[#333] text-4xl font-bold">
                 Diretório de Funcionários
               </h2>
-              <p className="text-white/70">
+              <p className="text-[#adaaaa]">
                 Total de funcionários: {filteredEmployees.length}
               </p>
             </div>
@@ -131,13 +122,13 @@ export default function ContentDirectory({ data }: ContentDirectoryProps) {
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             {/* Busca */}
             <div className="relative flex-1  max-w-md w-full lg:w-auto">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50 w-5 h-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#333] w-5 h-5" />
               <input
                 type="text"
                 placeholder="Buscar funcionários..."
                 value={searchTerm}
                 onChange={(e) => handleSearch(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-[#ffffff0e] backdrop-blur-sm border-1 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all"
+                className="w-full pl-10 pr-4 py-3 bg-[#ffffff0e] backdrop-blur-sm border-1 border-[#2b2a2a28] rounded-xl text-[#333] placeholder-[#5c5c5c] focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all"
               />
             </div>
 
@@ -187,7 +178,7 @@ export default function ContentDirectory({ data }: ContentDirectoryProps) {
             {paginatedEmployees.map((employee) => (
               <div
                 key={employee._id}
-                className="w-full px-4 border-2 py-3 rounded-[40px] relative bg-gradient-to-b from-transparent to-[#00000057]"
+                className="w-full px-4 border-1 py-3 rounded-[30px] relative bg-[#e7e7e7e7] border-[#bdbdbd65]"
               >
                 <div className="flex border-b-1 pb-4 pt-1 relative">
                   {employee.avatar ? (
@@ -228,7 +219,7 @@ export default function ContentDirectory({ data }: ContentDirectoryProps) {
                       viewMode === "grid" ? " pl-5" : "justify-center"
                     }`}
                   >
-                    <p>{employee.name}</p>
+                    <p className="text-[#333]">{employee.name}</p>
                   </div>
                 </div>
                 <div>
@@ -238,19 +229,19 @@ export default function ContentDirectory({ data }: ContentDirectoryProps) {
                     }`}
                   >
                     <div className="w-full lg:w-auto flex items-center gap-5">
-                      <Mail className="w-4 h-4 text-white/50" />
-                      <p className="m">{employee.email}</p>
+                      <Mail className="w-4 h-4 text-[#333]" />
+                      <p className="text-[#333]">{employee.email}</p>
                     </div>
                     <div className="w-full lg:w-auto flex items-center gap-5 py-3">
-                      <Phone className="w-4 h-4 text-white/50" />
-                      <p className="m">{employee.phone}</p>
+                      <Phone className="w-4 h-4 text-[#333]" />
+                      <p className="text-[#333]">{employee.phone}</p>
                     </div>
                     <div className="w-full lg:w-auto flex items-center gap-5 ">
-                      <MapPin className="w-4 h-4 text-white/50" />
-                      <p className="m">{employee.address}</p>
+                      <MapPin className="w-4 h-4 text-[#333]" />
+                      <p className="text-[#333]">{employee.address}</p>
                     </div>
                   </div>
-                  <button className="w-full lg:max-w-[10vh] lg:absolute lg:top-7 lg:right-4 border-1 text-[#fff] bg-[#dfdfdf11] rounded-3xl py-2 mb-2">
+                  <button className="w-full border-1 text-[#333] border-[#33333321] bg-[#dfdfdf11] rounded-3xl py-2 mb-2">
                     Ver Perfil
                   </button>
                 </div>

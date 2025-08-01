@@ -139,8 +139,10 @@ export function GraficoDeContratacoes() {
     <Card className="py-0 w-full h-full bg-[transparent] border-0">
       <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row ">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 pt-4 pb-3 sm:!py-0">
-          <CardTitle>Gráfico Interativo - Adições ao sistema.</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-[#e0e0e0]">
+            Gráfico Interativo - Adições ao sistema.
+          </CardTitle>
+          <CardDescription className="text-[#c5c5c5]">
             Mostra o total de contratação dos últimos 3 meses.
           </CardDescription>
         </div>
@@ -151,13 +153,13 @@ export function GraficoDeContratacoes() {
               <button
                 key={chart}
                 data-active={activeChart === chart}
-                className="data-[active=true]:bg-muted/50 relative z-30 rounded-tr-[2vw] flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6"
+                className="data-[active=true]:bg-[#1313138f] relative z-30 rounded-tr-[2vw] flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6"
                 onClick={() => setActiveChart(chart)}
               >
-                <span className="text-muted-foreground text-xs">
+                <span className=" text-xs text-[#ffffffa6]">
                   {chartConfig[chart].label}
                 </span>
-                <span className="text-lg leading-none font-bold sm:text-3xl">
+                <span className="text-lg leading-none font-bold sm:text-3xl text-[#d4d4d4]">
                   {total[key as keyof typeof total].toLocaleString()}
                 </span>
               </button>

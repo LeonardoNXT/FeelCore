@@ -48,7 +48,8 @@ export default function AuthScreen() {
       });
 
       if (!response.ok) {
-        throw new Error(await response.text());
+        const errorData = await response.json();
+        throw new Error(errorData.msg);
       }
 
       // Redireciona para /admin/ após login bem-sucedido
@@ -62,17 +63,17 @@ export default function AuthScreen() {
         erro.current.textContent =
           err instanceof Error ? err.message : String(err);
         erro.current.classList.remove("opacity-0", "h-0");
-        erro.current.classList.add("opacity-100", "h-auto");
+        erro.current.classList.add("opacity-100", "h-auto", "p-2");
       }
     }
   }
 
   return (
     <div className="w-full h-screen flex justify-center items-center relative">
-      <div className="w-full h-full absolute saturate-0 invert">
+      <div className="w-full h-full absolute saturate-[30%]">
         <Iridescence />
       </div>
-      <div className="relative z-10 flex flex-col bg-[#0f0f0f] rounded-2xl w-[90%] max-w-sm sm:max-w-md md:max-w-lg lg:w-[28vw] lg:rounded-[1vw] border border-[#222121] p-6 sm:p-8 lg:pb-[3vw] lg:pt-[3vw] lg:pl-[2vw] lg:pr-[2vw] mx-4">
+      <div className="relative z-10 flex flex-col bg-[#f5f5f5] rounded-2xl w-[90%] max-w-sm sm:max-w-md md:max-w-lg lg:w-[28vw] lg:rounded-[1vw] border border-[#c7bdbd] p-6 sm:p-8 lg:pb-[3vw] lg:pt-[3vw] lg:pl-[2vw] lg:pr-[2vw] mx-4">
         <div
           className="bg-[#fd7373ee] opacity-0 h-0 overflow-hidden rounded-lg lg:rounded-[0.5vw] transition-all duration-300"
           ref={erro}
@@ -87,7 +88,7 @@ export default function AuthScreen() {
           <input
             placeholder="Email"
             type="email"
-            className="outline-none border-0 border-b w-full border-b-[#333] text-lg lg:text-[1.2rem] text-[#fff] mb-6 lg:mb-[40px] pt-2 pb-2 lg:pt-[0.5vw] lg:pb-[0.5vw] bg-transparent"
+            className="outline-none border-0 border-b w-full border-b-[#d1d1d1] text-lg lg:text-[1.2rem] text-[#000000] mb-6 lg:mb-[40px] pt-2 pb-2 lg:pt-[0.5vw] lg:pb-[0.5vw] bg-transparent"
             required
             onInput={validateForm}
             ref={email}
@@ -95,7 +96,7 @@ export default function AuthScreen() {
           <input
             placeholder="Senha"
             type="password"
-            className="outline-none border-0 border-b w-full border-b-[#333] text-lg lg:text-[1.2rem] text-[#fff] pt-2 pb-2 lg:pt-[0.5vw] lg:pb-[0.5vw] bg-transparent"
+            className="outline-none border-0 border-b w-full border-b-[#d1d1d1] text-lg lg:text-[1.2rem] text-[#000] pt-2 pb-2 lg:pt-[0.5vw] lg:pb-[0.5vw] bg-transparent"
             required
             onInput={validateForm}
             ref={senha}
@@ -106,7 +107,7 @@ export default function AuthScreen() {
           <button
             ref={button}
             disabled={!isFormValid}
-            className="outline-none border-0 bg-[#c5c5c5] p-3 lg:p-[0.5vw] text-base lg:text-[1rem] rounded-lg lg:rounded-[2vw] cursor-pointer transition-all duration-200 disabled:bg-[#141414] disabled:text-[#c5c5c5] disabled:border disabled:border-[#202020] disabled:cursor-not-allowed"
+            className="outline-none border-0 bg-[#000000] p-3 lg:p-[0.5vw] text-base lg:text-[1rem] rounded-lg lg:rounded-[2vw] cursor-pointer transition-all duration-200 disabled:bg-[#ffffff] disabled:text-[#c5c5c5] disabled:border disabled:border-[#ffffff] disabled:cursor-not-allowed"
           >
             Entrar
           </button>

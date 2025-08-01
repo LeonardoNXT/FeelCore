@@ -64,9 +64,11 @@ export async function middleware(request: NextRequest) {
         }
 
         // Se o ID não for válido e não for o próprio userId
-        if (!isObjectId && urlId !== userId) {
-          const redirectBase = `/admin/employees/${urlVerified}/${userId}`;
-          return NextResponse.redirect(new URL(redirectBase, request.url));
+        if (urlId !== "profile") {
+          if (!isObjectId && urlId !== userId) {
+            const redirectBase = `/admin/employees/${urlVerified}/${userId}`;
+            return NextResponse.redirect(new URL(redirectBase, request.url));
+          }
         }
       }
       if (segments[2] === "dashboard") {
@@ -86,7 +88,7 @@ export async function middleware(request: NextRequest) {
         } // funcionando corretamente
         const isObjectId = /^[a-f\d]{24}$/i.test(urlId);
 
-        if (!isObjectId && urlId !== userId) {
+        if (!isObjectId && urlId !== userId && urlId) {
           return NextResponse.redirect(
             new URL(`/admin/dashboard/users/${userId}`, request.url)
           );

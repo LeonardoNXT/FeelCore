@@ -58,7 +58,7 @@ export default function FotoEConclusaoDoProfissional({ setPagina }: Props) {
     // Armazenar o File no store do funcionário
     setFuncionario({
       ...funcionario,
-      avatar: file, // This should now work with the updated interface
+      avatar: file,
     });
   };
 
@@ -122,21 +122,15 @@ export default function FotoEConclusaoDoProfissional({ setPagina }: Props) {
         const value = funcionario[key as keyof typeof funcionario];
         if (value !== null && value !== undefined && value !== "") {
           if (key === "avatar") {
-            // Handle avatar properly - only add if it's a File
             if (value instanceof File) {
               formData.append("avatar", value);
             }
-            // Skip if it's already a cloud storage object (url/public_id)
           } else {
             // Mapear nomes de campos do frontend para backend se necessário
             let fieldName = key;
 
             // Mapeamento de campos se houver diferenças entre frontend e backend
-            const fieldMapping: Record<string, string> = {
-              // Adicione aqui se houver campos com nomes diferentes
-              // 'dataNascimento': 'birthday',  // exemplo
-              // 'dataContratacao': 'hiredata'  // exemplo
-            };
+            const fieldMapping: Record<string, string> = {};
 
             fieldName = fieldMapping[key] || key;
             formData.append(fieldName, String(value));
@@ -250,10 +244,10 @@ export default function FotoEConclusaoDoProfissional({ setPagina }: Props) {
   return (
     <div className="h-full flex flex-col lg:flex-row-reverse">
       <div
-        className="w-full h-full absolute top-0 left-0 bg-[#000] flex justify-center items-center opacity-0 pointer-events-none"
+        className="w-full h-full absolute top-0 left-0 bg-[#fff] flex justify-center items-center opacity-0 pointer-events-none"
         ref={divSucess}
       >
-        <p className="text-[6vw] lg:text-[4vw]" ref={sucessText}>
+        <p className="text-[6vw] lg:text-[4vw] text-[#000]" ref={sucessText}>
           O email foi enviado com sucesso
         </p>
       </div>

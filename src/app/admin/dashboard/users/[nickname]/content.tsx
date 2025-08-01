@@ -8,32 +8,23 @@ import { motion } from "framer-motion";
 
 export default function ContentDashboardUsers() {
   return (
-    <div className="p-2 sm:p-4 lg:p-[1vw] bg-[#0e0e0e] rounded-lg lg:rounded-[1vw]">
+    <div className="p-2 sm:p-4 lg:p-[1vw] border-1 border-[#cfcfcf] bg-[#e6e6e6] rounded-lg lg:rounded-[1vw]">
       <motion.div
-        className="w-full bg-[#0c0c0c] rounded-lg lg:rounded-[1vw]"
+        className="w-full rounded-lg lg:rounded-[1vw]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
         <motion.div
-          className="border-b border-[#555555] pb-3 sm:pb-4 lg:pb-[0.8vw]"
+          className="border-b border-[#acacac] pb-3 sm:pb-4 lg:pb-[0.8vw]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1, duration: 0.2 }}
         >
-          <p className="font-medium text-lg sm:text-xl lg:text-[1vw] text-white">
-            Dashboard
+          <p className="font-medium text-lg sm:text-xl lg:text-[1vw] text-[#333]">
+            Gráfico de Usuário
           </p>
         </motion.div>
-      </motion.div>
-
-      <motion.div
-        className="w-full border-b border-[#333] pb-3 pt-3 sm:pb-4 sm:pt-4 lg:pb-[0.8vw] lg:pt-[0.8vw]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2, duration: 0.3 }}
-      >
-        <p className="text-sm sm:text-base text-[#333]">Gráfico dos usuários</p>
       </motion.div>
 
       <motion.div

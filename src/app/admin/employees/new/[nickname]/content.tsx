@@ -16,7 +16,7 @@ export default function ContentENew() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="w-full h-[99.5vh] sm:h-[98vh] rounded-[2vw] relative overflow-hidden"
+      className="w-full h-[99.5vh] sm:h-[98vh] rounded-[2vw] relative overflow-hidden border-1 border-[#fff0]"
     >
       <Image
         src={"/background5.webp"}

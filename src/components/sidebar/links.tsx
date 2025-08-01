@@ -175,9 +175,9 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
       aria-label="Toggle menu"
     >
       {isMobileMenuOpen ? (
-        <X className="h-5 w-5" />
+        <X className="h-5 w-5 stroke-[#333]" />
       ) : (
-        <Menu className="h-5 w-5" />
+        <Menu className="h-5 w-5 stroke-[#333]" />
       )}
     </button>
   );
@@ -341,18 +341,18 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
 
       {/* Sidebar Desktop (>= 1500px) */}
       <aside
-        className="w-[15%] relative border-r bg-gradient-to-br from-[#000000] via-[#050505] to-[#0c0c0c]"
+        className="w-[15%] relative border-r bg-gradient-to-br from-[#c8ebf8] via-[#e9e9e9] to-[#ffffff]"
         style={{ display: isMobile ? "none" : "flex" }}
       >
         <div className="w-full h-screen sticky top-0 left-0 flex flex-col">
           {/* Header */}
-          <div className="flex h-14 items-center border-b px-4">
+          <div className="flex h-14 items-center border-b border-[#ffffff] px-4">
             <Link
               href="/admin"
               className="flex items-center gap-2 font-semibold"
             >
-              <span className="text-[1.2vw]">
-                Feel<span className="text-[#ffd8a6]">Core</span>.
+              <span className="text-[1.2vw] text-[#333]">
+                Feel<span className="text-[#263e42]">Core</span>
               </span>
             </Link>
           </div>
@@ -369,7 +369,7 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "tween", duration: 0.3 }}
-            className="fixed left-0 top-0 h-full w-64 z-50 border-r bg-gradient-to-br from-[#000000] via-[#050505] to-[#0c0c0c]"
+            className="fixed left-0 top-0 h-full w-64 z-50 border-r bg-gradient-to-br from-[#c8ebf8] via-[#e9e9e9] to-[#ffffff]"
           >
             <div className="w-full h-full flex flex-col">
               {/* Header */}
@@ -379,8 +379,8 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
                   className="flex items-center gap-2 font-semibold"
                   onClick={handleMobileNavigation}
                 >
-                  <span className="text-lg">
-                    Feel<span className="text-[#ffd8a6]">Core</span>.
+                  <span className="text-lg text-[#333]">
+                    Feel<span className="text-[#263e42]">Core</span>
                   </span>
                 </Link>
               </div>
