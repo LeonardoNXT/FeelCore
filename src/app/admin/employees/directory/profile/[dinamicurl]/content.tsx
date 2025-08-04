@@ -22,7 +22,6 @@ export default function ProfileContent({ employeerId }: any) {
   const [cpf, setCpf] = useState<string>("");
   const [createdAt, setCreatedAt] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [employee_of, setEmployeeOf] = useState<EmployeeOf | null>(null);
   const [hireDate, setHireDate] = useState<string>("");
   const [patients, setPatients] = useState<any[]>([]); // Inicialize como array vazio
   const [phone, setPhone] = useState<string>("");
@@ -49,7 +48,6 @@ export default function ProfileContent({ employeerId }: any) {
           new Date(data.employee.createdAt).toLocaleDateString("pt-br")
         );
         setEmail(data.employee.email);
-        setEmployeeOf(data.employee.employee_of);
         setHireDate(
           new Date(data.employee.hireDate).toLocaleDateString("pt-br")
         );
