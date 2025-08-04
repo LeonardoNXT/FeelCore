@@ -22,77 +22,11 @@ export async function middleware(request: NextRequest) {
 
       if (!response.ok) throw new Error(await response.text());
 
-      const data = await response.json();
-      const userId = data.user._id;
-
       const { pathname } = request.nextUrl;
       const segments = pathname.split("/");
 
       if (pathname === "/login") {
-        return NextResponse.redirect(new URL(`/admin/${userId}`, request.url));
-      }
-
-      if (segments[1] === "admin") {
-        const urlId1 = segments[2];
-        console.log(urlId1);
-
-        if (!urlId1) {
-          return NextResponse.redirect(
-            new URL(`/admin/${userId}`, request.url)
-          );
-        } // funcionado
-        const isObjectId = /^[a-f\d]{24}$/i.test(urlId1);
-
-        if (!["dashboard", "employees"].includes(segments[2])) {
-          if (!isObjectId && urlId1 !== userId) {
-            return NextResponse.redirect(
-              new URL(`/admin/${userId}`, request.url)
-            );
-          }
-        }
-      } //
-      if (segments[2] === "employees") {
-        const urlVerified = segments[3]; // (ex: overview, directory, new)
-        const urlId = segments[4]; // (ex: ObjectId ou userId)
-        const isObjectId = /^[a-f\d]{24}$/i.test(urlId);
-
-        // Verifica se a subrota é válida (overview, directory, new)
-        if (!["overview", "directory", "new"].includes(urlVerified)) {
-          return NextResponse.redirect(
-            new URL(`/admin/${userId}`, request.url)
-          );
-        }
-
-        // Se o ID não for válido e não for o próprio userId
-        if (urlId !== "profile") {
-          if (!isObjectId && urlId !== userId) {
-            const redirectBase = `/admin/employees/${urlVerified}/${userId}`;
-            return NextResponse.redirect(new URL(redirectBase, request.url));
-          }
-        }
-      }
-      if (segments[2] === "dashboard") {
-        if (segments[3] !== "users" && segments[3] !== "financial") {
-          return NextResponse.redirect(
-            new URL(`/admin/${userId}`, request.url)
-          );
-        }
-      }
-      // funcionando corretamente
-      if (segments[3] === "users") {
-        const urlId = segments[4];
-        if (!urlId) {
-          return NextResponse.redirect(
-            new URL(`/admin/dashboard/users/${userId}`, request.url)
-          );
-        } // funcionando corretamente
-        const isObjectId = /^[a-f\d]{24}$/i.test(urlId);
-
-        if (!isObjectId && urlId !== userId && urlId) {
-          return NextResponse.redirect(
-            new URL(`/admin/dashboard/users/${userId}`, request.url)
-          );
-        }
+        return NextResponse.redirect(new URL(`/admin/`, request.url));
       }
     } catch (err) {
       console.log("Middleware auth error:", err);
@@ -100,6 +34,35 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL("/login", request.url));
       }
     }
+  }
+  try {
+    const response1 = await fetch(
+      "https://backend-feelflow-core.onrender.com/employees/all",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      }
+    );
+    const data1 = await response1.json();
+    const ids = data1.employees.map((e) => e._id);
+    const { pathname } = request.nextUrl;
+    const segments = pathname.split("/");
+
+    if (segments[4] == "profile") {
+      console.log(segments[5]);
+      console.log(ids);
+      const targetId = segments[5];
+      if (!ids.includes(targetId)) {
+        console.log("não está incluso");
+        return NextResponse.redirect(
+          new URL("/admin/employees/directory", request.url)
+        );
+      }
+    }
+  } catch (e) {
+    console.log(e);
   }
 
   return NextResponse.next();

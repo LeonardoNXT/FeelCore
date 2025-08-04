@@ -10,7 +10,11 @@ export default function Directory() {
 
   useEffect(() => {
     if (!hasFetched) {
-      fetch("/api/employees")
+      fetch("/api/employees/all", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      })
         .then((res) => {
           if (!res.ok) throw new Error("Erro na requisição");
           return res.json();
@@ -25,7 +29,12 @@ export default function Directory() {
     }
   }, [hasFetched, setEmployees, setHasFetched]);
 
-  if (!hasFetched) return <p>Carregando...</p>;
+  if (!hasFetched)
+    return (
+      <div className="w-full h-[98vh] flex justify-center items-center">
+        <p className="text-[#a7a7a7] text-2xl">Carregando...</p>
+      </div>
+    );
 
   return <ContentDirectory data={{ employees, total }} />;
 }

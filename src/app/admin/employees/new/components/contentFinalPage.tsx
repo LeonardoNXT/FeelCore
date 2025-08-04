@@ -2,7 +2,6 @@
 import { useFuncionarioStore } from "@/stores/funcionarioStore";
 import { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap/gsap-core";
-import { Router, useRouter } from "next/router";
 
 type Pagina = 1 | 2 | 3 | 4 | 5;
 
@@ -197,11 +196,7 @@ export default function FotoEConclusaoDoProfissional({ setPagina }: Props) {
         opacity: 1,
       }).to(sucessText.current, 0.3, {
         opacity: 1,
-        onComplete: () => {
-          setTimeout(() => {
-            Router.('/admin/employees/directory/')
-          }, 1000)
-        },
+        onComplete: () => {},
       });
 
       // Opcionalmente limpar o store ou redirecionar

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import {
   ChevronLeft,
   ChevronRight,
@@ -133,13 +134,13 @@ export default function ContentDirectory({ data }: ContentDirectoryProps) {
             </div>
 
             {/* Seletor de visualização */}
-            <div className="flex bg-[#ffffff0a] backdrop-blur-sm rounded-xl p-1 border border-white/20">
+            <div className="flex bg-[#ffffff0a] backdrop-blur-sm rounded-xl p-1 border border-[#dbd9d9]">
               <button
                 onClick={() => setViewMode("list")}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   viewMode === "list"
                     ? "bg-white text-black"
-                    : "text-white/70 hover:text-white"
+                    : "text-[#333] hover:text-[#000]"
                 }`}
               >
                 Lista
@@ -149,7 +150,7 @@ export default function ContentDirectory({ data }: ContentDirectoryProps) {
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   viewMode === "grid"
                     ? "bg-white text-black"
-                    : "text-white/70 hover:text-white"
+                    : "text-[#333] hover:text-[#000]"
                 }`}
               >
                 Grade
@@ -241,9 +242,18 @@ export default function ContentDirectory({ data }: ContentDirectoryProps) {
                       <p className="text-[#333]">{employee.address}</p>
                     </div>
                   </div>
-                  <button className="w-full border-1 text-[#333] border-[#33333321] bg-[#dfdfdf11] rounded-3xl py-2 mb-2">
-                    Ver Perfil
-                  </button>
+                  <Link
+                    href={`/admin/employees/directory/profile/${employee._id}`}
+                    className="h-auto"
+                  >
+                    <p
+                      className={
+                        "w-full border-1 text-[#333] border-[#33333321] bg-[#dfdfdf11] rounded-3xl py-2 mb-2 text-center duration-300 hover:bg-[#cccbcb]"
+                      }
+                    >
+                      Ver Perfil
+                    </p>
+                  </Link>
                 </div>
               </div>
             ))}
