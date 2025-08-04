@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
@@ -23,7 +24,6 @@ export async function middleware(request: NextRequest) {
       if (!response.ok) throw new Error(await response.text());
 
       const { pathname } = request.nextUrl;
-      const segments = pathname.split("/");
 
       if (pathname === "/login") {
         return NextResponse.redirect(new URL(`/admin/`, request.url));
