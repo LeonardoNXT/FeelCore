@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 
@@ -46,7 +45,7 @@ export async function middleware(request: NextRequest) {
       }
     );
     const data1 = await response1.json();
-    const ids = data1.employees.map((e) => e._id);
+    const ids = (data1.employees as { _id: string }[]).map((e) => e._id);
     const { pathname } = request.nextUrl;
     const segments = pathname.split("/");
 
