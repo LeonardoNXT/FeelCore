@@ -71,7 +71,7 @@ export default function AdminLayout({
       <motion.main
         className={`
           flex-1 h-full flex transition-all duration-300
-          ${isMobile ? "w-full p-2" : "w-[85%] p-[0.5vw]"}
+          ${isMobile ? "w-full p-0" : "w-[85%] p-[0.5vw]"}
           ${isMobileMenuOpen ? "ml-0" : "ml-0"}
         `}
         initial={{ opacity: 0 }}

@@ -98,11 +98,11 @@ export default function ContentDirectory({ data }: ContentDirectoryProps) {
   };
 
   return (
-    <div className="relative border-1 border-[#ffffff] rounded-[2vw] h-full">
+    <div className="relative border-1 rounded-[2vw] h-full">
       {/* Background Image */}
 
       {/* Overlay and Content */}
-      <div className=" w-full min-h-[98vh] flex flex-col h-auto bg-[#e2e2e298] backdrop-blur-[50px] rounded-[2vw] p-6">
+      <div className=" w-full min-h-[98vh] flex flex-col h-auto  backdrop-blur-[50px] rounded-[2vw] p-6">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-10 mt-4">
@@ -179,7 +179,7 @@ export default function ContentDirectory({ data }: ContentDirectoryProps) {
             {paginatedEmployees.map((employee) => (
               <div
                 key={employee._id}
-                className="w-full px-4 border-1 py-3 rounded-[30px] relative bg-[#e7e7e7e7] border-[#bdbdbd65]"
+                className="w-full px-4 border-1 py-3 rounded-[30px] relative bg-[#f3f3f371] border-[#bdbdbd65]"
               >
                 <div className="flex border-b-1 pb-4 pt-1 relative">
                   {employee.avatar ? (
