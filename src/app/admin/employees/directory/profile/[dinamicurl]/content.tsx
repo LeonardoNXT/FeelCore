@@ -31,7 +31,10 @@ export default function ProfileContent({ employeerId }: any) {
 
   console.log(employeerId);
   useEffect(() => {
-    fetch(`/api/employees/${employeerId}`)
+    fetch(`/api/employees/${employeerId}`, {
+      method: "POST",
+      credentials: "include",
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
