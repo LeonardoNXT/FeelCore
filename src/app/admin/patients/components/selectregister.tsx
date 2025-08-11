@@ -21,7 +21,7 @@ export default function CadastroSelect({
   backPage: () => void;
   onContinuar: () => void;
 }) {
-  const { consumer, setConsumer, resetConsumer } = useConsumerStore();
+  const { consumer, setConsumer } = useConsumerStore();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);

@@ -8,7 +8,7 @@ export default function CadastroInicial({
 }: {
   onContinuar: () => void;
 }) {
-  const { consumer, setConsumer, resetConsumer } = useConsumerStore();
+  const { consumer, setConsumer } = useConsumerStore();
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
 

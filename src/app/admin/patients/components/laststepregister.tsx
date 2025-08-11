@@ -23,13 +23,11 @@ interface Employee {
 
 export default function CadastroLastStep({
   backPage,
-  onContinuar,
 }: {
   backPage: () => void;
-  onContinuar: () => void;
 }) {
   const [employee, setEmployee] = useState<Employee | null>(null);
-  const { consumer, setConsumer, resetConsumer } = useConsumerStore();
+  const { consumer } = useConsumerStore();
   const [preview, setPreview] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const handleClick = () => {
