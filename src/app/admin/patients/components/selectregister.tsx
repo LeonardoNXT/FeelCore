@@ -28,6 +28,7 @@ export default function CadastroSelect({
   const itemsPerPage = 5; // quantos por página
 
   useEffect(() => {
+    window.scrollY = 0; // volta para o topo
     fetch("/api/employees/all", {
       method: "post",
       credentials: "include",

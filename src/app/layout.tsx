@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-br" className="dark" suppressHydrationWarning>
+    <html lang="pt-br" className="light" suppressHydrationWarning>
       <body className={`${aeonik.className} antialiased`}>
         <ThemeProvider
           attribute="class"

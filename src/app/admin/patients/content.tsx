@@ -16,7 +16,7 @@ export default function Cadastro() {
           onContinuar={() => setPagina(3)}
         />
       )}
-      {pagina === 3 && <CadastroLastStep backPage={() => setPagina(1)} />}
+      {pagina === 3 && <CadastroLastStep backPage={() => setPagina(2)} />}
     </>
   );
 }

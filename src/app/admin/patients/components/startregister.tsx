@@ -67,7 +67,10 @@ export default function CadastroInicial({
             type="text"
             value={consumer.name || ""}
             onChange={(e) => setConsumer({ name: e.target.value })}
-            className="w-full bg-[#ffffff] border-[#c7c7c713] md:border-[#afafaf3a] border-1 text-[#918e8e] rounded-2xl md:rounded-3xl p-3 duration-300"
+            className="w-full bg-[#ffffff] border border-[#c7c7c713] md:border-[#afafaf3a] 
+            text-[#918e8e] rounded-2xl md:rounded-3xl p-3 
+            focus:border-[#0084ff] focus:ring-1 focus:outline-none 
+            transition-colors duration-200 focus:ring-[#0084ff]"
             placeholder="Nome:"
             required
           />
@@ -82,7 +85,10 @@ export default function CadastroInicial({
             onChange={(e) =>
               setConsumer({ email: e.target.value.toLowerCase() })
             }
-            className="w-full bg-[#ffffff] border-[#c7c7c713] md:border-[#afafaf3a] border-1 text-[#918e8e] rounded-2xl md:rounded-3xl p-3 duration-300"
+            className="w-full bg-[#ffffff] border border-[#c7c7c713] md:border-[#afafaf3a] 
+            text-[#918e8e] rounded-2xl md:rounded-3xl p-3 
+            focus:border-[#0084ff] focus:ring-1 focus:outline-none 
+            transition-colors duration-200 focus:ring-[#0084ff]"
             placeholder="Email:"
             required
           />
@@ -95,7 +101,10 @@ export default function CadastroInicial({
             type="password"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
-            className="w-full bg-[#ffffff] border-[#c7c7c713] md:border-[#afafaf3a] border-1 text-[#918e8e] rounded-2xl md:rounded-3xl p-3 duration-300"
+            className="w-full bg-[#ffffff] border border-[#c7c7c713] md:border-[#afafaf3a] 
+            text-[#918e8e] rounded-2xl md:rounded-3xl p-3 
+            focus:border-[#0084ff] focus:ring-1 focus:outline-none 
+            transition-colors duration-200 focus:ring-[#0084ff]"
             placeholder="Senha:"
             required
           />
