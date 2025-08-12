@@ -41,7 +41,6 @@ export default function CadastroLastStep({
   };
   useEffect(() => {
     window.scrollY = 0; // volta para o topo
-    console.log(consumer.name?.trim().split(" "));
     if (!consumer.patient_of) {
       backPage();
     }
@@ -79,7 +78,7 @@ export default function CadastroLastStep({
           </div>
         </div>
       </motion.div>
-      <div className="md:flex w-full md:items-stretch md:justify-between flex-row-reverse">
+      <div className="md:flex w-full md:items-stretch md:justify-between flex-row-reverse overflow-hidden">
         <div className="p-4 md:w-[26%] md:h-auto">
           {employee && (
             <motion.div

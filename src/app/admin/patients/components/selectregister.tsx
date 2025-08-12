@@ -54,7 +54,7 @@ export default function CadastroSelect({
   const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-4 overflow-hidden">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
