@@ -5,8 +5,6 @@ import {
   Home,
   BarChart3,
   DollarSign,
-  Users,
-  UserCheck,
   ChevronDown,
   Building2,
   UserPlus,
@@ -14,6 +12,8 @@ import {
   LucideIcon,
   Menu,
   X,
+  Heart,
+  List,
 } from "lucide-react";
 import { useState, ReactNode, useEffect } from "react";
 import { useUserStore } from "@/stores/userStore";
@@ -45,6 +45,7 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
   const pathname = usePathname();
   const [isDashboardOpen, setIsDashboardOpen] = useState<boolean>(true);
   const [isEmployeesOpen, setIsEmployeesOpen] = useState<boolean>(true);
+  const [isPatientsOpen, setIsPatientsOpen] = useState<boolean>(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
@@ -78,8 +79,8 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
   const routeStates = {
     isHomeActive:
       pathname === "/admin" || /^\/admin\/[a-f\d]{24}$/i.test(pathname),
-    isDashboardUsersActive: pathname.startsWith("/admin/dashboard/users"),
-    isUsersActive: pathname.startsWith("/admin/users"),
+    isDashboardPatientsActive: pathname.startsWith("/admin/dashboard/users"),
+    isPatientsActive: pathname.startsWith("/admin/patients"),
     isDashboardActive: pathname.startsWith("/admin/dashboard"),
     isEmployeesActive: pathname.startsWith("/admin/employees"),
     isAddEmployeeActive: pathname.startsWith("/admin/employees/new"),
@@ -87,6 +88,9 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
     isEmployeesDirectoryActive: pathname.startsWith(
       "/admin/employees/directory"
     ),
+    isAddPatientActive: pathname.startsWith("/admin/patients/new"),
+    isPatientsDirectoryActive: pathname.startsWith("/admin/patients/directory"),
+    isPatientsOverviewActive: pathname.startsWith("/admin/patients/overview"),
   };
 
   const NavItem = ({
@@ -138,7 +142,9 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
             (onClick === (() => setIsDashboardOpen(!isDashboardOpen)) &&
               isDashboardOpen) ||
             (onClick === (() => setIsEmployeesOpen(!isEmployeesOpen)) &&
-              isEmployeesOpen)
+              isEmployeesOpen) ||
+            (onClick === (() => setIsPatientsOpen(!isPatientsOpen)) &&
+              isPatientsOpen)
               ? "rotate-180"
               : ""
           }`}
@@ -242,11 +248,11 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
                   </SubNavItem>
                   <SubNavItem
                     href="/admin/dashboard/users"
-                    isActive={routeStates.isDashboardUsersActive}
+                    isActive={routeStates.isDashboardPatientsActive}
                     onNavigate={handleMobileNavigation}
                   >
-                    <Users className="h-4 w-4" />
-                    Usuários
+                    <Heart className="h-4 w-4" />
+                    Pacientes
                   </SubNavItem>
                 </div>
               )}
@@ -291,14 +297,44 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
               )}
             </div>
 
-            <NavItem
-              href="/admin/users"
-              icon={UserCheck}
-              isActive={routeStates.isUsersActive}
-              onNavigate={handleMobileNavigation}
-            >
-              Usuários
-            </NavItem>
+            <div className="space-y-1">
+              <NavItem
+                icon={Heart}
+                isActive={routeStates.isPatientsActive}
+                onClick={() => setIsPatientsOpen(!isPatientsOpen)}
+              >
+                Pacientes
+              </NavItem>
+
+              {isPatientsOpen && (
+                <div className="space-y-1 ml-4 border-l border-border pl-4">
+                  <SubNavItem
+                    href="/admin/patients/overview"
+                    isActive={routeStates.isPatientsOverviewActive}
+                    onNavigate={handleMobileNavigation}
+                  >
+                    <Eye className="h-4 w-4" />
+                    Visualização Geral
+                  </SubNavItem>
+                  <SubNavItem
+                    href="/admin/patients/directory"
+                    isActive={routeStates.isPatientsDirectoryActive}
+                    onNavigate={handleMobileNavigation}
+                  >
+                    <List className="h-4 w-4" />
+                    Lista de Pacientes
+                  </SubNavItem>
+                  <SubNavItem
+                    href="/admin/patients/new"
+                    isActive={routeStates.isAddPatientActive}
+                    onNavigate={handleMobileNavigation}
+                  >
+                    <UserPlus className="h-4 w-4" />
+                    Adicionar Paciente
+                  </SubNavItem>
+                </div>
+              )}
+            </div>
           </div>
         </nav>
 

@@ -28,19 +28,77 @@ export default function CadastroLastStep({
   backPage: () => void;
 }) {
   const [employee, setEmployee] = useState<Employee | null>(null);
+  const [birthDate, setBirthDate] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { consumer } = useConsumerStore();
   const [preview, setPreview] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
   const handleClick = () => {
-    inputRef.current?.click(); // dispara o clique no input escondido
+    inputRef.current?.click();
   };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
+    setSelectedFile(file);
     setPreview(URL.createObjectURL(file));
   };
+
+  const cadastrarUsuario = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!birthDate) {
+      alert("Por favor, preencha a data de aniversário");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // Criar FormData para enviar dados + arquivo
+      const formData = new FormData();
+
+      // Adicionar dados obrigatórios
+      formData.append("name", consumer.name || "");
+      formData.append("email", consumer.email || "");
+      formData.append("password", consumer.password || "");
+      formData.append("birth_date", birthDate);
+      formData.append("patient_of", consumer.patient_of || "");
+
+      // Adicionar arquivo se selecionado
+      if (selectedFile) {
+        formData.append("avatar", selectedFile);
+      }
+
+      const response = await fetch("/api/customers", {
+        method: "POST",
+        credentials: "include",
+        body: formData, // Não definir Content-Type, deixar o browser definir
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Erro ao criar conta");
+      }
+
+      // Sucesso - redirecionar ou mostrar mensagem
+      console.log("Usuário criado com sucesso:", data);
+
+      // Aqui você pode redirecionar ou mostrar mensagem de sucesso
+      // Por exemplo: router.push("/login") ou mostrar modal de sucesso
+    } catch (error) {
+      console.error("Erro ao cadastrar usuário:", error);
+      alert(error instanceof Error ? error.message : "Erro ao criar conta");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    window.scrollY = 0; // volta para o topo
+    window.scrollY = 0;
     if (!consumer.patient_of) {
       backPage();
     }
@@ -51,13 +109,14 @@ export default function CadastroLastStep({
       .then((response) => response.json())
       .then((data) => setEmployee(data.employee));
   }, [consumer.patient_of, backPage]);
+
   return (
     <div>
       <motion.div
         initial={{ opacity: 0, filter: "blur(10px)" }}
         animate={{ opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 1 }}
-        className="p-2 pl-6 mt-10 mb-0"
+        className="p-2 pl-6 mt-10 mb-0 overflow-hidden"
       >
         <div className="px-3 py-2 bg-gradient-to-br from-[#26bfd3] to-[#03c4ff00] text-[14px] text-[#ffffff] rounded-[13px] w-max flex items-center">
           <p></p>
@@ -78,7 +137,7 @@ export default function CadastroLastStep({
           </div>
         </div>
       </motion.div>
-      <div className="md:flex w-full md:items-stretch md:justify-between flex-row-reverse overflow-hidden">
+      <div className="md:flex w-full md:items-stretch md:justify-between flex-row-reverse">
         <div className="p-4 md:w-[26%] md:h-auto">
           {employee && (
             <motion.div
@@ -101,7 +160,7 @@ export default function CadastroLastStep({
                     width={200}
                     height={200}
                     className="rounded-full h-[80px] w-[80px] md:h-[140px] md:mb-[20px] md:w-[140px] border-[#4c4285] border-5"
-                  ></Image>
+                  />
                 ) : (
                   <div className="w-[80px] h-[80px] rounded-full bg-[#000] border-[#4c4285] border-5 flex justify-center items-center text-[#ebebeb] font-bold text-[30px]">
                     {employee?.name.split(" ")[0].split("")[0] +
@@ -118,7 +177,7 @@ export default function CadastroLastStep({
             </motion.div>
           )}
         </div>
-        <form className="md:flex-1">
+        <form className="md:flex-1" onSubmit={cadastrarUsuario}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -149,6 +208,8 @@ export default function CadastroLastStep({
                 className="text-[#3f3f3f] text-[15px] px-4 py-2 border-1 border-[#00000046] rounded-2xl flex-1 w-auto font-bold"
                 placeholder="Aniversário"
                 type="date"
+                value={birthDate}
+                onChange={(e) => setBirthDate(e.target.value)}
                 required
               />
             </div>
@@ -168,7 +229,6 @@ export default function CadastroLastStep({
               </div>
               <div className="flex w-full">
                 <div className="flex items-end w-1/2">
-                  {/* Botão estilizado */}
                   <button
                     type="button"
                     onClick={handleClick}
@@ -177,7 +237,6 @@ export default function CadastroLastStep({
                     Adicionar imagem
                   </button>
 
-                  {/* Input escondido */}
                   <input
                     type="file"
                     accept="image/*"
@@ -220,14 +279,16 @@ export default function CadastroLastStep({
                 type="button"
                 className="px-7 py-4 text-[14px] bg-[#fff] text-[#333] rounded-[60px]  border-1 border-[#f5f5f5]"
                 onClick={() => backPage()}
+                disabled={isLoading}
               >
                 Voltar
               </button>
               <button
                 type="submit"
-                className="px-6 py-3 text-[14px] bg-[#0084ff] border-1 border-[#f5f5f5] text-[#fff] duration-300 rounded-[60px] font-bold"
+                className="px-6 py-3 text-[14px] bg-[#0084ff] border-1 border-[#f5f5f5] text-[#fff] duration-300 rounded-[60px] font-bold disabled:opacity-50"
+                disabled={isLoading}
               >
-                Concluir
+                {isLoading ? "Cadastrando..." : "Concluir"}
               </button>
             </div>
           </motion.div>
