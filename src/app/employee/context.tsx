@@ -12,7 +12,7 @@ import {
 import Image from "next/image";
 
 export default function MainRouteOfEmployeeConteiner() {
-  const { user, setUser } = useEmployeeStore();
+  const { user } = useEmployeeStore();
 
   const activePatients = user?.patients.filter(
     (patient) => patient.status == "Ativo"

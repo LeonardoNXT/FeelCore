@@ -31,7 +31,6 @@ interface ApiError {
 }
 
 export default function EndingCadastroPatient({
-  backPage,
   id,
 }: {
   backPage: () => void;
