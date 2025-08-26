@@ -44,7 +44,7 @@ export default function AdminLayout({
 
           const data = await res.json();
           console.log(data);
-          setUser(data.user);
+          setUser(data[0]);
         } catch (err) {
           console.error("Erro na verificação:", err);
           router.push("/login");

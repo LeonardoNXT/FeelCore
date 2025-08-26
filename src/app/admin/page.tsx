@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export default function DashboardPage() {
   return (
     <motion.div
-      className="bg-[#000000] w-full h-[98vh] flex rounded-[2vw] overflow-hidden relative"
+      className="bg-[#000000] w-full md:h-[98vh] h-[100vh] flex md:rounded-[2vw] overflow-hidden relative"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

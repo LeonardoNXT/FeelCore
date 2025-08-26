@@ -69,8 +69,8 @@ export default function ProfileContent({ employeerId }: any) {
           <Image
             src={`${icon}`}
             alt="Imagem do Profissional"
-            width={100}
-            height={100}
+            width={500}
+            height={500}
             className="rounded-full duration-300 absolute bottom-[-25%] md:w-[200px] md:ml-[1vw]"
           />
         ) : (

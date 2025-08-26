@@ -23,11 +23,16 @@ interface Customer {
   _id: string;
   name: string;
   email: string;
+  avatar?: {
+    url: string;
+    public_id: string;
+  };
   password: string;
   age: number;
   patient_of: string; // ObjectId do Employee (ou Employee populado)
   client_of: string; // ObjectId da Organization
   disorders: string[];
+  status: "Ativo" | "Inativo";
   mood_diary: MoodDiaryEntry[];
 }
 
@@ -35,10 +40,20 @@ interface Employee {
   _id: string;
   name: string;
   email: string;
-  age: number;
+  birthday: string;
+  rg?: string;
+  cpf?: string;
+  phone: string;
+  address: string;
   remuneration: number;
-  patients: string[]; // Array de ObjectIds dos Customers (ou Customers populados)
-  employee_of: string; // ObjectId da Organization
+  patients: Customer[]; // ou Customer[] se populado
+  employee_of: string; // ou Organization se populado
+  hireDate: Date;
+  avatar?: {
+    url?: string;
+    public_id?: string;
+  };
+  status: "Ativo" | "Inativo";
 }
 
 interface User {
@@ -56,7 +71,19 @@ interface UserState {
   clearUser: () => void;
 }
 
+interface EmployeeState {
+  user: Employee | null;
+  setUser: (user: Employee) => void;
+  clearUser: () => void;
+}
+
 export const useUserStore = create<UserState>((set) => ({
+  user: null,
+  setUser: (user) => set({ user }),
+  clearUser: () => set({ user: null }),
+}));
+
+export const useEmployeeStore = create<EmployeeState>((set) => ({
   user: null,
   setUser: (user) => set({ user }),
   clearUser: () => set({ user: null }),

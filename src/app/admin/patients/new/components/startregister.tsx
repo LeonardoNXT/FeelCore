@@ -46,7 +46,7 @@ export default function CadastroInicial({
         transition={{ duration: 1 }}
       >
         <h2 className="text-[#242424] text-[80px] leading-[1]">
-          Crie um novo paciente
+          Adicionar um novo paciente
         </h2>
         <p className="text-[#707070] w-full leading-[1] mt-3 mb-5 md:text-center">
           Inicie a jornada de um novo paciente aqui.

@@ -24,12 +24,8 @@ interface Employee {
 
 export default function CadastroLastStep({
   backPage,
-  onContinuar,
-  setId,
 }: {
   backPage: () => void;
-  onContinuar: () => void;
-  setId: React.Dispatch<React.SetStateAction<string | null>>;
 }) {
   const [employee, setEmployee] = useState<Employee | null>(null);
   const [birthDate, setBirthDate] = useState("");
@@ -57,23 +53,21 @@ export default function CadastroLastStep({
       alert("Por favor, preencha a data de aniversário");
       return;
     }
-    if (typeof setId !== "function") {
-      console.error("setId não é uma função:", typeof setId, setId);
-      alert("Erro interno: função setId não encontrada");
-      return;
-    }
 
     setIsLoading(true);
 
     try {
+      // Criar FormData para enviar dados + arquivo
       const formData = new FormData();
 
+      // Adicionar dados obrigatórios
       formData.append("name", consumer.name || "");
       formData.append("email", consumer.email || "");
       formData.append("password", consumer.password || "");
       formData.append("birth_date", birthDate);
       formData.append("patient_of", consumer.patient_of || "");
 
+      // Adicionar arquivo se selecionado
       if (selectedFile) {
         formData.append("avatar", selectedFile);
       }
@@ -81,7 +75,7 @@ export default function CadastroLastStep({
       const response = await fetch("/api/customers", {
         method: "POST",
         credentials: "include",
-        body: formData,
+        body: formData, 
       });
 
       const data = await response.json();
@@ -90,15 +84,8 @@ export default function CadastroLastStep({
         throw new Error(data.error || "Erro ao criar conta");
       }
 
-      // Only set ID after confirming success and data structure
-      if (data.customer && data.customer._id) {
-        setId(String(data.customer._id));
-        // Call onContinuar only after successfully setting the ID
-        onContinuar();
-      } else {
-        console.error("Unexpected API response structure:", data);
-        throw new Error("Resposta da API em formato inesperado");
-      }
+      console.log("Usuário criado com sucesso:", data);
+
     } catch (error) {
       console.error("Erro ao cadastrar usuário:", error);
       alert(error instanceof Error ? error.message : "Erro ao criar conta");
@@ -121,19 +108,19 @@ export default function CadastroLastStep({
   }, [consumer.patient_of, backPage]);
 
   return (
-    <div className="relative w-[100%] md:h-[98vh] flex flex-col justify-stretch">
+    <div>
       <motion.div
         initial={{ opacity: 0, filter: "blur(10px)" }}
         animate={{ opacity: 1, filter: "blur(0px)" }}
         transition={{ duration: 1 }}
-        className="p-2 pl-6 mt-10 mb-0"
+        className="p-2 pl-6 mt-10 mb-0 overflow-hidden"
       >
         <div className="px-3 py-2 bg-gradient-to-br from-[#26bfd3] to-[#03c4ff00] text-[14px] text-[#ffffff] rounded-[13px] w-max flex items-center">
           <p></p>
           <Zap className="text-[#fff] w-[13px] mr-2" />
           <p>Último Passo</p>
         </div>
-        <div className="text-[#2b2b2b] text-[75px] font-bold leading-[1] overflow-hidden">
+        <div className="text-[#2b2b2b] text-[75px] font-bold leading-[1]">
           <p>{consumer.name?.trim().split(" ")[0]}</p>
           <div className="flex items-center gap-3">
             <p className="w-max">

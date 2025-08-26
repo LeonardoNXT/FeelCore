@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Iridescence from "@/blocks/Backgrounds/Beams/Beams";
 
-export default function AuthScreen() {
+export default function AuthScreen({ endpoint }: { endpoint: string }) {
   const router = useRouter();
   const email = useRef<HTMLInputElement>(null);
   const senha = useRef<HTMLInputElement>(null);
@@ -40,7 +40,7 @@ export default function AuthScreen() {
       button.current.textContent = "Entrando...";
       button.current.disabled = true;
 
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch(`/api/${endpoint}`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -52,8 +52,19 @@ export default function AuthScreen() {
         throw new Error(errorData.msg);
       }
 
-      // Redireciona para /admin/ após login bem-sucedido
-      router.push("/admin/");
+      const data = await response.json();
+      const userRole = data.user.role;
+      switch (userRole) {
+        case "adm":
+          router.push("/admin/");
+          break;
+        case "patient":
+          router.push("/patient/");
+          break;
+        case "employee":
+          router.push("/employee/");
+          break;
+      }
     } catch (err) {
       if (button.current) {
         button.current.textContent = "Entrar";
