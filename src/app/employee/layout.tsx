@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { motion } from "framer-motion";
 import { useEmployeeStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
 import NavbarOfEmployeesComponent from "@/components/sidebar/headerofEmployees";
