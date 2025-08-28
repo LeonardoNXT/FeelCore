@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useEmployeeStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
 import NavbarOfEmployeesComponent from "@/components/sidebar/headerofEmployees";
@@ -10,10 +10,24 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [mobile, setmobile] = useState<boolean>(false);
   const { user, setUser } = useEmployeeStore();
   const router = useRouter();
 
   useEffect(() => {
+    let widthScreen = 0;
+    let verifyScreen = false;
+
+    const mobileVerify = () => {
+      if (widthScreen !== window.innerWidth) {
+        verifyScreen = widthScreen < 768 ? true : false;
+        widthScreen = window.innerWidth;
+        setmobile(verifyScreen);
+      }
+    };
+
+    window.addEventListener("resize", mobileVerify);
+
     const verify = async () => {
       if (!user) {
         try {
@@ -34,6 +48,9 @@ export default function AdminLayout({
           router.push("/");
         }
       }
+      return () => {
+        window.removeEventListener("resize", mobileVerify);
+      };
     };
 
     verify();
