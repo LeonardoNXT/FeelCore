@@ -38,11 +38,8 @@ export default function MainRouteOfEmployeeConteiner() {
 
   return (
     <section className="w-full min-h-screen relative bg-[#000] bg-[url('/background.jpg')] bg-cover bg-center">
-      <div className="w-full min-h-full absolute top-0 backdrop-blur-2xl backdrop-sepia-50">
-        <div className="px-4 py-30">
-          <p className="text-[20px] ml-1 text-[#e2f1ff]">
-            {firstAndLastName} ✯
-          </p>
+      <div className="w-full min-h-full absolute top-0 backdrop-blur-2xl backdrop-sepia-90">
+        <div className="px-5 py-40">
           <p className="text-5xl">Bem-vindo, é bom te ver aqui!</p>
           <p className="text-2xl text-[#fff8e2]">
             {dia}.{mes} - {diaAtual}
