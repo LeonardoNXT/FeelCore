@@ -23,6 +23,7 @@ export default function AdminLayout({
         verifyScreen = widthScreen < 768 ? true : false;
         widthScreen = window.innerWidth;
         setmobile(verifyScreen);
+        console.log(mobile);
       }
     };
 
@@ -48,12 +49,13 @@ export default function AdminLayout({
           router.push("/");
         }
       }
-      return () => {
-        window.removeEventListener("resize", mobileVerify);
-      };
     };
 
     verify();
+
+    return () => {
+      window.removeEventListener("resize", mobileVerify);
+    };
   }, [user, setUser, router]);
 
   return (
