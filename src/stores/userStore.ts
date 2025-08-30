@@ -54,6 +54,7 @@ interface Employee {
     public_id?: string;
   };
   status: "Ativo" | "Inativo";
+  userfoundOut: false | true;
 }
 
 interface User {
