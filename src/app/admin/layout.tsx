@@ -15,7 +15,6 @@ export default function AdminLayout({
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [load, setload] = useState<boolean>(false);
 
   // Detectar se é mobile (breakpoint personalizado 1500px)
   useEffect(() => {
@@ -46,7 +45,6 @@ export default function AdminLayout({
           const data = await res.json();
           console.log(data);
           setUser(data[0]);
-          setload(true);
         } catch (err) {
           console.error("Erro na verificação:", err);
           router.push("/login");
