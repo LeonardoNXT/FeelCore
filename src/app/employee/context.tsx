@@ -11,11 +11,7 @@ import {
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-interface LoadInterface {
-  load: boolean;
-}
-
-export default function MainRouteOfEmployeeConteiner({ load }: LoadInterface) {
+export default function MainRouteOfEmployeeConteiner() {
   const { user } = useEmployeeStore();
   const patients = user?.patients
     .filter((patient) => patient.status == "Ativo")
@@ -37,7 +33,7 @@ export default function MainRouteOfEmployeeConteiner({ load }: LoadInterface) {
   const imageTest = user?.patients[0].avatar?.url;
   const imageTest2 = user?.patients[2].avatar?.url;
 
-  if (load) {
+  if (user) {
     return (
       <motion.section
         initial={{ opacity: 0 }}
@@ -326,5 +322,7 @@ export default function MainRouteOfEmployeeConteiner({ load }: LoadInterface) {
         </div>
       </motion.section>
     );
+  } else {
+    return <div>Aguarde</div>;
   }
 }

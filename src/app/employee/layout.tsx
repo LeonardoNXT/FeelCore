@@ -1,14 +1,48 @@
-import NavbarOfEmployeesComponent from "@/components/sidebar/headerofEmployees";
+"use client";
 
+import NavbarOfEmployeesComponent from "@/components/sidebar/headerofEmployees";
+import { useEffect } from "react";
+import { useEmployeeStore } from "@/stores/userStore";
+import { useRouter } from "next/navigation";
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user, setUser } = useEmployeeStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log("rodou função");
+    const verify = async () => {
+      if (!user) {
+        try {
+          const res = await fetch("/api/auth/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          });
+
+          if (!res.ok) throw new Error("Não autorizado");
+
+          const data = await res.json();
+          setUser(data[0]);
+        } catch (err) {
+          console.error("Erro na verificação:", err);
+          router.push("/");
+        }
+      }
+    };
+
+    verify();
+  }, [user, setUser, router]);
+
   return (
     <section className="w-full h-full relative">
       <NavbarOfEmployeesComponent />
-      <main className="bg-[#000]">{children}</main>
+      {user && <main className="bg-[#000]">{children}</main>}
     </section>
   );
 }
