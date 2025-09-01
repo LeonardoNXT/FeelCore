@@ -11,7 +11,7 @@ export default function NavbarOfEmployeesComponent() {
   const { user } = useEmployeeStore();
   const firstname = user?.name.split(" ")[0];
   const [mobile, setMobile] = useState<boolean>(false);
-  const [open, setOpen] = useState<Boolean>(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const routes = [
     {
