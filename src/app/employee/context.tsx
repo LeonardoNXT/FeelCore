@@ -39,7 +39,7 @@ export default function MainRouteOfEmployeeConteiner() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, delay: 1 }}
-        className="w-full min-h-screen relative bg-[#000] bg-[url('/background.jpg')] bg-cover bg-center"
+        className="w-full min-h-screen relative bg-[#000] bg-[url('/background.jpg')] bg-cover bg-center flex justify-center"
       >
         <div className="w-full min-h-screen top-0 backdrop-blur-2xl backdrop-sepia-90">
           <div className="px-5 pt-40">

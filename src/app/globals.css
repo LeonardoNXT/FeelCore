@@ -44,6 +44,45 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+::-webkit-scrollbar {
+  width: 0px;
+  height: 4px;
+  position: absolute;
+}
+
+.none-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+::-webkit-scrollbar-thumb {
+  background: #000000;
+  background: linear-gradient(
+    180deg,
+    rgb(185, 185, 185) 0%,
+    rgb(231, 231, 231) 50%,
+    rgb(185, 185, 185) 100%
+  );
+  border-radius: 9999px;
+}
+.conteiner-scrollbar::-webkit-scrollbar-thumb {
+  background: #000000;
+  background: linear-gradient(
+    90deg,
+    rgb(185, 185, 185) 0%,
+    rgb(231, 231, 231) 50%,
+    rgb(185, 185, 185) 100%
+  );
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+  margin-inline: 1.2rem; /* espaçamento lateral */
+}
+.conteiner-scrollbar::-webkit-scrollbar-track {
+  margin-bottom: 24px;
+}
+.scroll-create::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #333 0%, #333 50%, #333 100%);
+}
 :root {
   --radius: 0.65rem;
   --background: #fff;
@@ -86,6 +125,7 @@
   }
   :root {
     --font-inter-tight: sans-serif;
+    background-color: #000;
   }
   body {
     background: #ffffff;
@@ -114,6 +154,9 @@
   }
 }
 input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
 input[type="password"]::-webkit-credentials-auto-fill-button,
