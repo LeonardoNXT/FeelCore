@@ -36,7 +36,7 @@ interface Customer {
   mood_diary: MoodDiaryEntry[];
 }
 
-interface Employee {
+export interface Employee {
   _id: string;
   name: string;
   email: string;

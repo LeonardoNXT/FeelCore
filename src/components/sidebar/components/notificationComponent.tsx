@@ -1,6 +1,5 @@
 import { Bell, RefreshCcw } from "lucide-react";
 import { useNotificationApi } from "@/stores/notificationStore";
-import PatientAssignAlert from "./AssignAlert";
 import AssignAlert from "./AssignAlert";
 
 export default function NotificationBarComponent() {
@@ -27,7 +26,7 @@ export default function NotificationBarComponent() {
   };
 
   return (
-    <div className="w-full h-full border-1 border-[#ebebeb] rounded-4xl px-4 py-4">
+    <div className="w-full h-full md:border-1 border-[#ebebeb] rounded-4xl px-4 py-4 overflow-y-scroll">
       <div className="flex justify-between gap-2 text-[#333]">
         <div className="flex gap-2 items-center">
           <Bell className="w-[20px] h-[20px]" />

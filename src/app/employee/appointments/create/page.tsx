@@ -2,7 +2,6 @@
 import Image from "next/image";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
 import RefreshComponent from "../../components/refresh";
 import ErrorComponent from "../components/errorComponent";
 

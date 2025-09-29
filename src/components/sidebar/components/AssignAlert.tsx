@@ -1,15 +1,5 @@
-interface ResponseNotification {
-  _id: string;
-  status: "enviado" | "lido";
-  title: string;
-  summary: string;
-  organization: string;
-  created_for: string;
-  kind: string;
-  notification_type: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { ResponseNotification } from "@/stores/notificationStore";
+
 export default function AssignAlert({
   status,
   notification,
