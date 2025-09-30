@@ -4,7 +4,7 @@ import { getTime } from "./getTime";
 import { MoveUpRight, Users } from "lucide-react";
 import { Dispatch, SetStateAction } from "react";
 import { getInitials } from "./getInitials";
-
+import { motion } from "framer-motion";
 interface Props {
   otherAppointments: Appointments[];
   setIdSelectedComponent: Dispatch<SetStateAction<string | null>>;
@@ -19,7 +19,12 @@ export default function OtherPendingAppointmentsComponent({
   handlePedingSelected,
 }: Props) {
   return (
-    <div className="w-full px-1 py-1 bg-gradient-to-r from-[#e5eaeb] to-[#ffffff6b] mt-2 rounded-[30px]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="w-full px-1 py-1 bg-gradient-to-r from-[#e5eaeb] to-[#ffffff6b] mt-2 rounded-[30px]"
+    >
       <div className="flex justify-between items-center px-3 py-3">
         <p className="text-[16px] text-[#333333d0] py-1 px-2 bg-[#dbdbdb7e] rounded-2xl shadow-inner shadow-[#a0a0a0]">
           Outros agendamentos pendentes
@@ -91,6 +96,6 @@ export default function OtherPendingAppointmentsComponent({
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
