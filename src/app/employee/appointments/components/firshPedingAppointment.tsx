@@ -2,6 +2,7 @@ import { Appointments } from "@/stores/appointment";
 import { MoveRight } from "lucide-react";
 import { getInitials } from "./getInitials";
 import { getTime } from "./getTime";
+import { motion } from "framer-motion";
 import Image from "next/image";
 
 export default function FirshPedingAppoitmentComponent({
@@ -13,7 +14,12 @@ export default function FirshPedingAppoitmentComponent({
   const calendarTime = new Date(appointment.date).toLocaleDateString();
   const dateTime = getTime(appointment.date);
   return (
-    <div className="w-full px-2 py-2 bg-gradient-to-r from-[#010101] to-[#292929ea] rounded-[30px] border-1 border-[#333333]">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+      className="w-full px-2 py-2 bg-gradient-to-r from-[#010101] to-[#292929ea] rounded-[30px] border-1 border-[#333333]"
+    >
       <div className="flex justify-between items-center px-2 py-2">
         <p className="text-[16px] text-[#646464] py-1 px-2 bg-[#161616] border-1 border-[#333] rounded-2xl">
           Agendamento pendente
@@ -56,6 +62,6 @@ export default function FirshPedingAppoitmentComponent({
           <p className="text-[#333] text-5xl font-bold">{firshNameOfPedente}</p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

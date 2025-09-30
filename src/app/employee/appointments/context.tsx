@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 import { useAppointmentsStore } from "@/stores/appointment";
 import PendingComponent from "./components/peding";
@@ -45,37 +45,39 @@ export default function AppointmentsPageContext() {
     console.log(idPedingSelectedComponent);
   }, [idPedingSelectedComponent]);
   return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3, delay: 1 }}
-      className="w-full min-h-screen bg-[url('/background.jpg')] bg-cover relative"
-    >
-      {idPedingSelectedComponent && (
-        <PendingComponent
-          id={idPedingSelectedComponent}
-          setIdSelectedComponent={setIdSelectedComponent}
-          setHandlePedingSelected={setHandlePedingSelected}
-          handlePedingSelected={handlePedingSelected}
-        />
-      )}
-      <div className="w-full md:flex md:justify-center min-h-screen backdrop-blur-3xl backdrop-sepia-50 relative">
-        <div className="w-full md:w-[800px] px-3 py-25 md:py-35">
-          {conditionalOfAppointments && (
-            <div className="w-full">
-              <FirshPedingAppoitmentComponent appointment={appointments[0]} />
-              {otherAppointments && otherAppointments.length > 0 && (
-                <OtherPendingAppointmentsComponent
-                  otherAppointments={otherAppointments}
-                  handlePedingSelected={handlePedingSelected}
-                  setHandlePedingSelected={setHandlePedingSelected}
-                  setIdSelectedComponent={setIdSelectedComponent}
-                />
-              )}
-            </div>
-          )}
+    <AnimatePresence>
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className="w-full min-h-screen bg-[url('/background.jpg')] bg-fixed bg-cover relative"
+      >
+        {idPedingSelectedComponent && (
+          <PendingComponent
+            id={idPedingSelectedComponent}
+            setIdSelectedComponent={setIdSelectedComponent}
+            setHandlePedingSelected={setHandlePedingSelected}
+            handlePedingSelected={handlePedingSelected}
+          />
+        )}
+        <div className="w-full md:flex md:justify-center min-h-screen backdrop-blur-3xl backdrop-sepia-50 relative">
+          <div className="w-full md:w-[800px] px-3 py-25 md:py-35">
+            {conditionalOfAppointments && (
+              <div className="w-full">
+                <FirshPedingAppoitmentComponent appointment={appointments[0]} />
+                {otherAppointments && otherAppointments.length > 0 && (
+                  <OtherPendingAppointmentsComponent
+                    otherAppointments={otherAppointments}
+                    handlePedingSelected={handlePedingSelected}
+                    setHandlePedingSelected={setHandlePedingSelected}
+                    setIdSelectedComponent={setIdSelectedComponent}
+                  />
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </motion.section>
+      </motion.section>
+    </AnimatePresence>
   );
 }
