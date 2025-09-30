@@ -1,12 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Users, MoveUpRight } from "lucide-react";
-import Image from "next/image";
+
 import { useAppointmentsStore } from "@/stores/appointment";
 import PendingComponent from "./components/peding";
 import useGetHours from "./hooks/useGetHours";
-import { getTime } from "./components/getTime";
 
 import FirshPedingAppoitmentComponent from "./components/firshPedingAppointment";
 import OtherPendingAppointmentsComponent from "./components/otherPendingAppointments";
