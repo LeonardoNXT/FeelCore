@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface Appointments {
+export interface Appointments {
   _id: string;
   status: "pendente" | "concluido" | "cancelado" | "agendado";
   date: string;
