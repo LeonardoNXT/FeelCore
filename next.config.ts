@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://backend-feelflow-core.onrender.com/*",
+        destination: "https://backend-feelflow-core.onrender.com/:path*",
       },
     ];
   },
