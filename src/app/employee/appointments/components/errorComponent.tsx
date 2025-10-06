@@ -1,11 +1,9 @@
 import { CircleX } from "lucide-react";
 import CloseButtonComponent from "./closeButton";
 import { motion } from "framer-motion";
+import { ErrorAPI } from "../hooks/useSetError";
 interface Props {
-  errorContent: {
-    error: string;
-    message?: string;
-  };
+  errorContent: ErrorAPI;
   onClick: () => void;
   bg?: string;
   display?: "absolute" | "fixed";
@@ -30,7 +28,9 @@ export default function ErrorComponent({
         <div className="flex justify-between">
           <div className="flex gap-2 px-3 py-2 rounded-full bg-[#e7e7e74f] shadow-inner shadow-[#00000067] text-[#444]">
             <CircleX className="text-[#ee3a3a]" />
-            <p className="mr-1 text-[#bd2222]">{errorContent.error}</p>
+            <p className="mr-1 text-[#bd2222] text-nowrap text-ellipsis overflow-hidden max-w-[200px]">
+              {errorContent.error}
+            </p>
           </div>
           <CloseButtonComponent onClick={onClick} />
         </div>

@@ -153,6 +153,12 @@
     appearance: textfield;
   }
 }
+#input-white-date::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+}
+#input-white-date::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+}
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }

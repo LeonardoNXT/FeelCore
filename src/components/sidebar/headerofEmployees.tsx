@@ -23,8 +23,6 @@ export default function NavbarOfEmployeesComponent() {
   const { setNotifications } = useNotificationApi();
 
   useEffect(() => {
-    console.log("rodou header");
-
     let timeoutId: ReturnType<typeof setTimeout>;
 
     const mobileVerify = () => {
@@ -55,7 +53,6 @@ export default function NavbarOfEmployeesComponent() {
         },
       });
       const data = await response.json();
-      console.log(data);
       setNotifications(data);
     };
 

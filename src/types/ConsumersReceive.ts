@@ -4,4 +4,9 @@ export interface Consumer {
   password: string;
   birth_date: string;
   patient_of: string;
+  avatar?: {
+    url: string;
+    public_id: string;
+  };
+  status: "Ativo" | "Inativo";
 }

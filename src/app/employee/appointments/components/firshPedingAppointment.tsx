@@ -2,8 +2,7 @@ import { Appointments } from "@/stores/appointment";
 import { MoveRight } from "lucide-react";
 import { getInitials } from "./getInitials";
 import { getTime } from "./getTime";
-import { motion } from "framer-motion";
-import Image from "next/image";
+import BoxOfInitialPagesComponent from "./boxOfInitialComponents";
 
 export default function FirshPedingAppoitmentComponent({
   appointment,
@@ -14,36 +13,15 @@ export default function FirshPedingAppoitmentComponent({
   const calendarTime = new Date(appointment.date).toLocaleDateString();
   const dateTime = getTime(appointment.date);
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-      className="w-full px-2 py-2 bg-gradient-to-r from-[#010101] to-[#292929ea] rounded-[30px] border-1 border-[#333333]"
+    <BoxOfInitialPagesComponent
+      title="Agendamento pendente"
+      summary={`        Você pode enviar um email perguntando ${firshNameOfPedente}
+        deseja continuar o agendamento por aqui.`}
+      icon={true}
+      urlImage={appointment.intendedFor.avatar?.url}
+      fallbackImage={getInitials(appointment.intendedFor.name)}
     >
-      <div className="flex justify-between items-center px-2 py-2">
-        <p className="text-[16px] text-[#646464] py-1 px-2 bg-[#161616] border-1 border-[#333] rounded-2xl">
-          Agendamento pendente
-        </p>
-        <div className=" bg-[#292929] text-[#333] border-1 rounded-full">
-          {appointment.intendedFor.avatar?.url ? (
-            <Image
-              src={appointment.intendedFor.avatar.url}
-              width={35}
-              height={35}
-              alt="Imagem do paciente"
-              className="rounded-full"
-            />
-          ) : (
-            <div className="px-2 py-2 text-[#fff]">
-              {getInitials(appointment.intendedFor.name)}
-            </div>
-          )}
-        </div>
-      </div>
-      <div className="px-4 text-[#757575] mt-10">
-        Você pode enviar um email perguntando {firshNameOfPedente}
-        deseja continuar o agendamento por aqui.
-      </div>
+      <div className="px-4 text-[#757575] mt-10"></div>
       <div className="px-2 flex items-center gap-3 mb-3 mt-5">
         <div className="px-3 py-2 bg-gradient-to-br from-[#010101] to-[#241e0f] w-max flex gap-2 items-center rounded-3xl border-1 border-[#333]">
           <p className="text-[#c9c4b6fb] text-[13px] rounded-2xl poppins ">
@@ -62,6 +40,6 @@ export default function FirshPedingAppoitmentComponent({
           <p className="text-[#333] text-5xl font-bold">{firshNameOfPedente}</p>
         </div>
       </div>
-    </motion.div>
+    </BoxOfInitialPagesComponent>
   );
 }
