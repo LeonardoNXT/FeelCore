@@ -4,12 +4,18 @@ import AssignAlert from "./AssignAlert";
 
 export default function NotificationBarComponent() {
   const { notifications, setNotifications } = useNotificationApi();
-  const unread = notifications.filter(
-    (notification) => notification.status == "enviado"
-  );
-  const readed = notifications.filter(
-    (notifications) => notifications.status !== "enviado"
-  );
+  const unread = notifications
+    .filter((notification) => notification.status == "enviado")
+    .sort(
+      (eOne, eTwo) =>
+        new Date(eTwo.createdAt).getTime() - new Date(eOne.createdAt).getTime()
+    );
+  const readed = notifications
+    .filter((notifications) => notifications.status !== "enviado")
+    .sort(
+      (eOne, eTwo) =>
+        new Date(eTwo.createdAt).getTime() - new Date(eOne.createdAt).getTime()
+    );
 
   console.log("readed", readed);
 
