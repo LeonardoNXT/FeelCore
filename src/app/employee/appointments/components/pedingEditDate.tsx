@@ -11,11 +11,7 @@ import useGetHours from "../hooks/useGetHours";
 import RefreshComponent from "../../components/refresh";
 import CloseButtonComponent from "./closeButton";
 import ErrorComponent from "./errorComponent";
-
-interface Error {
-  error: string;
-  message?: string;
-}
+import { ErrorAPI } from "../hooks/useSetError";
 
 export default function PendingEditDateComponent({
   setHandleEditDate,
@@ -42,7 +38,7 @@ export default function PendingEditDateComponent({
   const [calendar, setCalendar] = useState<string | null | undefined>(
     calendarDate
   );
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError] = useState<ErrorAPI | null>(null);
   const [sucessChange, setSucessChange] = useState<boolean>(false);
   const validateCalendarAndTime = (e: FormEvent) => {
     e.preventDefault();
