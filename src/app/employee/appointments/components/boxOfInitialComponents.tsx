@@ -4,7 +4,7 @@ import HeaderOfBoxInitialComponent from "./headerOfBoxInitialComponent";
 type Props = {
   title: string;
   summary: string;
-  urlImage?: string;
+  urlImage?: string | undefined;
   icon: boolean;
   fallbackImage?: string;
   children: React.ReactNode;

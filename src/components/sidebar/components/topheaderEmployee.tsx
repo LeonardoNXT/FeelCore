@@ -5,6 +5,7 @@ import NotificationComponent from "./notificationSinoCoponent";
 import { Employee } from "@/stores/userStore";
 import { Dispatch, SetStateAction } from "react";
 import { ErrorApi } from "@/types/ErrorApi";
+import { getInitials } from "@/app/employee/appointments/components/getInitials";
 
 interface Props {
   user: Employee;
@@ -87,7 +88,7 @@ export default function TopHeaderEmployee({
   return (
     <div className="w-full max-w-[500px] md:bg-[#ffffff28] md:backdrop-blur-2xl rounded-full px-2 py-2 md:border-1 flex items-stretch justify-between relative z-10 top-4">
       <div className="flex bg-[#000] w-max px-2 py-2 rounded-full gap-2 items-center ">
-        {user?.avatar?.url && (
+        {user?.avatar?.url ? (
           <Image
             src={user.avatar.url}
             width={100}
@@ -95,6 +96,10 @@ export default function TopHeaderEmployee({
             className="rounded-full w-[50px] border-2 border-[#dddddd]"
             alt="Sua imagem"
           />
+        ) : (
+          <div className="w-[50px] aspect-square rounded-full bg-[#333] border-3 border-[#97887a] flex justify-center items-center text-[#eee]">
+            {getInitials(user.name)}
+          </div>
         )}
         <div>
           <p className="pr-3 text-[14px] leading-[0.9] text-[#fff7ef]">
