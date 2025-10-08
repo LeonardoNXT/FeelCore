@@ -54,6 +54,9 @@
   width: 0;
   height: 0;
 }
+.plyr__video-wrapper video {
+  width: 100%;
+}
 ::-webkit-scrollbar-thumb {
   background: #000000;
   background: linear-gradient(
@@ -83,7 +86,17 @@
 .scroll-create::-webkit-scrollbar-thumb {
   background: linear-gradient(90deg, #333 0%, #333 50%, #333 100%);
 }
+
+main {
+  position: relative;
+}
+
 :root {
+  --plyr-range-track-height: 6px;
+  --plyr-range-thumb-height: 14px;
+  --plyr-range-thumb-background: #fff;
+  --plyr-range-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0);
+  --plyr-color-main: #333;
   --radius: 0.65rem;
   --background: #fff;
   --foreground: oklch(0.145 0 0);
