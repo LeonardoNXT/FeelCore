@@ -14,8 +14,16 @@ import {
   X,
   Heart,
   List,
+  LogOut,
+  Cog,
 } from "lucide-react";
-import { useState, ReactNode, useEffect } from "react";
+import {
+  useState,
+  ReactNode,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { useUserStore } from "@/stores/userStore";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -38,9 +46,13 @@ interface SubNavItemProps {
 
 interface SideBarPageProps {
   onMenuToggle?: (isOpen: boolean) => void;
+  setHandleLogout: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
+export default function SideBarPage({
+  onMenuToggle,
+  setHandleLogout,
+}: SideBarPageProps) {
   const { user } = useUserStore();
   const pathname = usePathname();
   const [isDashboardOpen, setIsDashboardOpen] = useState<boolean>(true);
@@ -48,6 +60,23 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
   const [isPatientsOpen, setIsPatientsOpen] = useState<boolean>(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [handleProfileClicked, setHandleProfileClicked] =
+    useState<boolean>(false);
+
+  const logOutFetch = async () => {
+    try {
+      const response = await fetch("/api/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!response.ok) {
+        throw new Error("houve um erro interno");
+      }
+      setHandleLogout(true);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   // Detectar se é mobile (breakpoint personalizado 1500px)
   useEffect(() => {
@@ -130,7 +159,6 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
         </Link>
       );
     }
-
     return (
       <button
         onClick={handleClick}
@@ -243,7 +271,7 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
                     isActive={pathname === "/admin/dashboard/financial"}
                     onNavigate={handleMobileNavigation}
                   >
-                    <DollarSign className="h-4 w-4" />
+                    <DollarSign className="h-4 w-4 cursor-not-allowed pointer-events-none" />
                     Financeiro
                   </SubNavItem>
                   <SubNavItem
@@ -341,7 +369,40 @@ export default function SideBarPage({ onMenuToggle }: SideBarPageProps) {
         {/* Footer */}
         {user && (
           <div className="mt-auto border-t p-4">
-            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            <AnimatePresence>
+              {handleProfileClicked && (
+                <motion.div
+                  key={"HandleMenuComponent"}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{
+                    duration: 0.7,
+                    type: "spring",
+                    ease: "circInOut",
+                  }}
+                  className="w-full h-12 shadow-2xl bg-[#fff] border-1 border-[#bbbbbb5e] rounded-3xl mb-4 flex justify-between items-center px-2"
+                >
+                  <div
+                    className="flex px-3 gap-2 text-[#333] py-1 border-1 border-[#d8d8d8] rounded-full text-[13px] items-center duration-200 hover:bg-red-300 hover:gap-3 ursor-pointer select-none"
+                    onClick={() => {
+                      logOutFetch();
+                    }}
+                  >
+                    <LogOut className="w-[15px]" />
+                    <p className="tracking-wider">Sair</p>
+                  </div>
+                  <div className="flex px-3 gap-2 text-[#333] py-1 border-1 border-[#d8d8d8] rounded-full text-[13px] items-center duration-200 hover:bg-[#fff] hover:gap-3 cursor-pointer select-none">
+                    <Cog className="w-[15px]" />
+                    <p className="tracking-wider">Config.</p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <div
+              onClick={() => setHandleProfileClicked(!handleProfileClicked)}
+              className="flex items-center gap-3 text-sm text-muted-foreground duration-300 border-1 hover:bg-[#fff] hover:border-[#eee] px-2 py-2 select-none cursor-pointer rounded-full"
+            >
               <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
                 <span className="text-xs font-medium">
                   <Image

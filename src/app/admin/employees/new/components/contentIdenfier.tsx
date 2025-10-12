@@ -11,7 +11,6 @@ interface Props {
 }
 
 export default function IdentificacaoDoProfissional({ setPagina }: Props) {
-  const [rg, setRg] = useState<string>("");
   const [cpf, setCpf] = useState<string>("");
   const [maxDate, setMaxDate] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
@@ -27,28 +26,6 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
   const titleRef = useRef<HTMLParagraphElement>(null);
   const formContainerRef = useRef<HTMLDivElement>(null);
   const ranOnce = useRef(false);
-
-  // Função para formatar RG brasileiro (XX.XXX.XXX-X)
-  const formatRg = (value: string): string => {
-    // Remove tudo que não é número ou letra
-    const clean = value.replace(/[^\dA-Za-z]/g, "");
-
-    // Aplica a máscara baseado no tamanho (assumindo formato numérico)
-    if (clean.length <= 2) {
-      return clean;
-    } else if (clean.length <= 5) {
-      return `${clean.slice(0, 2)}.${clean.slice(2)}`;
-    } else if (clean.length <= 8) {
-      return `${clean.slice(0, 2)}.${clean.slice(2, 5)}.${clean.slice(5)}`;
-    } else {
-      // Limita a 9 caracteres
-      const numbers = clean.slice(0, 8);
-      const digit = clean.slice(8, 9);
-      return `${numbers.slice(0, 2)}.${numbers.slice(2, 5)}.${numbers.slice(
-        5
-      )}-${digit}`;
-    }
-  };
 
   // Função para formatar CPF brasileiro (XXX.XXX.XXX-XX)
   const formatCpf = (value: string): string => {
@@ -100,49 +77,43 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
   };
 
   // Função para verificar se os inputs são válidos
-  const isVerifiedInput = (
-    rg: string,
-    cpf: string,
-    birthday: string
-  ): boolean => {
-    const rgClean = rg.replace(/[^\dA-Za-z]/g, "");
+  const isAdult = (birthday: string): boolean => {
+    const birthDate = new Date(birthday);
+    const today = new Date();
+
+    // calcula idade
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age >= 18;
+  };
+
+  const isVerifiedInput = (cpf: string, birthday: string): boolean => {
     const cpfNumbers = cpf.replace(/\D/g, "");
 
     return (
-      rgClean.length >= 8 &&
       cpfNumbers.length === 11 &&
       isValidCPF(cpf) &&
       birthday !== undefined &&
       birthday !== null &&
-      birthday !== ""
+      birthday !== "" &&
+      isAdult(birthday) // <-- aqui valida se tem 18+
     );
   };
 
   // Função para verificar se existe input válido
   const existInput = useCallback(() => {
-    if (inputRg.current && inputCpf.current && calendar.current) {
+    if (inputCpf.current && calendar.current) {
       const isValid = isVerifiedInput(
-        inputRg.current.value,
         inputCpf.current.value,
         calendar.current.value
       );
       setIsButtonDisabled(!isValid);
     }
   }, []);
-
-  // Handler para mudança no RG
-  const handleRgChange = (e: ChangeEvent<HTMLInputElement>): void => {
-    const formatted = formatRg(e.target.value);
-    setRg(formatted);
-
-    // Atualiza o valor do input diretamente
-    if (inputRg.current) {
-      inputRg.current.value = formatted;
-    }
-
-    // Executa a validação após um pequeno delay para garantir que o estado foi atualizado
-    setTimeout(existInput, 0);
-  };
 
   // Handler para mudança no CPF
   const handleCpfChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -164,23 +135,15 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
 
     if (inputRg?.current && inputCpf?.current && calendar?.current) {
       // Verifica se os dados são válidos antes de prosseguir
-      if (
-        !isVerifiedInput(
-          inputRg.current.value,
-          inputCpf.current.value,
-          calendar.current.value
-        )
-      ) {
+      if (!isVerifiedInput(inputCpf.current.value, calendar.current.value)) {
         alert("Por favor, preencha todos os campos corretamente.");
         return;
       }
 
       // Remove formatação antes de salvar no store
-      const cleanRg = inputRg.current.value.replace(/[^\dA-Za-z]/g, "");
       const cleanCpf = inputCpf.current.value.replace(/\D/g, "");
 
       setFuncionario({
-        rg: cleanRg,
         cpf: cleanCpf,
         birthday: calendar.current.value,
       });
@@ -263,24 +226,21 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
     }
 
     // Carrega dados salvos do funcionário
-    if (inputRg.current && inputCpf.current && calendar.current) {
-      if (funcionario.rg && funcionario.cpf && funcionario.birthday) {
+    if (inputCpf.current && calendar.current) {
+      if (funcionario.cpf && funcionario.birthday) {
         // Formata os dados ao carregar
-        const formattedRg = formatRg(funcionario.rg);
         const formattedCpf = formatCpf(funcionario.cpf);
 
-        inputRg.current.value = formattedRg;
         inputCpf.current.value = formattedCpf;
         calendar.current.value = funcionario.birthday;
 
-        setRg(formattedRg);
         setCpf(formattedCpf);
 
         // Executa validação
         setTimeout(existInput, 100);
       }
     }
-  }, [funcionario.rg, funcionario.cpf, funcionario.birthday, existInput]);
+  }, [funcionario.cpf, funcionario.birthday, existInput]);
 
   return (
     <div
@@ -314,17 +274,6 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
 
           {/* Form Container */}
           <form className="flex flex-col sm:flex-row w-full gap-3 sm:gap-[1vw] order-1 sm:order-2">
-            {/* RG Input */}
-            <input
-              ref={inputRg}
-              type="text"
-              value={rg}
-              onChange={handleRgChange}
-              placeholder="RG: XX.XXX.XXX-X"
-              maxLength={12}
-              className="border-1 px-4 py-3 sm:px-[2vw] sm:py-[0.8vw] sm:pl-[1vw] transition-all duration-300 focus:border-[#e6e6e6] focus:outline-none rounded-xl sm:rounded-[2vw] w-full text-sm sm:text-[0.8vw] bg-[#000]"
-            />
-
             {/* CPF Input */}
             <input
               ref={inputCpf}

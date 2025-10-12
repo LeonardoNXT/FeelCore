@@ -1,25 +1,25 @@
 "use client";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-
-import { useAppointmentsStore } from "@/stores/appointment";
+import { Appointments, useAppointmentsStore } from "@/stores/appointment";
 import PendingComponent from "./components/peding";
 import useGetHours from "./hooks/useGetHours";
-
 import FirshPedingAppoitmentComponent from "./components/firshPedingAppointment";
 import OtherPendingAppointmentsComponent from "./components/otherPendingAppointments";
+import ScheduleAppointmentComponent from "./components/scheduleAppointmentsComponent";
+import CardPadronizedComponent from "./components/cardPadronized";
+import ButtonPushRouteComponent from "../components/buttonPushRoute";
+import ConfirmPastAppointmentsComponent from "./components/confirmPastAppointmentsComponent";
 
 export default function AppointmentsPageContext() {
   const { appointments, setAppointments } = useAppointmentsStore();
-  const [idPedingSelectedComponent, setIdSelectedComponent] = useState<
-    string | null
-  >(null);
-  const [handlePedingSelected, setHandlePedingSelected] =
-    useState<boolean>(false);
+  const [appointmentPendingSeleted, setAppointmentPendingSeleted] =
+    useState<Appointments | null>(null);
+  const [changePage, setChangePage] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchApiAppointments = async () => {
-      const response = await fetch("/api/appointments/pending", {
+      const response = await fetch("/api/appointments/availability/all", {
         method: "POST",
         credentials: "include",
       });
@@ -34,50 +34,67 @@ export default function AppointmentsPageContext() {
 
   const conditionalOfAppointments = appointments.length > 0;
   const dateTime = useGetHours(
-    conditionalOfAppointments ? appointments[0].date : null
+    conditionalOfAppointments ? appointments[0].startTime : null
   );
+
   if (conditionalOfAppointments) {
     console.log(dateTime);
     otherAppointments = appointments.filter((_, index) => index > 0);
     console.log(otherAppointments);
   }
-  useEffect(() => {
-    console.log(idPedingSelectedComponent);
-  }, [idPedingSelectedComponent]);
+
   return (
     <AnimatePresence>
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        className="w-full min-h-screen bg-[url('/background.jpg')] bg-fixed bg-cover relative"
-      >
-        {idPedingSelectedComponent && (
-          <PendingComponent
-            id={idPedingSelectedComponent}
-            setIdSelectedComponent={setIdSelectedComponent}
-            setHandlePedingSelected={setHandlePedingSelected}
-            handlePedingSelected={handlePedingSelected}
-          />
-        )}
-        <div className="w-full md:flex md:justify-center min-h-screen backdrop-blur-3xl backdrop-sepia-50 relative">
-          <div className="w-full md:w-[800px] px-3 py-25 md:py-35">
-            {conditionalOfAppointments && (
-              <div className="w-full">
-                <FirshPedingAppoitmentComponent appointment={appointments[0]} />
-                {otherAppointments && otherAppointments.length > 0 && (
-                  <OtherPendingAppointmentsComponent
-                    otherAppointments={otherAppointments}
-                    handlePedingSelected={handlePedingSelected}
-                    setHandlePedingSelected={setHandlePedingSelected}
-                    setIdSelectedComponent={setIdSelectedComponent}
-                  />
-                )}
-              </div>
+      {!changePage && (
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="w-full min-h-screen bg-[url('/background.jpg')] bg-fixed bg-cover relative"
+        >
+          <AnimatePresence>
+            {appointmentPendingSeleted && (
+              <PendingComponent
+                appointmentPendingSeleted={appointmentPendingSeleted}
+                setAppointmentPendingSeleted={setAppointmentPendingSeleted}
+              />
             )}
+          </AnimatePresence>
+
+          <div className="w-full md:flex md:justify-center min-h-screen backdrop-blur-3xl backdrop-sepia-50 relative">
+            <div className="w-full md:w-[800px] px-3 py-25 md:py-35">
+              <ButtonPushRouteComponent
+                title="Criar agendamento"
+                route="/employee/appointments/create"
+                setChangePage={setChangePage}
+              />
+              {conditionalOfAppointments && (
+                <div className="w-full">
+                  <ConfirmPastAppointmentsComponent />
+                  <ScheduleAppointmentComponent />
+                  <CardPadronizedComponent
+                    title="Agendamentos pendentes"
+                    arrayOfItems={appointments}
+                  />
+                  <FirshPedingAppoitmentComponent
+                    appointment={appointments[0]}
+                    setAppointmentSeleted={setAppointmentPendingSeleted}
+                  />
+                  <AnimatePresence>
+                    {otherAppointments && otherAppointments.length > 0 && (
+                      <OtherPendingAppointmentsComponent
+                        otherAppointments={otherAppointments}
+                        setAppointmentSeleted={setAppointmentPendingSeleted}
+                      />
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </motion.section>
+        </motion.section>
+      )}
     </AnimatePresence>
   );
 }

@@ -13,9 +13,12 @@ export default function PendingUncheckComponent({
   const [sucessUncheck, setSucessUncheck] = useState<boolean>(false);
   const uncheckAppointment = async () => {
     try {
-      const response = await fetch(`/api/appointments/uncheck/${id}`, {
-        method: "PATCH",
+      const response = await fetch(`/api/appointments/availability/delete`, {
+        method: "POST",
         credentials: "include",
+        body: JSON.stringify({
+          appointmentId: id,
+        }),
         headers: {
           "Content-Type": "application/json",
         },

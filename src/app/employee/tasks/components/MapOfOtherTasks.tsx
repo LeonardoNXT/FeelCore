@@ -61,6 +61,7 @@ export default function MapOfOtherTasksComponent({
                 if (setCompleteTaskSelected) {
                   setCompleteTaskSelected(task);
                 }
+                window.scrollTo({ top: 0 });
               }}
             >
               <MoveUpRight className="w-full h-full duration-300 hover:rotate-45 " />

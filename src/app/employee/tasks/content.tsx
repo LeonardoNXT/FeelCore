@@ -62,34 +62,39 @@ export default function TaskContent() {
     }
   }, [tasks, setOtherTasks]);
 
-  return (
-    <SectionConteinerPadronized>
-      {error && (
-        <ErrorComponent errorContent={error} onClick={() => setError(null)} />
-      )}
-
+  if (pendingTaskSelected) {
+    return (
       <PendingTaskComponent
         pendingTaskSelected={pendingTaskSelected}
         setPendingTaskSelected={setPendingTaskSelected}
+        setError={setError}
       />
+    );
+  } else {
+    return (
+      <SectionConteinerPadronized>
+        {error && (
+          <ErrorComponent errorContent={error} onClick={() => setError(null)} />
+        )}
 
-      <BoxOfInitialPagesComponent
-        title="Primeira tarefa pendente"
-        summary="Visualize e acompanhe todas as tarefas que ainda precisam ser concluídas."
-        icon
-        urlImage={first?.intendedFor.avatar?.url}
-        fallbackImage={getInitials(first?.intendedFor.name)}
-      >
-        <FirstPendingTaskContent
-          first={first}
+        <BoxOfInitialPagesComponent
+          title="Primeira tarefa pendente"
+          summary="Visualize e acompanhe todas as tarefas que ainda precisam ser concluídas."
+          icon
+          urlImage={first?.intendedFor.avatar?.url}
+          fallbackImage={getInitials(first?.intendedFor.name)}
+        >
+          <FirstPendingTaskContent
+            first={first}
+            setPendingTaskSelected={setPendingTaskSelected}
+          />
+        </BoxOfInitialPagesComponent>
+
+        <OtherTasksComponent
+          otherTasks={otherTasks}
           setPendingTaskSelected={setPendingTaskSelected}
         />
-      </BoxOfInitialPagesComponent>
-
-      <OtherTasksComponent
-        otherTasks={otherTasks}
-        setPendingTaskSelected={setPendingTaskSelected}
-      />
-    </SectionConteinerPadronized>
-  );
+      </SectionConteinerPadronized>
+    );
+  }
 }
