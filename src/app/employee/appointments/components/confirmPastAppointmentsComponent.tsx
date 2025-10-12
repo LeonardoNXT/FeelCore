@@ -2,8 +2,6 @@ import { Appointments, AppointmentsScheduled } from "@/stores/appointment";
 import { useEffect, useState } from "react";
 import CardPadronizedComponent from "./cardPadronized";
 import FirshPastScheduledAppointment from "./firshPastScheduledAppointment";
-import BoxOfInitialPagesComponent from "./boxOfInitialComponents";
-import { getTime } from "./getTime";
 import { Check, X } from "lucide-react";
 import OtherScheduledAppointmentsPadronizedComponent from "./otherAppoitmentsScheduledPadronized";
 
