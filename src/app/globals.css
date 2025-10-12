@@ -44,6 +44,10 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+.dark [data-chart="chart-_r_3_"] {
+  --color-desktop: var(--chart-2);
+}
+
 ::-webkit-scrollbar {
   width: 0px;
   height: 4px;
@@ -121,6 +125,7 @@ main {
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+  --modified-1: #bbb;
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
@@ -177,6 +182,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 input[type="time"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
+}
+#login::-webkit-credentials-auto-fill-button,
+#login::-webkit-password-toggle-button {
+  filter: invert(0);
 }
 input[type="password"]::-webkit-credentials-auto-fill-button,
 input[type="password"]::-webkit-password-toggle-button {

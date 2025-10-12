@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import SideBarPage from "@/components/sidebar/links";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
+import RefreshComponent from "../employee/components/refresh";
 
 export default function AdminLayout({
   children,
@@ -15,6 +16,7 @@ export default function AdminLayout({
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [handleLogout, setHandleLogout] = useState<boolean>(false);
 
   // Detectar se é mobile (breakpoint personalizado 1500px)
   useEffect(() => {
@@ -59,6 +61,17 @@ export default function AdminLayout({
     setIsMobileMenuOpen(isOpen);
   };
 
+  if (handleLogout) {
+    return (
+      <RefreshComponent
+        display="flex"
+        zIndex="30"
+        title="Desconectando..."
+        route="/"
+      />
+    );
+  }
+
   return (
     <motion.section
       className="flex w-full relative min-h-screen"
@@ -66,7 +79,10 @@ export default function AdminLayout({
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
     >
-      <SideBarPage onMenuToggle={handleMenuToggle} />
+      <SideBarPage
+        onMenuToggle={handleMenuToggle}
+        setHandleLogout={setHandleLogout}
+      />
 
       <motion.main
         className={`

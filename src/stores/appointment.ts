@@ -2,8 +2,26 @@ import { create } from "zustand";
 
 export interface Appointments {
   _id: string;
-  status: "pendente" | "concluido" | "cancelado" | "agendado";
-  date: string;
+  status: "disponivel" | "agendado" | "cancelado" | "concluido";
+  startTime: string;
+  endTime: string;
+  duration: number;
+  intendedFor?: {
+    name: string;
+    _id: string;
+    avatar?: {
+      url: string;
+      public_id: string;
+    };
+  };
+}
+
+export interface AppointmentsScheduled {
+  _id: string;
+  status: "disponivel" | "agendado" | "cancelado" | "concluido";
+  startTime: string;
+  endTime: string;
+  duration: number;
   intendedFor: {
     name: string;
     _id: string;
@@ -20,8 +38,22 @@ interface AppointmentsStore {
   clearAppointments: () => void;
 }
 
+interface AppointmentsScheduledStore {
+  appointments: AppointmentsScheduled[];
+  setAppointments: (appointments: AppointmentsScheduled[]) => void;
+  clearAppointments: () => void;
+}
+
 export const useAppointmentsStore = create<AppointmentsStore>((set) => ({
   appointments: [],
   setAppointments: (appointments) => set({ appointments }),
   clearAppointments: () => set({ appointments: [] }),
 }));
+
+export const useAppointmentsScheduleStore = create<AppointmentsScheduledStore>(
+  (set) => ({
+    appointments: [],
+    setAppointments: (appointments) => set({ appointments }),
+    clearAppointments: () => set({ appointments: [] }),
+  })
+);

@@ -12,6 +12,8 @@ import {
   Wallet,
   User,
   Pencil,
+  Eye,
+  EyeClosed,
 } from "lucide-react";
 
 export default function ProfileContent({ employeerId }: any) {
@@ -28,6 +30,7 @@ export default function ProfileContent({ employeerId }: any) {
   const [remuneration, setRemuneration] = useState<number>(0);
   const [rg, setRg] = useState<string>("");
   const [status, setStatus] = useState<string>("");
+  const [handleCPFVisible, setHandleCPFVisible] = useState<boolean>(false);
 
   console.log(employeerId);
   useEffect(() => {
@@ -134,16 +137,6 @@ export default function ProfileContent({ employeerId }: any) {
                 <p className="text-[15px]">{phone || "Desconhecido"}</p>
               </div>
             </div>
-            <div className="mt-[5vw] md:mt-[20px]">
-              <p className="font-semibold tracking-wide">Endereço Completo</p>
-              <div className="px-[3vw] md:px-[20px] py-[3vw] md:py-[10px] border-1 mt-[1vw] border-[#f3f3f3] rounded-3xl flex gap-[2vw] relative">
-                <House className="text-[#333] w-[22px]" />
-                <Pencil className="text-[#333] w-[18px] absolute right-[4vw] md:right-[1.0vw]" />
-                <p className="text-[15px]  mr-[25px]">
-                  {address || "Desconhecido"}
-                </p>
-              </div>
-            </div>
           </div>
           <div>
             <div className="w-full h-[1px] bg-[#e9e9e9] mt-[4vw] md:hidden"></div>
@@ -189,14 +182,32 @@ export default function ProfileContent({ employeerId }: any) {
               </p>
               <div className="px-[3vw] md:px-[20px] py-[3vw] md:py-[10px] border-1 mt-[1vw] border-[#f3f3f3] rounded-3xl flex gap-[2vw] relative">
                 <p className="text-[#333] w-[22px] font-bold">CPF</p>
-                <p className="text-[15px]">{cpf || "Desconhecido"}</p>
+                <p className="text-[15px]">
+                  {handleCPFVisible ? (
+                    cpf
+                  ) : (
+                    <span className="tracking-widest">***.***.***-**</span>
+                  )}
+                </p>
+                <div className="absolute right-4">
+                  {handleCPFVisible ? (
+                    <Eye onClick={() => setHandleCPFVisible(false)} />
+                  ) : (
+                    <EyeClosed onClick={() => setHandleCPFVisible(true)} />
+                  )}
+                </div>
               </div>
             </div>
             <div className="mt-[5vw] md:mt-[20px]">
-              <p className="font-semibold tracking-wide">Registro Geral</p>
-              <div className="px-[3vw] md:px-[20px] py-[3vw] md:py-[10px] border-1 mt-[1vw] border-[#f3f3f3] rounded-3xl flex gap-[2vw] relative">
-                <p className="text-[#333] w-[22px] font-bold">RG</p>
-                <p className="text-[15px]">{rg || "Desconhecido"}</p>
+              <p className="font-semibold tracking-wide select-none">
+                Endereço Completo
+              </p>
+              <div className="px-[3vw] md:px-[20px] py-[3vw] md:py-[10px] border-1 mt-[1vw] border-[#f3f3f3] rounded-3xl flex gap-[2vw] relative select-none">
+                <House className="text-[#333] w-[22px]" />
+                <Pencil className="text-[#333] w-[18px] absolute right-[4vw] md:right-[1.0vw]" />
+                <p className="text-[15px]  mr-[25px]">
+                  {address || "Desconhecido"}
+                </p>
               </div>
             </div>
           </div>
