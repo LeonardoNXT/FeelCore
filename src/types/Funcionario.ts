@@ -4,7 +4,6 @@ export interface Funcionario {
   name: string;
   email: string;
   birthday: string;
-  rg: string;
   cpf: string;
   phone: string;
   address: string;

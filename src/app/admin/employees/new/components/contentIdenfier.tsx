@@ -16,8 +16,6 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
   const { funcionario, setFuncionario } = useFuncionarioStore();
-
-  const inputRg = useRef<HTMLInputElement>(null);
   const inputCpf = useRef<HTMLInputElement>(null);
   const calendar = useRef<HTMLInputElement>(null);
   const returnButton = useRef<HTMLButtonElement>(null);
@@ -133,7 +131,7 @@ export default function IdentificacaoDoProfissional({ setPagina }: Props) {
   const changePage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    if (inputRg?.current && inputCpf?.current && calendar?.current) {
+    if (inputCpf?.current && calendar?.current) {
       // Verifica se os dados são válidos antes de prosseguir
       if (!isVerifiedInput(inputCpf.current.value, calendar.current.value)) {
         alert("Por favor, preencha todos os campos corretamente.");

@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   Home,
   BarChart3,
-  DollarSign,
   ChevronDown,
   Building2,
   UserPlus,
@@ -266,14 +265,6 @@ export default function SideBarPage({
 
               {isDashboardOpen && (
                 <div className="space-y-1 ml-4 border-l border-border pl-4">
-                  <SubNavItem
-                    href="/admin/dashboard/financial"
-                    isActive={pathname === "/admin/dashboard/financial"}
-                    onNavigate={handleMobileNavigation}
-                  >
-                    <DollarSign className="h-4 w-4 cursor-not-allowed pointer-events-none" />
-                    Financeiro
-                  </SubNavItem>
                   <SubNavItem
                     href="/admin/dashboard/users"
                     isActive={routeStates.isDashboardPatientsActive}

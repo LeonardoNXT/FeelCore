@@ -69,28 +69,31 @@ export default function AppointmentsPageContext() {
                 route="/employee/appointments/create"
                 setChangePage={setChangePage}
               />
-              {conditionalOfAppointments && (
-                <div className="w-full">
-                  <ConfirmPastAppointmentsComponent />
-                  <ScheduleAppointmentComponent />
+
+              <div className="w-full">
+                <ConfirmPastAppointmentsComponent />
+                <ScheduleAppointmentComponent />
+                {appointments.length > 0 && (
                   <CardPadronizedComponent
                     title="Agendamentos pendentes"
                     arrayOfItems={appointments}
                   />
+                )}
+                {appointments.length > 0 && (
                   <FirshPedingAppoitmentComponent
                     appointment={appointments[0]}
                     setAppointmentSeleted={setAppointmentPendingSeleted}
                   />
-                  <AnimatePresence>
-                    {otherAppointments && otherAppointments.length > 0 && (
-                      <OtherPendingAppointmentsComponent
-                        otherAppointments={otherAppointments}
-                        setAppointmentSeleted={setAppointmentPendingSeleted}
-                      />
-                    )}
-                  </AnimatePresence>
-                </div>
-              )}
+                )}
+                <AnimatePresence>
+                  {otherAppointments && otherAppointments.length > 0 && (
+                    <OtherPendingAppointmentsComponent
+                      otherAppointments={otherAppointments}
+                      setAppointmentSeleted={setAppointmentPendingSeleted}
+                    />
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </div>
         </motion.section>
