@@ -57,7 +57,7 @@ export interface Employee {
   userfoundOut: false | true;
 }
 
-interface User {
+export interface Organization {
   _id: string;
   name: string;
   email: string;
@@ -67,8 +67,8 @@ interface User {
 }
 
 interface UserState {
-  user: User | null;
-  setUser: (user: User) => void;
+  user: Organization | null;
+  setUser: (user: Organization) => void;
   clearUser: () => void;
 }
 

@@ -2,10 +2,7 @@ import { create } from "zustand";
 
 interface Login {
   name: string;
-  avatar?: {
-    public_id: string;
-    url: string;
-  };
+  avatar?: { public_id: string; url: string } | string;
 }
 
 type ReceiveContent = {
