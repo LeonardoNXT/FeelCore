@@ -36,9 +36,6 @@ export default function Home() {
 
         console.log("ADM", onlyRelevantInfo);
         setInitialLogin(onlyRelevantInfo);
-        if (data[1].role) {
-          return setUserADM(data[0]);
-        }
       } catch (err) {
         console.log(err);
       }
