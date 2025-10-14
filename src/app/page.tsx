@@ -1,15 +1,15 @@
 "use client";
 import Aurora from "@/blocks/Backgrounds/Aurora";
-import useInitialLoginStore from "@/stores/InitialLogin";
 import { Menu, MoveRight, User, UserRoundCog } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getInitials } from "./employee/appointments/components/getInitials";
 import { AnimatePresence, motion } from "framer-motion";
 import RefreshComponent from "./employee/components/refresh";
+import { Login } from "@/stores/InitialLogin";
 
 export default function Home() {
-  const { receiveContent, setInitialLogin } = useInitialLoginStore();
+  const [receiveContent, setInitialLogin] = useState<Login | null>(null);
   const [acess, setAcess] = useState<string | null>(null);
   const [clickOnLogin, setClickOnLogin] = useState<boolean>(false);
   const [linkLogin, setLinkLogin] = useState<string | null>(null);
@@ -27,11 +27,9 @@ export default function Home() {
         const data = await response.json();
 
         const onlyRelevantInfo = {
-          login: {
-            name: data[0].name,
-            avatar: data[0].avatar,
-          },
-          role: data[1].role,
+          name: data[0].name,
+          avatar: data[0].avatar,
+          role: data[1] || null,
         };
 
         console.log("ADM", onlyRelevantInfo);
@@ -80,12 +78,12 @@ export default function Home() {
                 className="px-1 py-1 bg-[#121212] flex items-stretch rounded-full border-1 border-[#333] cursor-pointer"
                 onClick={setRouter}
               >
-                {receiveContent.login.avatar ? (
+                {receiveContent.avatar ? (
                   <Image
                     src={
-                      typeof receiveContent.login.avatar === "string"
-                        ? receiveContent.login.avatar
-                        : receiveContent.login.avatar?.url
+                      typeof receiveContent.avatar === "string"
+                        ? receiveContent.avatar
+                        : receiveContent.avatar?.url
                     }
                     width={55}
                     height={55}
@@ -94,12 +92,12 @@ export default function Home() {
                   />
                 ) : (
                   <div className="w-[55px] aspect-square bg-[#222] rounded-full px-2 py-2 grid place-items-center border-4 border-[#88a7a5]">
-                    {getInitials(receiveContent.login.name)}
+                    {getInitials(receiveContent.name)}
                   </div>
                 )}
                 <div className="pr-4 px-2 flex flex-col justify-center relative">
                   <p className="tracking-wide text-[13px] leading-[12px] text-[#fff2cf]">
-                    Olá, {receiveContent.login.name.split(" ")[0]}
+                    Olá, {receiveContent.name.split(" ")[0]}
                   </p>
                   <div className="flex gap-1 justify-center items-center w-max text-[#bbb]">
                     <p className="text-[11px]">Acessar</p>
@@ -191,7 +189,7 @@ export default function Home() {
         {receiveContent && acess && (
           <RefreshComponent
             title={`Bem-vindo(a) novamente, ${
-              receiveContent.login.name.split(" ")[0]
+              receiveContent.name.split(" ")[0]
             }!`}
             display="flex"
             route={acess}

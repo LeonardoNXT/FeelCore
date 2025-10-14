@@ -1,17 +1,22 @@
 import { AppointmentsScheduled } from "@/stores/appointment";
 import BoxOfInitialPagesComponent from "./boxOfInitialComponents";
 import { getInitials } from "./getInitials";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
 import InsideBoxPadronizedFirshScheduledAppointments from "./boxInsidePadronizedScheduledAppointments";
+import { ChooseOptionProps } from "./confirmPastAppointmentsComponent";
 
 type Props = {
   firstAppointment: AppointmentsScheduled;
+  setChooseOption: Dispatch<SetStateAction<ChooseOptionProps>>;
+  setId: Dispatch<SetStateAction<string | null>>;
 };
 
 export default function FirshPastScheduledAppointment({
   firstAppointment,
+  setId,
+  setChooseOption,
 }: Props) {
   const [hover, setHover] = useState<string | null>(null);
   return (
@@ -48,6 +53,10 @@ export default function FirshPastScheduledAppointment({
                 setHover("Clicando no 'X', você cancelará o agendamento.")
               }
               onMouseLeave={() => setHover(null)}
+              onClick={() => {
+                setId(firstAppointment._id);
+                setChooseOption("CANCEL");
+              }}
               className="border-1 border-[#333] rounded-full h-10 w-10 p-2 duration-200 hover:text-[#333] hover:bg-[#ffd6d6] cursor-pointer hover:rotate-90"
             >
               <X className="w-full h-full" />
@@ -58,6 +67,10 @@ export default function FirshPastScheduledAppointment({
                 setHover("Clicando no '✓', você finalizará o agendamento.")
               }
               onMouseLeave={() => setHover(null)}
+              onClick={() => {
+                setId(firstAppointment._id);
+                setChooseOption("COMPLETE");
+              }}
             >
               <Check className="w-full h-full" />
             </div>

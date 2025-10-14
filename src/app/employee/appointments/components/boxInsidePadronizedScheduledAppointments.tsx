@@ -18,6 +18,7 @@ export default function InsideBoxPadronizedFirshScheduledAppointments({
     <div
       className="w-full mt-10 h-70 rounded-3xl flex flex-col justify-center items-center relative"
       style={{ background: `linear-gradient(45deg,${from} 0%, ${to} 100%)` }}
+      data-id={firstAppointment._id}
     >
       <div className="flex gap-2 text-[#444]">
         <p>{getTime(firstAppointment.startTime)}</p>

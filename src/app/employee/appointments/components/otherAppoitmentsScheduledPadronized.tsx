@@ -1,7 +1,7 @@
 import { AppointmentsScheduled } from "@/stores/appointment";
 import BoxOfInitialPagesComponent from "./boxOfInitialComponents";
 import { getTime } from "./getTime";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search } from "lucide-react";
 
@@ -25,6 +25,10 @@ export default function OtherScheduledAppointmentsPadronizedComponent({
   const [filteredOtherAppointments, setFilteredOtherAppointments] = useState<
     AppointmentsScheduled[]
   >(otherAppointmentsScheduled);
+
+  useEffect(() => {
+    setFilteredOtherAppointments(otherAppointmentsScheduled);
+  }, [otherAppointmentsScheduled]);
 
   const filterArray = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length < 1) {
@@ -78,6 +82,7 @@ export default function OtherScheduledAppointmentsPadronizedComponent({
                   layout
                   className="min-w-[350px] md:min-w-[400px] rounded-3xl bg-gradient-to-tl from-[#ffffff] to-[#fcfcfc00] h-full flex flex-col justify-center items-center relative"
                   key={i}
+                  data-id={otherAppointments._id}
                 >
                   <div className="flex gap-2 text-[#646464]">
                     <p>{getTime(otherAppointments.startTime)}</p>
