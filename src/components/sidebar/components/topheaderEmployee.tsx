@@ -118,18 +118,14 @@ export default function TopHeaderEmployee({
         />
         <div
           className="h-full aspect-square bg-[#181818] rounded-full flex justify-center items-center cursor-pointer hover:bg-[#000] duration-300"
-          onClick={() => setOpen(!open)}
+          onClick={() => {
+            if (!open) return setOpen(true);
+            setNotificationOpen(false);
+            refreshNotification();
+            setOpen(false);
+          }}
         >
-          {open ? (
-            <X
-              onClick={() => {
-                setNotificationOpen(false);
-                refreshNotification();
-              }}
-            />
-          ) : (
-            <Menu />
-          )}
+          {open ? <X /> : <Menu />}
         </div>
       </div>
     </div>

@@ -10,9 +10,13 @@ import ScheduleAppointmentComponent from "./components/scheduleAppointmentsCompo
 import CardPadronizedComponent from "./components/cardPadronized";
 import ButtonPushRouteComponent from "../components/buttonPushRoute";
 import ConfirmPastAppointmentsComponent from "./components/confirmPastAppointmentsComponent";
+import WarningBoxComponent from "./components/warningBoxComponent";
+import useWarmingBox from "./hooks/useWarmingBox";
 
 export default function AppointmentsPageContext() {
   const { appointments, setAppointments } = useAppointmentsStore();
+  const { warningBox, setWarningBox, confirmWarmingBox, setConfirmWarmingBox } =
+    useWarmingBox();
   const [appointmentPendingSeleted, setAppointmentPendingSeleted] =
     useState<Appointments | null>(null);
   const [changePage, setChangePage] = useState<boolean>(false);
@@ -43,6 +47,10 @@ export default function AppointmentsPageContext() {
     console.log(otherAppointments);
   }
 
+  useEffect(() => {
+    console.log("[confirmWarmingBox]", confirmWarmingBox);
+  }, [confirmWarmingBox]);
+
   return (
     <AnimatePresence>
       {!changePage && (
@@ -53,6 +61,16 @@ export default function AppointmentsPageContext() {
           transition={{ duration: 0.3 }}
           className="w-full min-h-screen bg-[url('/background.jpg')] bg-fixed bg-cover relative"
         >
+          <AnimatePresence>
+            {warningBox && (
+              <WarningBoxComponent
+                warningBox={warningBox}
+                setWarningBox={setWarningBox}
+                setConfirm={setConfirmWarmingBox}
+              />
+            )}
+          </AnimatePresence>
+
           <AnimatePresence>
             {appointmentPendingSeleted && (
               <PendingComponent
@@ -71,8 +89,16 @@ export default function AppointmentsPageContext() {
               />
 
               <div className="w-full">
-                <ConfirmPastAppointmentsComponent />
-                <ScheduleAppointmentComponent />
+                <ConfirmPastAppointmentsComponent
+                  warmingBox={warningBox}
+                  setWarmingBox={setWarningBox}
+                  confirm={confirmWarmingBox}
+                  setConfirm={setConfirmWarmingBox}
+                />
+                <ScheduleAppointmentComponent
+                  setWarningBox={setWarningBox}
+                  setConfirm={setConfirmWarmingBox}
+                />
                 {appointments.length > 0 && (
                   <CardPadronizedComponent
                     title="Agendamentos pendentes"

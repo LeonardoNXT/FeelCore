@@ -1,20 +1,31 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import BoxOfInitialPagesComponent from "./boxOfInitialComponents";
 import {
   AppointmentsScheduled,
   useAppointmentsScheduleStore,
 } from "@/stores/appointment";
-import { MoveRight, X } from "lucide-react";
+import { MoveRight } from "lucide-react";
 import CardPadronizedComponent from "./cardPadronized";
 import InsideBoxPadronizedFirshScheduledAppointments from "./boxInsidePadronizedScheduledAppointments";
 import OtherScheduledAppointmentsPadronizedComponent from "./otherAppoitmentsScheduledPadronized";
 
-export default function ScheduleAppointmentComponent() {
+import CancelButtonComponent from "./cancelButton";
+import { ConfirmWarmingBoxProps, WarningBox } from "../hooks/useWarmingBox";
+import LargeCancelButtonComponent from "./cancelButtonLarge";
+
+export default function ScheduleAppointmentComponent({
+  setWarningBox,
+  setConfirm,
+}: {
+  setWarningBox: Dispatch<SetStateAction<WarningBox | null>>;
+  setConfirm: Dispatch<SetStateAction<ConfirmWarmingBoxProps>>;
+}) {
   const [firsh, setFirsh] = useState<AppointmentsScheduled | null>(null);
   const [otherAppointmentsScheduled, setOtherAppointmentsScheduled] = useState<
     AppointmentsScheduled[] | null
   >(null);
   const { setAppointments, appointments } = useAppointmentsScheduleStore();
+  const [id, setId] = useState<string | null>(null);
 
   useEffect(() => {
     const scheduledAppointments = async () => {
@@ -45,6 +56,23 @@ export default function ScheduleAppointmentComponent() {
       }
     }
   }, [appointments]);
+
+  useEffect(() => {
+    if (!id) return;
+    setWarningBox({
+      title: "Cancelar agendamento.",
+      summary:
+        "Clicando em confirmar você pode cancelar o agendamento confirmado.",
+      id: id,
+      route: "appointments/cancel",
+    });
+    setConfirm({
+      status: false,
+      type: "CONFIRM SCHEDULE",
+    });
+    setId(null);
+  }, [id, setWarningBox, setConfirm]);
+
   if (appointments.length > 0) {
     return (
       <div className="mb-2 w-full">
@@ -78,11 +106,7 @@ export default function ScheduleAppointmentComponent() {
                   firstAppointment={firsh}
                   to="#bce1e2"
                 >
-                  <div className="absolute bottom-0 px-2 py-2 bg-[#111] rounded-t-3xl">
-                    <div className="h-10 w-10 px-2 py-2 border-1 rounded-full flex justify-center items-center duration-300 hover:rotate-90 hover:bg-red-300 cursor-pointer">
-                      <X className="w-full h-full " />
-                    </div>
-                  </div>
+                  <LargeCancelButtonComponent setId={setId} />
                 </InsideBoxPadronizedFirshScheduledAppointments>
               </div>
             </BoxOfInitialPagesComponent>
@@ -94,11 +118,7 @@ export default function ScheduleAppointmentComponent() {
                 to="#bce1e2"
                 otherAppointmentsScheduled={otherAppointmentsScheduled}
               >
-                <div className="absolute bottom-4 px-1 py-1 bg-[#111] rounded-full">
-                  <div className="h-8 w-8 rounded-full px-2 py-2 flex justify-center items-center duration-200 hover:bg-red-300 hover:rotate-90 cursor-pointer">
-                    <X />
-                  </div>
-                </div>
+                <CancelButtonComponent setId={setId} />
               </OtherScheduledAppointmentsPadronizedComponent>
             )}
           </div>
