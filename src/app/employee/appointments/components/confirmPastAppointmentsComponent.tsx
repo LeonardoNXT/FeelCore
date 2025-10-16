@@ -5,6 +5,7 @@ import FirshPastScheduledAppointment from "./firshPastScheduledAppointment";
 import OtherScheduledAppointmentsPadronizedComponent from "./otherAppoitmentsScheduledPadronized";
 import ConfirmAndCancelComponent from "./confirmAndCancel";
 import { ConfirmWarmingBoxProps, WarningBox } from "../hooks/useWarmingBox";
+import PdfOnBoxInsideConteiner from "./PDFonBoxInsideConteiner";
 
 type Data = {
   message: string;
@@ -155,6 +156,13 @@ export default function ConfirmPastAppointmentsComponent({
         title="Agendamentos não concluídos"
         arrayOfItems={pastScheduledAppointments as Appointments[]}
       />
+      <PdfOnBoxInsideConteiner
+        title="PDF - Agendamentos não concluídos"
+        summary="Aqui, você pode visualizar os agendamentos que foram confirmados e cuja data e horário de início já passaram. Essa lista serve como histórico de compromissos realizados, permitindo acompanhar o que já foi concluído. Use as opções abaixo para consultar detalhes ou gerar relatórios."
+        color="#a6be6e"
+        pdfEndpoint="/appointments/pdf/past/confirm"
+      />
+      <div className="mt-2"></div>
       {firstAppointment && (
         <FirshPastScheduledAppointment
           firstAppointment={firstAppointment}

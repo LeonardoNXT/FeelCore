@@ -12,6 +12,7 @@ import ButtonPushRouteComponent from "../components/buttonPushRoute";
 import ConfirmPastAppointmentsComponent from "./components/confirmPastAppointmentsComponent";
 import WarningBoxComponent from "./components/warningBoxComponent";
 import useWarmingBox from "./hooks/useWarmingBox";
+import GetAppointmentsComponentPadronized from "./components/completeAppointments";
 
 export default function AppointmentsPageContext() {
   const { appointments, setAppointments } = useAppointmentsStore();
@@ -119,6 +120,26 @@ export default function AppointmentsPageContext() {
                     />
                   )}
                 </AnimatePresence>
+                <GetAppointmentsComponentPadronized
+                  title="Agendamentos concluídos"
+                  titlePdf="PDF - Agendamento concluídos"
+                  summaryPdf="Aqui, você pode gerar um documento em PDF contendo todos os agendamentos que já foram concluídos. Esse arquivo pode ser utilizado para fins de registro, análise ou compartilhamento. Para exportar, basta clicar na opção abaixo."
+                  summary="Aqui, você pode visualizar os agendamentos concluídos de todas as datas."
+                  color="#746DFF"
+                  pdfEndpoint="appointments/pdf/complete"
+                  endpoint="appointments/complete/all"
+                  buttons={{ cancel: false, pdf: true }}
+                />
+                <GetAppointmentsComponentPadronized
+                  title="Agendamentos cancelados"
+                  titlePdf="PDF - Agendamento cancelados"
+                  summaryPdf="Aqui, você pode gerar um documento em PDF contendo todos os agendamentos que já foram cancelados. Esse arquivo pode ser utilizado para fins de registro, análise ou compartilhamento. Para exportar, basta clicar na opção abaixo."
+                  summary="Aqui, você pode visualizar os agendamentos cancelados de todas as datas."
+                  color="#FF6D6D"
+                  pdfEndpoint="appointments/pdf/canceled"
+                  endpoint="appointments/all/canceled"
+                  buttons={{ cancel: false, pdf: true }}
+                />
               </div>
             </div>
           </div>

@@ -12,11 +12,14 @@ import PendingTaskComponent from "./components/pendingTaskComponent";
 import OtherTasksComponent from "./components/otherTasksComponent";
 import { getInitials } from "../appointments/components/getInitials";
 import FirstPendingTaskContent from "./components/firstTaskComponent";
+import ButtonPushRouteComponent from "../components/buttonPushRoute";
+import { AnimatePresence } from "framer-motion";
 
 export default function TaskContent() {
   const { tasks, setTasks } = useTasksStore();
   const { error, setError } = useSetError();
   const [first, setFirstTask] = useState<Tasks | null>(null);
+  const [changePage, setChangePage] = useState<boolean>(false);
   const {
     otherTasks,
     setOtherTasks,
@@ -72,29 +75,40 @@ export default function TaskContent() {
     );
   } else {
     return (
-      <SectionConteinerPadronized>
-        {error && (
-          <ErrorComponent errorContent={error} onClick={() => setError(null)} />
+      <AnimatePresence>
+        {!changePage && (
+          <SectionConteinerPadronized>
+            {error && (
+              <ErrorComponent
+                errorContent={error}
+                onClick={() => setError(null)}
+              />
+            )}
+            <ButtonPushRouteComponent
+              title="Criar nova tarefa"
+              route="/employee/tasks/create"
+              setChangePage={setChangePage}
+            />
+            <BoxOfInitialPagesComponent
+              title="Primeira tarefa pendente"
+              summary="Visualize e acompanhe todas as tarefas que ainda precisam ser concluídas."
+              icon
+              urlImage={first?.intendedFor.avatar?.url}
+              fallbackImage={getInitials(first?.intendedFor.name)}
+            >
+              <FirstPendingTaskContent
+                first={first}
+                setPendingTaskSelected={setPendingTaskSelected}
+              />
+            </BoxOfInitialPagesComponent>
+
+            <OtherTasksComponent
+              otherTasks={otherTasks}
+              setPendingTaskSelected={setPendingTaskSelected}
+            />
+          </SectionConteinerPadronized>
         )}
-
-        <BoxOfInitialPagesComponent
-          title="Primeira tarefa pendente"
-          summary="Visualize e acompanhe todas as tarefas que ainda precisam ser concluídas."
-          icon
-          urlImage={first?.intendedFor.avatar?.url}
-          fallbackImage={getInitials(first?.intendedFor.name)}
-        >
-          <FirstPendingTaskContent
-            first={first}
-            setPendingTaskSelected={setPendingTaskSelected}
-          />
-        </BoxOfInitialPagesComponent>
-
-        <OtherTasksComponent
-          otherTasks={otherTasks}
-          setPendingTaskSelected={setPendingTaskSelected}
-        />
-      </SectionConteinerPadronized>
+      </AnimatePresence>
     );
   }
 }

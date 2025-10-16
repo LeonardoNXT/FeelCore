@@ -8,10 +8,10 @@ import { MoveRight } from "lucide-react";
 import CardPadronizedComponent from "./cardPadronized";
 import InsideBoxPadronizedFirshScheduledAppointments from "./boxInsidePadronizedScheduledAppointments";
 import OtherScheduledAppointmentsPadronizedComponent from "./otherAppoitmentsScheduledPadronized";
-
-import CancelButtonComponent from "./cancelButton";
 import { ConfirmWarmingBoxProps, WarningBox } from "../hooks/useWarmingBox";
-import LargeCancelButtonComponent from "./cancelButtonLarge";
+import LargeCancelButtonComponent from "./cancelAndPDFButtonLarge";
+import CancelAndPdfButtonComponent from "./cancelAndPdfButton";
+import PdfOnBoxInsideConteiner from "./PDFonBoxInsideConteiner";
 
 export default function ScheduleAppointmentComponent({
   setWarningBox,
@@ -83,6 +83,12 @@ export default function ScheduleAppointmentComponent({
               arrayOfItems={appointments}
               to="#bce1e2"
             />
+            <PdfOnBoxInsideConteiner
+              title="PDF - Agendamentos Confirmados"
+              summary="Aqui, você pode visualizar todos os agendamentos que já foram confirmados. Essa lista permite acompanhar os compromissos que estão oficialmente marcados e prontos para serem realizados. Para mais detalhes ou ações, utilize as opções disponíveis abaixo."
+              color="#bce1e2"
+              pdfEndpoint="appointments/pdf/confirm"
+            />
             <BoxOfInitialPagesComponent
               title="Agendamento confirmado"
               summary={`O próximo agendamento confirmado é o de ${
@@ -118,7 +124,11 @@ export default function ScheduleAppointmentComponent({
                 to="#bce1e2"
                 otherAppointmentsScheduled={otherAppointmentsScheduled}
               >
-                <CancelButtonComponent setId={setId} />
+                <CancelAndPdfButtonComponent
+                  setId={setId}
+                  cancelButton={true}
+                  pdfButton={true}
+                />
               </OtherScheduledAppointmentsPadronizedComponent>
             )}
           </div>

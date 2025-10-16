@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
 import InsideBoxPadronizedFirshScheduledAppointments from "./boxInsidePadronizedScheduledAppointments";
 import { ChooseOptionProps } from "./confirmPastAppointmentsComponent";
+import PDFbuttonComponent from "./PDFbuttonComponent";
 
 type Props = {
   firstAppointment: AppointmentsScheduled;
@@ -60,6 +61,14 @@ export default function FirshPastScheduledAppointment({
               className="border-1 border-[#333] rounded-full h-10 w-10 p-2 duration-200 hover:text-[#333] hover:bg-[#ffd6d6] cursor-pointer hover:rotate-90"
             >
               <X className="w-full h-full" />
+            </div>
+            <div
+              onMouseEnter={() =>
+                setHover("Clicando em 'PDF', você pode baixar o agendamento.")
+              }
+              onMouseLeave={() => setHover(null)}
+            >
+              <PDFbuttonComponent id={firstAppointment._id} />
             </div>
             <div
               className="border-1 border-[#333] rounded-full h-10 w-10 p-2 duration-200 hover:text-[#333] hover:bg-[#eaffd6] cursor-pointer hover:rotate-[-25deg]"

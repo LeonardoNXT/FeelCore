@@ -113,7 +113,7 @@ export default function OtherScheduledAppointmentsPadronizedComponent({
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.5 }}
-                className="w-full h-full grid place-items-center text-[#333] text-2xl md:text-3xl"
+                className="w-full h-full grid place-items-center text-[#333] text-2xl md:text-3xl text-center"
               >
                 Não foi encontrado agendamento algum
               </motion.div>

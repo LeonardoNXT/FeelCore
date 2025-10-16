@@ -44,11 +44,11 @@ export default function Home() {
 
   const setRouter = () => {
     if (!receiveContent) return;
-    if (receiveContent.role === "employee") {
+    if (receiveContent.role?.role === "employee") {
       return setAcess("/employee");
-    } else if (receiveContent.role === "patient") {
+    } else if (receiveContent.role?.role === "patient") {
       return setAcess("/patient");
-    } else if (receiveContent.role === "adm") {
+    } else if (receiveContent.role?.role === "adm") {
       return setAcess("/admin");
     }
   };

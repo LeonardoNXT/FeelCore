@@ -6,11 +6,15 @@ export default function CardPadronizedComponent({
   arrayOfItems,
   from = "#ffffff",
   to = "#beaa6e",
+  my = 2,
+  mt = 2,
 }: {
   title: string;
   arrayOfItems: Appointments[];
   from?: string;
   to?: string;
+  my?: number;
+  mt?: number;
 }) {
   return (
     <motion.div
@@ -18,7 +22,7 @@ export default function CardPadronizedComponent({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="w-full my-2 rounded-4xl border-9 border-[#141414] px-3 py-3 relative"
+      className={`w-full my-${my} mt-${mt} rounded-4xl border-9 border-[#141414] px-3 py-3 relative `}
       style={{ background: `linear-gradient(45deg,${from} 0%, ${to} 100%)` }}
     >
       <div className="absolute top-0 left-1/2 translate-x-[-50%] rounded-b-[10px] bg-[#141414] text-[15px] px-4 pb-1">

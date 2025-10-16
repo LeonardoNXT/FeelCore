@@ -56,8 +56,8 @@ export default function WarningBoxComponent({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      className="fixed inset-0 bg-[#00000067] z-50 grid place-items-center px-4"
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 bg-[#00000042] z-50 grid place-items-center px-4"
     >
       <div className="md:max-w-[500px] w-full p-4 bg-[#010101] border border-[#222] rounded-3xl">
         {/* Header */}
