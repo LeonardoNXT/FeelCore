@@ -28,7 +28,7 @@ export default function PdfOnBoxInsideConteiner({
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = `agendamento_${Date.now}.pdf`;
+      a.download = `agendamento_${new Date().toLocaleDateString()}.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
