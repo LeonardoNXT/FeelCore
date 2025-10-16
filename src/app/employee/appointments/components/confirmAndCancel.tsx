@@ -1,6 +1,7 @@
 import { Check, X } from "lucide-react";
-import { Dispatch, SetStateAction, useRef } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { ChooseOptionProps } from "./confirmPastAppointmentsComponent";
+import SmallPDFcomponent from "./smallPdfComponent";
 
 export default function ConfirmAndCancelComponent({
   setChooseOption,
@@ -10,6 +11,16 @@ export default function ConfirmAndCancelComponent({
   setId: Dispatch<SetStateAction<string | null>>;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
+  const [id, setIdToPdf] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const parent = ref.current?.closest("[data-id]");
+    const id = parent?.getAttribute("data-id");
+
+    if (id) setIdToPdf(id);
+  }, [ref]);
 
   const handleClick = () => {
     const parent = ref.current?.closest("[data-id]");
@@ -31,6 +42,7 @@ export default function ConfirmAndCancelComponent({
       >
         <X />
       </div>
+      {id && <SmallPDFcomponent id={id} />}
       <div
         className="h-8 w-8 px-2 py-2 flex justify-center items-center rounded-full duration-200 hover:bg-green-300 hover:rotate-[-20deg] cursor-pointer"
         onClick={() => {
