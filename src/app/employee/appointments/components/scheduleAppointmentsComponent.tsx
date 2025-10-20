@@ -89,6 +89,7 @@ export default function ScheduleAppointmentComponent({
               color="#bce1e2"
               pdfEndpoint="appointments/pdf/confirm"
             />
+            <div className="mt-2"></div>
             <BoxOfInitialPagesComponent
               title="Agendamento confirmado"
               summary={`O próximo agendamento confirmado é o de ${

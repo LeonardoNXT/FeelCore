@@ -13,7 +13,7 @@ import ErrorComponent from "@/app/employee/appointments/components/errorComponen
 import EmployeeLinksComponent from "./components/EmployeeLinksComponent";
 
 export default function NavbarOfEmployeesComponent() {
-  const { user } = useEmployeeStore();
+  const { user, clearUser } = useEmployeeStore();
   const [mobile, setMobile] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [exitClicked, setExitClicked] = useState<boolean>(false);
@@ -74,6 +74,10 @@ export default function NavbarOfEmployeesComponent() {
               route="/"
               display="absolute"
               zIndex="20"
+              auxiliarFunction={() => {
+                console.log("[ ==== USUÁRIO LIMPO ==== ]");
+                clearUser();
+              }}
             />
           </AnimatePresence>
         )}

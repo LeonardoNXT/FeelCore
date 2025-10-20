@@ -8,14 +8,16 @@ export default function RefreshComponent({
   route,
   display,
   zIndex = "10",
+  auxiliarFunction,
 }: {
   title: string;
   route: string;
   display: string;
   zIndex?: string;
+  auxiliarFunction?: () => void | null;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  useRefreshAnimation(ref, route);
+  useRefreshAnimation(ref, route, auxiliarFunction);
 
   return (
     <motion.div

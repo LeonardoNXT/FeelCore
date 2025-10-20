@@ -6,7 +6,8 @@ import gsap from "gsap";
 
 export default function useRefreshAnimation(
   ref: RefObject<HTMLDivElement | null>,
-  route: string
+  route: string,
+  auxiliarFunction?: () => void
 ) {
   const router = useRouter();
   const pathname = usePathname();
@@ -25,6 +26,11 @@ export default function useRefreshAnimation(
         if (pathname == route) {
           console.log("Passou por aqui no refresh");
           return window.location.reload();
+        }
+
+        if (auxiliarFunction) {
+          auxiliarFunction();
+          console.log("[ ==== USUÁRIO LIMPO ==== ]");
         }
         router.push(route);
       }, []);

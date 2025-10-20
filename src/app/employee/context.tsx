@@ -1,13 +1,102 @@
 "use client";
+import { AnimatePresence } from "framer-motion";
+import useWarmingBox from "./appointments/hooks/useWarmingBox";
+import WarningBoxComponent from "./appointments/components/warningBoxComponent";
+import ScheduleAppointmentComponent from "./appointments/components/scheduleAppointmentsComponent";
+import ButtonPushRouteComponent from "./components/buttonPushRoute";
+import { useState } from "react";
+import TasksContentPadronizedComponent from "./tasks/components/tasksComponent";
+import useSetError from "./appointments/hooks/useSetError";
+import ErrorComponent from "./appointments/components/errorComponent";
+import MapOfSummaries from "./summaries/components/mapOfSummaries";
 import { motion } from "framer-motion";
 
 export default function MainRouteOfEmployeeConteiner() {
+  const { error, setError } = useSetError();
+  const [changePage, setChangePage] = useState<boolean>(false);
+  const { warningBox, setWarningBox, setConfirmWarmingBox } = useWarmingBox();
   return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3, delay: 1 }}
-      className="w-full min-h-screen relative bg-[#000] bg-[url('/background.jpg')] bg-cover bg-center flex justify-center"
-    ></motion.section>
+    <AnimatePresence>
+      {!changePage && (
+        <motion.section
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="w-full min-h-screen bg-[url('/background.jpg')] bg-fixed bg-cover relative"
+        >
+          <AnimatePresence>
+            {warningBox && (
+              <WarningBoxComponent
+                warningBox={warningBox}
+                setWarningBox={setWarningBox}
+                setConfirm={setConfirmWarmingBox}
+              />
+            )}
+          </AnimatePresence>
+          <AnimatePresence>
+            {error && (
+              <ErrorComponent
+                errorContent={error}
+                bg="bg-[#fff]"
+                display="fixed"
+                onClick={() => setError(null)}
+              />
+            )}
+          </AnimatePresence>
+
+          <div className="w-full md:flex md:justify-center min-h-screen backdrop-blur-3xl backdrop-sepia-50 relative">
+            <div className="w-full md:w-[800px] px-3 py-25 md:py-35 flex flex-col gap-2">
+              <div>
+                <div>
+                  <ButtonPushRouteComponent
+                    title="Agendamentos"
+                    route="/employee/appointments"
+                    setChangePage={setChangePage}
+                  />
+                  <ScheduleAppointmentComponent
+                    setWarningBox={setWarningBox}
+                    setConfirm={setConfirmWarmingBox}
+                  />
+                </div>
+                <div>
+                  <ButtonPushRouteComponent
+                    title="Tarefas"
+                    route="/employee/tasks"
+                    setChangePage={setChangePage}
+                  />
+                  <TasksContentPadronizedComponent
+                    endPoint="completed"
+                    firshTaskComponentContent={{
+                      from: "#eee",
+                      to: "#A5CF74",
+                      title: "Primeira tarefa concluída",
+                      summary:
+                        "Revise as tarefas que já foram finalizadas e acompanhe o progresso do paciente.",
+                    }}
+                    otherTasksContent={{
+                      from: "#eee",
+                      to: "#74CF7F",
+                      title: "Outras tarefas concluídas",
+                      summary:
+                        "Revise as tarefas que já foram finalizadas. Mantenha o histórico organizado e celebre a conquistas de seus pacientes.",
+                    }}
+                    setError={setError}
+                  />
+                </div>
+              </div>
+              <div>
+                <ButtonPushRouteComponent
+                  title="Resumos"
+                  route="/employee/summaries"
+                  setChangePage={setChangePage}
+                />
+                <MapOfSummaries setChangePage={setChangePage} />
+              </div>
+            </div>
+          </div>
+        </motion.section>
+      )}
+    </AnimatePresence>
   );
 }
