@@ -12,10 +12,17 @@ export default function MapComponentPadronized({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1, delay: (index + 5) / 10 }}
-      className={`w-[350px] md:w-[450px] h-full bg-gradient-to-br from-[#ffffff] to-[#ffffff25] ${
+      whileHover={{
+        scale: 1.02,
+        transition: { duration: 0.3, type: "spring", ease: "circInOut" },
+      }}
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.5 }}
+      layout
+      key={index}
+      transition={{ duration: 0.3, type: "spring", ease: "circInOut" }}
+      className={`min-w-[350px] md:min-w-[450px] h-full bg-gradient-to-br from-[#ffffff] to-[#ffffff25] ${
         center ? "flex justify-center items-center" : ""
       } rounded-3xl relative`}
     >

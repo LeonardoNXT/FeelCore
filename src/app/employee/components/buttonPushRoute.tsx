@@ -1,5 +1,5 @@
-import { MoveUpRight } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
+import { LoaderCircle, MoveUpRight } from "lucide-react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
@@ -15,6 +15,7 @@ export default function ButtonPushRouteComponent({
   setChangePage,
 }: Props) {
   const router = useRouter();
+  const [load, setLoad] = useState<boolean>(false);
 
   return (
     <motion.div
@@ -28,13 +29,18 @@ export default function ButtonPushRouteComponent({
         {title}
       </p>
       <div
-        className="w-10 h-10 rounded-full bg-[#eee] grid place-items-center px-2 py-2"
+        className="w-10 h-10 rounded-full bg-[#eee] grid place-items-center px-2 py-2 cursor-pointer"
         onClick={() => {
           setChangePage(true);
           router.push(route);
+          setLoad(true);
         }}
       >
-        <MoveUpRight className="text-[#333] w-full h-full duration-300 hover:rotate-45" />
+        {load ? (
+          <LoaderCircle className="text-[#333] w-full h-full animate-spin" />
+        ) : (
+          <MoveUpRight className="text-[#333] w-full h-full duration-300 hover:rotate-45" />
+        )}
       </div>
     </motion.div>
   );

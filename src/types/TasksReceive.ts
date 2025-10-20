@@ -16,6 +16,15 @@ export interface Tasks {
     };
     name: string;
   };
+  content_of_response?: {
+    title: string;
+    description: string;
+    archive?: {
+      archive_type: string;
+      public_id: string;
+      url: string;
+    };
+  };
   organization: string;
   status: "pending" | "complete";
   steps: {

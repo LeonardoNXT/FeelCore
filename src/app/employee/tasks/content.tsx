@@ -1,114 +1,80 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import BoxOfInitialPagesComponent from "../appointments/components/boxOfInitialComponents";
+import { useState } from "react";
 import SectionConteinerPadronized from "../components/sectionAndComponentPadronized";
-import { useTasksStore } from "@/stores/tasksStore";
 import useSetError from "../appointments/hooks/useSetError";
 import ErrorComponent from "../appointments/components/errorComponent";
-import { Tasks } from "@/types/TasksReceive";
-import useTask from "./hook/useTask";
-import PendingTaskComponent from "./components/pendingTaskComponent";
-import OtherTasksComponent from "./components/otherTasksComponent";
-import { getInitials } from "../appointments/components/getInitials";
-import FirstPendingTaskContent from "./components/firstTaskComponent";
 import ButtonPushRouteComponent from "../components/buttonPushRoute";
 import { AnimatePresence } from "framer-motion";
+import TasksContentPadronizedComponent from "./components/tasksComponent";
+
+const CONFIG_PAGE = [
+  {
+    ENDING_POINT: "completed",
+    FIRSH_TASK: {
+      title: "Primeira tarefa concluída",
+      summary:
+        "Revise as tarefas que já foram finalizadas e acompanhe seu progresso.",
+      from: "#eee",
+      to: "#74CFC9",
+    },
+    OTHER_TASKS: {
+      title: "Outras tarefas concluídas",
+      summary:
+        "Revise as tarefas que já foram finalizadas. Mantenha o histórico organizado e celebre suas conquistas.",
+      from: "#FDFFFC",
+      to: "#598B96",
+    },
+  },
+  {
+    ENDING_POINT: "pending",
+    FIRSH_TASK: {
+      title: "Primeira tarefa pendente",
+      summary:
+        "Visualize e acompanhe todas as tarefas que ainda precisam ser concluídas.",
+      from: "#eee",
+      to: "#CF8F74",
+    },
+    OTHER_TASKS: {
+      title: "Outras tarefas pendentes",
+      summary:
+        "Visualize e acompanhe todas as tarefas que ainda precisam ser concluídas. Mantenha o foco e organize suas prioridades.",
+      from: "#FDFFFC",
+      to: "#967C59",
+    },
+  },
+];
 
 export default function TaskContent() {
-  const { tasks, setTasks } = useTasksStore();
   const { error, setError } = useSetError();
-  const [first, setFirstTask] = useState<Tasks | null>(null);
   const [changePage, setChangePage] = useState<boolean>(false);
-  const {
-    otherTasks,
-    setOtherTasks,
-    pendingTaskSelected,
-    setPendingTaskSelected,
-  } = useTask();
 
-  useEffect(() => {
-    const fetchAPITEST = async () => {
-      try {
-        const response = await fetch("/api/tasks/pending", {
-          method: "POST",
-          credentials: "include",
-        });
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error();
-        }
-        setTasks(data);
-        console.log("[GET] : TAREFAS LISTADAS COM SUCESSO");
-      } catch (err) {
-        console.error("[ERRO] :", err);
-        setError({
-          error: "Houve um erro interno.",
-          message: "Tente novamente mais tarde.",
-        });
-      }
-    };
-    fetchAPITEST();
-  }, [setTasks, setError]);
-
-  useEffect(() => {
-    const pending = tasks.pendingTasks;
-    if (pending.length > 0) {
-      setFirstTask(pending[0]);
-      setOtherTasks(pending.slice(1));
-      console.log("[TASKS] :", {
-        content: pending,
-        total: pending.length,
-      });
-    } else {
-      console.log("[TASKS] : NÃO HÁ TAREFAS PENDENTES.");
-    }
-  }, [tasks, setOtherTasks]);
-
-  if (pendingTaskSelected) {
-    return (
-      <PendingTaskComponent
-        pendingTaskSelected={pendingTaskSelected}
-        setPendingTaskSelected={setPendingTaskSelected}
-        setError={setError}
-      />
-    );
-  } else {
-    return (
-      <AnimatePresence>
-        {!changePage && (
-          <SectionConteinerPadronized>
-            {error && (
-              <ErrorComponent
-                errorContent={error}
-                onClick={() => setError(null)}
-              />
-            )}
-            <ButtonPushRouteComponent
-              title="Criar nova tarefa"
-              route="/employee/tasks/create"
-              setChangePage={setChangePage}
+  return (
+    <AnimatePresence>
+      {!changePage && (
+        <SectionConteinerPadronized>
+          {error && (
+            <ErrorComponent
+              errorContent={error}
+              onClick={() => setError(null)}
             />
-            <BoxOfInitialPagesComponent
-              title="Primeira tarefa pendente"
-              summary="Visualize e acompanhe todas as tarefas que ainda precisam ser concluídas."
-              icon
-              urlImage={first?.intendedFor.avatar?.url}
-              fallbackImage={getInitials(first?.intendedFor.name)}
-            >
-              <FirstPendingTaskContent
-                first={first}
-                setPendingTaskSelected={setPendingTaskSelected}
-              />
-            </BoxOfInitialPagesComponent>
-
-            <OtherTasksComponent
-              otherTasks={otherTasks}
-              setPendingTaskSelected={setPendingTaskSelected}
+          )}
+          <ButtonPushRouteComponent
+            title="Criar nova tarefa"
+            route="/employee/tasks/create"
+            setChangePage={setChangePage}
+          />
+          {CONFIG_PAGE.map((component) => (
+            <TasksContentPadronizedComponent
+              key={component.ENDING_POINT}
+              endPoint={component.ENDING_POINT}
+              firshTaskComponentContent={component.FIRSH_TASK}
+              otherTasksContent={component.OTHER_TASKS}
+              setError={setError}
             />
-          </SectionConteinerPadronized>
-        )}
-      </AnimatePresence>
-    );
-  }
+          ))}
+        </SectionConteinerPadronized>
+      )}
+    </AnimatePresence>
+  );
 }

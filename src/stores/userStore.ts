@@ -1,39 +1,59 @@
+import { MoodDiaryEntry } from "@/app/employee/patients/[id]/components/getMoodDiary";
 import { create } from "zustand";
 
-interface MoodDiaryEntry {
-  emotion:
-    | "Feliz"
-    | "Perfeito"
-    | "Triste"
-    | "Horrível"
-    | "Neutro"
-    | "Irritante"
-    | "Estressante"
-    | "Cansativo"
-    | "Chocante"
-    | "Ruim"
-    | "Intenso";
-  intensity: number;
-  description: string;
-  date: string; // ISO string format
-  _id?: string; // MongoDB adiciona automaticamente
-}
-
-interface Customer {
+export interface Customer {
   _id: string;
   name: string;
   email: string;
+  birth_date: string;
+  is_minor: boolean;
   avatar?: {
     url: string;
     public_id: string;
   };
-  password: string;
-  age: number;
-  patient_of: string; // ObjectId do Employee (ou Employee populado)
-  client_of: string; // ObjectId da Organization
-  disorders: string[];
+  patient_of: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+  client_of: {
+    _id: string;
+    name: string;
+  };
+  anamnese_pdf?: {
+    public_id: string;
+    url: string;
+  };
   status: "Ativo" | "Inativo";
   mood_diary: MoodDiaryEntry[];
+
+  medical_history: {
+    previous_health_problems: string[];
+    current_medical_conditions: string[];
+    current_medications: string[];
+    allergies: string[];
+    surgeries: string[];
+    hospitalizations: string[];
+  };
+  assessment: {
+    family_history: {
+      mental_health_family: string[];
+      medical_family_history: string[];
+    };
+    psychiatric_history: {
+      previous_treatments: string[];
+      previous_medications: string[];
+      previous_hospitalizations: string[];
+    };
+  };
+  treatment_objectives: {
+    short_term_goals: string[];
+    long_term_goals: string[];
+    success_criteria: string[];
+  };
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }
 
 export interface Employee {

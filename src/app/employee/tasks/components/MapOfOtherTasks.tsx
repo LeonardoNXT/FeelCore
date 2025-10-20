@@ -4,22 +4,17 @@ import { getTime } from "../../appointments/components/getTime";
 import { MoveUpRight } from "lucide-react";
 import MapComponentPadronized from "../../appointments/components/MapComponentPadronized";
 import { Tasks } from "@/types/TasksReceive";
-import { Dispatch, SetStateAction } from "react";
+import { useRouter } from "next/navigation";
 
 type Props = {
   tasks: Tasks[] | null;
-  setPendingTaskSelected?: Dispatch<SetStateAction<Tasks | null>>;
-  setCompleteTaskSelected?: Dispatch<SetStateAction<Tasks | null>>;
 };
 
-export default function MapOfOtherTasksComponent({
-  tasks,
-  setPendingTaskSelected,
-  setCompleteTaskSelected,
-}: Props) {
+export default function MapOfOtherTasksComponent({ tasks }: Props) {
+  const router = useRouter();
   if (tasks) {
     return tasks.map((task, i) => (
-      <MapComponentPadronized key={i} index={i} center>
+      <MapComponentPadronized key={task._id} index={i} center>
         <div className="w-full flex flex-col items-center">
           <div className="w-full flex justify-end px-4 py-4">
             {task.intendedFor.avatar ? (
@@ -38,10 +33,11 @@ export default function MapOfOtherTasksComponent({
           </div>
           <div className="text-[#777] text-center py-8">
             {task.archive && (
-              <div className="text-[#777] text-[14px] w-full flex justify-center">
+              <div className="text-[#777] text-[14px] w-full flex justify-center gap-2">
                 <p className="px-2 bg-[#eeeeee00] w-max border-1 border-[#bbb] rounded-[10px]">
                   {task.archive.archive_type.toLocaleUpperCase()}
                 </p>
+                <p>{new Date(task.completionDate).toLocaleDateString()}</p>
               </div>
             )}
             <div className="text-[#333] font-bold text-3xl md:text-5xl flex gap-2 ">
@@ -55,13 +51,7 @@ export default function MapOfOtherTasksComponent({
             <div
               className="w-[40px] h-[40px] shadow-inner shadow-[#333] rounded-full grid place-items-center text-[#333] p-2 hover:bg-[#fff] duration-300 cursor-pointer"
               onClick={() => {
-                if (setPendingTaskSelected) {
-                  setPendingTaskSelected(task);
-                }
-                if (setCompleteTaskSelected) {
-                  setCompleteTaskSelected(task);
-                }
-                window.scrollTo({ top: 0 });
+                router.push(`/employee/tasks/${task._id}`);
               }}
             >
               <MoveUpRight className="w-full h-full duration-300 hover:rotate-45 " />

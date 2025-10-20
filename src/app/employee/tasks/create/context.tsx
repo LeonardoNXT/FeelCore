@@ -2,17 +2,15 @@
 import { useEffect, useState } from "react";
 import SetPatientComponent from "../../components/setPatient";
 import useSetPatient from "../../components/useStateSetPatients";
-import { motion } from "framer-motion";
 import InputComponentPadronized from "../../components/inputComponent";
 import InputFileComponent from "../../components/inputFileComponent";
 import useSetError from "../../appointments/hooks/useSetError";
-import ErrorComponent from "../../appointments/components/errorComponent";
 import InputDatePadronized from "../../components/InputDatePadronized";
 import useSetDate from "../../appointments/hooks/useSetHours";
 import useButtonFetch from "../../appointments/hooks/useButtonFetch";
 import ListCreateComponent from "../../components/listComponent";
 import ListAddedComponent from "../../components/listAddedComponent";
-import RefreshComponent from "../../components/refresh";
+import CreationSectionPadronized from "../../components/creationSectionPadrozided";
 
 export interface List {
   list: string[] | [];
@@ -145,112 +143,100 @@ export default function CreateTasksContent() {
   }, [patientSelected]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-      className="w-full min-h-screen h-full bg-[url('/background.jpg')] bg-center bg-cover bg-fixed relative"
+    <CreationSectionPadronized
+      error={{
+        background: "bg-[#fff]",
+        display: "fixed",
+        error: error,
+        setError: setError,
+      }}
+      success={{
+        display: "fixed",
+        route: "/employee/tasks",
+        state: sucess,
+        title: "Tarefa criada com sucesso.",
+      }}
     >
-      {sucess && (
-        <RefreshComponent
-          title="Tarefa criada com sucesso."
-          display="fixed"
-          route="/employee/tasks"
+      <SetPatientComponent
+        patients={patients}
+        setPatients={setPatients}
+        patientSelected={patientSelected}
+        setPatientSelected={setPatientSelected}
+        title="Para registrar uma nova tarefa, selecione um paciente."
+      />
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          setFetchState("pending");
+          createTaskApi();
+        }}
+        className="w-full flex flex-col gap-2"
+      >
+        <InputFileComponent
+          title="Anexar Arquivo"
+          archive={archive}
+          setArchive={setArchive}
+          setError={setError}
         />
-      )}
-      {error && (
-        <ErrorComponent
-          display="fixed"
-          bg="bg-[#fff]"
-          errorContent={error}
-          onClick={() => setError(null)}
+        <InputComponentPadronized
+          title="Título da tarefa"
+          summary="Adicione um título descritivo para facilitar a organização e visualização da tarefa."
+          placeHolder="Título :"
+          setInputTitle={setInputTitle}
+          inputTitle={inputTitle}
+          typeInput="text"
+          maxLength={CONFIG.INPUT_TEXT.MAX}
+          minLength={CONFIG.INPUT_TEXT.MIN}
         />
-      )}
-
-      <div className="w-full h-full flex justify-center backdrop-blur-2xl backdrop-sepia-50">
-        <div className="max-w-[900px] w-full px-4 md:px-0 py-30 flex items-center flex-col gap-2">
-          <SetPatientComponent
-            patients={patients}
-            setPatients={setPatients}
-            patientSelected={patientSelected}
-            setPatientSelected={setPatientSelected}
-            title="Para registrar uma nova tarefa, selecione um paciente."
-          />
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              setFetchState("pending");
-              createTaskApi();
-            }}
-            className="w-full flex flex-col gap-2"
+        <InputComponentPadronized
+          title="Descrição da tarefa"
+          summary="Inclua uma explicação sobre o conteúdo ou propósito da tarefa, para orientar o paciente durante sua execução."
+          placeHolder="Descrição :"
+          setInputTitle={setInputDescription}
+          inputTitle={inputDescription}
+          typeInput="textarea"
+          maxLength={CONFIG.INPUT_TEXTAREA.MAX}
+          minLength={CONFIG.INPUT_TEXTAREA.MIN}
+        />
+        <ListCreateComponent
+          title="Lista da Tarefa"
+          summary="Insira tarefas a serem realizadas pelo paciente."
+          list={list}
+          setList={setList}
+          setError={setError}
+          min={CONFIG.INPUT_LIST.MIN}
+          max={CONFIG.INPUT_LIST.MAX}
+        />
+        <ListAddedComponent
+          title="Item da lista"
+          summary="Adicione os itens que compõem a tarefa, detalhando cada passo que o paciente deve seguir para concluí-la corretamente."
+          list={list}
+          setList={setList}
+        />
+        <InputDatePadronized
+          title={"Data da tarefa"}
+          summary={
+            "Informe o prazo previsto para que o paciente visualize quando precisa finalizar a tarefa."
+          }
+          date={date}
+          setDate={setDate}
+          minDate={LIMIT_DATE}
+          hours={hours}
+          setHours={setHours}
+        />
+        <div className="w-full flex justify-end">
+          <button
+            type="submit"
+            className="px-5 w-full py-3 bg-[#181818] text-[16px] text-[#fff] border-2 hover:border-[#b8d7ff] hover:shadow-2xl hover:shadow-[#b8d7ff] rounded-4xl cursor-pointer duration-300 hover:bg-[#000000b7] hover:text-[#fff]"
           >
-            <InputFileComponent
-              title="Anexar Arquivo"
-              archive={archive}
-              setArchive={setArchive}
-              setError={setError}
-            />
-            <InputComponentPadronized
-              title="Título da tarefa"
-              summary="Adicione um título descritivo para facilitar a organização e visualização da tarefa."
-              placeHolder="Título :"
-              setInputTitle={setInputTitle}
-              inputTitle={inputTitle}
-              typeInput="text"
-              maxLength={CONFIG.INPUT_TEXT.MAX}
-              minLength={CONFIG.INPUT_TEXT.MIN}
-            />
-            <InputComponentPadronized
-              title="Descrição da tarefa"
-              summary="Inclua uma explicação sobre o conteúdo ou propósito da tarefa, para orientar o paciente durante sua execução."
-              placeHolder="Descrição :"
-              setInputTitle={setInputDescription}
-              inputTitle={inputDescription}
-              typeInput="textarea"
-              maxLength={CONFIG.INPUT_TEXTAREA.MAX}
-              minLength={CONFIG.INPUT_TEXTAREA.MIN}
-            />
-            <ListCreateComponent
-              title="Lista da Tarefa"
-              summary="Insira tarefas a serem realizadas pelo paciente."
-              list={list}
-              setList={setList}
-              setError={setError}
-              min={CONFIG.INPUT_LIST.MIN}
-              max={CONFIG.INPUT_LIST.MAX}
-            />
-            <ListAddedComponent
-              title="Item da lista"
-              summary="Adicione os itens que compõem a tarefa, detalhando cada passo que o paciente deve seguir para concluí-la corretamente."
-              list={list}
-              setList={setList}
-            />
-            <InputDatePadronized
-              title={"Data da tarefa"}
-              summary={
-                "Informe o prazo previsto para que o paciente visualize quando precisa finalizar a tarefa."
-              }
-              date={date}
-              setDate={setDate}
-              minDate={LIMIT_DATE}
-              hours={hours}
-              setHours={setHours}
-            />
-            <div className="w-full flex justify-end">
-              <button
-                type="submit"
-                className="px-5 w-full py-3 bg-[#181818] text-[16px] text-[#fff] border-2 hover:border-[#b8d7ff] hover:shadow-2xl hover:shadow-[#b8d7ff] rounded-4xl cursor-pointer duration-300 hover:bg-[#000000b7] hover:text-[#fff]"
-              >
-                {stateButton(fetchState, {
-                  pending: "Carregando...",
-                  completed: "Criado com sucesso",
-                  null: "Criar Tarafa",
-                })}
-              </button>
-            </div>
-          </form>
+            {stateButton(fetchState, {
+              pending: "Carregando...",
+              completed: "Criado com sucesso",
+              null: "Criar Tarafa",
+            })}
+          </button>
         </div>
-      </div>
-    </motion.div>
+      </form>
+    </CreationSectionPadronized>
   );
 }
