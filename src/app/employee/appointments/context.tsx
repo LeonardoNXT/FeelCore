@@ -1,18 +1,34 @@
 "use client";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { Appointments, useAppointmentsStore } from "@/stores/appointment";
-import PendingComponent from "./components/peding";
-import useGetHours from "./hooks/useGetHours";
-import FirshPedingAppoitmentComponent from "./components/firshPedingAppointment";
-import OtherPendingAppointmentsComponent from "./components/otherPendingAppointments";
-import ScheduleAppointmentComponent from "./components/scheduleAppointmentsComponent";
-import CardPadronizedComponent from "./components/cardPadronized";
 import ButtonPushRouteComponent from "../components/buttonPushRoute";
-import ConfirmPastAppointmentsComponent from "./components/confirmPastAppointmentsComponent";
-import WarningBoxComponent from "./components/warningBoxComponent";
 import useWarmingBox from "./hooks/useWarmingBox";
-import GetAppointmentsComponentPadronized from "./components/completeAppointments";
+
+// ⏳ Lazy-load de componentes pesados
+const PendingComponent = dynamic(() => import("./components/peding"));
+const FirshPedingAppoitmentComponent = dynamic(
+  () => import("./components/firshPedingAppointment")
+);
+const OtherPendingAppointmentsComponent = dynamic(
+  () => import("./components/otherPendingAppointments")
+);
+const ScheduleAppointmentComponent = dynamic(
+  () => import("./components/scheduleAppointmentsComponent")
+);
+const CardPadronizedComponent = dynamic(
+  () => import("./components/cardPadronized")
+);
+const ConfirmPastAppointmentsComponent = dynamic(
+  () => import("./components/confirmPastAppointmentsComponent")
+);
+const WarningBoxComponent = dynamic(
+  () => import("./components/warningBoxComponent")
+);
+const GetAppointmentsComponentPadronized = dynamic(
+  () => import("./components/completeAppointments")
+);
 
 export default function AppointmentsPageContext() {
   const { appointments, setAppointments } = useAppointmentsStore();
@@ -20,7 +36,7 @@ export default function AppointmentsPageContext() {
     useWarmingBox();
   const [appointmentPendingSeleted, setAppointmentPendingSeleted] =
     useState<Appointments | null>(null);
-  const [changePage, setChangePage] = useState<boolean>(false);
+  const [changePage, setChangePage] = useState(false);
 
   useEffect(() => {
     const fetchApiAppointments = async () => {
@@ -29,28 +45,15 @@ export default function AppointmentsPageContext() {
         credentials: "include",
       });
       const data = await response.json();
-      console.log(data);
       setAppointments(data.appointments);
     };
     fetchApiAppointments();
   }, [setAppointments]);
 
-  let otherAppointments = null;
-
   const conditionalOfAppointments = appointments.length > 0;
-  const dateTime = useGetHours(
-    conditionalOfAppointments ? appointments[0].startTime : null
-  );
 
-  if (conditionalOfAppointments) {
-    console.log(dateTime);
-    otherAppointments = appointments.filter((_, index) => index > 0);
-    console.log(otherAppointments);
-  }
-
-  useEffect(() => {
-    console.log("[confirmWarmingBox]", confirmWarmingBox);
-  }, [confirmWarmingBox]);
+  const otherAppointments =
+    conditionalOfAppointments && appointments.filter((_, i) => i > 0);
 
   return (
     <AnimatePresence>
@@ -96,45 +99,49 @@ export default function AppointmentsPageContext() {
                   confirm={confirmWarmingBox}
                   setConfirm={setConfirmWarmingBox}
                 />
+
                 <ScheduleAppointmentComponent
                   setWarningBox={setWarningBox}
                   setConfirm={setConfirmWarmingBox}
                 />
-                {appointments.length > 0 && (
-                  <CardPadronizedComponent
-                    title="Agendamentos pendentes"
-                    arrayOfItems={appointments}
-                  />
-                )}
-                {appointments.length > 0 && (
-                  <FirshPedingAppoitmentComponent
-                    appointment={appointments[0]}
-                    setAppointmentSeleted={setAppointmentPendingSeleted}
-                  />
-                )}
-                <AnimatePresence>
-                  {otherAppointments && otherAppointments.length > 0 && (
-                    <OtherPendingAppointmentsComponent
-                      otherAppointments={otherAppointments}
+
+                {conditionalOfAppointments && (
+                  <>
+                    <CardPadronizedComponent
+                      title="Agendamentos pendentes"
+                      arrayOfItems={appointments}
+                    />
+                    <FirshPedingAppoitmentComponent
+                      appointment={appointments[0]}
                       setAppointmentSeleted={setAppointmentPendingSeleted}
                     />
-                  )}
-                </AnimatePresence>
+                    <AnimatePresence>
+                      {otherAppointments && (
+                        <OtherPendingAppointmentsComponent
+                          otherAppointments={otherAppointments}
+                          setAppointmentSeleted={setAppointmentPendingSeleted}
+                        />
+                      )}
+                    </AnimatePresence>
+                  </>
+                )}
+
                 <GetAppointmentsComponentPadronized
                   title="Agendamentos concluídos"
-                  titlePdf="PDF - Agendamento concluídos"
-                  summaryPdf="Aqui, você pode gerar um documento em PDF contendo todos os agendamentos que já foram concluídos. Esse arquivo pode ser utilizado para fins de registro, análise ou compartilhamento. Para exportar, basta clicar na opção abaixo."
-                  summary="Aqui, você pode visualizar os agendamentos concluídos de todas as datas."
+                  titlePdf="PDF - Agendamentos concluídos"
+                  summaryPdf="Gere um PDF com todos os agendamentos já concluídos."
+                  summary="Visualize todos os agendamentos finalizados."
                   color="#746DFF"
                   pdfEndpoint="appointments/pdf/complete"
                   endpoint="appointments/complete/all"
                   buttons={{ cancel: false, pdf: true }}
                 />
+
                 <GetAppointmentsComponentPadronized
                   title="Agendamentos cancelados"
-                  titlePdf="PDF - Agendamento cancelados"
-                  summaryPdf="Aqui, você pode gerar um documento em PDF contendo todos os agendamentos que já foram cancelados. Esse arquivo pode ser utilizado para fins de registro, análise ou compartilhamento. Para exportar, basta clicar na opção abaixo."
-                  summary="Aqui, você pode visualizar os agendamentos cancelados de todas as datas."
+                  titlePdf="PDF - Agendamentos cancelados"
+                  summaryPdf="Gere um PDF com todos os agendamentos cancelados."
+                  summary="Visualize todos os agendamentos cancelados."
                   color="#FF6D6D"
                   pdfEndpoint="appointments/pdf/canceled"
                   endpoint="appointments/all/canceled"

@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://backend-fellsystem.vercel.app/:path*",
+        destination: "https://www.feelsystem.com.br/:path*",
       },
     ];
   },

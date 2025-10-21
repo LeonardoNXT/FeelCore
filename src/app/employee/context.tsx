@@ -1,20 +1,31 @@
 "use client";
-import { AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
+import { AnimatePresence, motion } from "framer-motion";
 import useWarmingBox from "./appointments/hooks/useWarmingBox";
-import WarningBoxComponent from "./appointments/components/warningBoxComponent";
-import ScheduleAppointmentComponent from "./appointments/components/scheduleAppointmentsComponent";
-import ButtonPushRouteComponent from "./components/buttonPushRoute";
 import { useState } from "react";
-import TasksContentPadronizedComponent from "./tasks/components/tasksComponent";
+import ButtonPushRouteComponent from "./components/buttonPushRoute";
 import useSetError from "./appointments/hooks/useSetError";
-import ErrorComponent from "./appointments/components/errorComponent";
-import MapOfSummaries from "./summaries/components/mapOfSummaries";
-import { motion } from "framer-motion";
+const WarningBoxComponent = dynamic(
+  () => import("./appointments/components/warningBoxComponent")
+);
+const ErrorComponent = dynamic(
+  () => import("./appointments/components/errorComponent")
+);
+const ScheduleAppointmentComponent = dynamic(
+  () => import("./appointments/components/scheduleAppointmentsComponent")
+);
+const TasksContentPadronizedComponent = dynamic(
+  () => import("./tasks/components/tasksComponent")
+);
+const MapOfSummaries = dynamic(
+  () => import("./summaries/components/mapOfSummaries")
+);
 
 export default function MainRouteOfEmployeeConteiner() {
   const { error, setError } = useSetError();
-  const [changePage, setChangePage] = useState<boolean>(false);
+  const [changePage, setChangePage] = useState(false);
   const { warningBox, setWarningBox, setConfirmWarmingBox } = useWarmingBox();
+
   return (
     <AnimatePresence>
       {!changePage && (
@@ -34,6 +45,7 @@ export default function MainRouteOfEmployeeConteiner() {
               />
             )}
           </AnimatePresence>
+
           <AnimatePresence>
             {error && (
               <ErrorComponent
@@ -79,7 +91,7 @@ export default function MainRouteOfEmployeeConteiner() {
                       to: "#74CF7F",
                       title: "Outras tarefas concluídas",
                       summary:
-                        "Revise as tarefas que já foram finalizadas. Mantenha o histórico organizado e celebre a conquistas de seus pacientes.",
+                        "Revise as tarefas que já foram finalizadas. Mantenha o histórico organizado e celebre as conquistas de seus pacientes.",
                     }}
                     setError={setError}
                   />

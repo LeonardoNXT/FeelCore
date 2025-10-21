@@ -94,7 +94,7 @@ export default function ScheduleAppointmentComponent({
               title="Agendamento confirmado"
               summary={`O próximo agendamento confirmado é o de ${
                 firsh.intendedFor.name.split(" ")[0]
-              }. Você pode relembrar ela de sua consula pelo envio por email, logo abaixo.`}
+              }. Você pode relembrá-la da consulta enviando um e-mail logo abaixo.`}
               icon
               urlImage={firsh.intendedFor.avatar?.url}
               fallbackImage={firsh.intendedFor.name}
