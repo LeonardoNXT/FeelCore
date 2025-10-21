@@ -1,12 +1,18 @@
 "use client";
-
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import SectionConteinerPadronized from "../components/sectionAndComponentPadronized";
 import useSetError from "../appointments/hooks/useSetError";
-import ErrorComponent from "../appointments/components/errorComponent";
+const ErrorComponent = dynamic(
+  () => import("../appointments/components/errorComponent"),
+  { ssr: false }
+);
 import ButtonPushRouteComponent from "../components/buttonPushRoute";
 import { AnimatePresence } from "framer-motion";
-import TasksContentPadronizedComponent from "./components/tasksComponent";
+const TasksContentPadronizedComponent = dynamic(
+  () => import("./components/tasksComponent"),
+  { ssr: false }
+);
 
 const CONFIG_PAGE = [
   {
