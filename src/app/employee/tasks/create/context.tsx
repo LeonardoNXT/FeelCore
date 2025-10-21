@@ -1,16 +1,25 @@
 "use client";
 import { useEffect, useState } from "react";
-import SetPatientComponent from "../../components/setPatient";
 import useSetPatient from "../../components/useStateSetPatients";
 import InputComponentPadronized from "../../components/inputComponent";
-import InputFileComponent from "../../components/inputFileComponent";
 import useSetError from "../../appointments/hooks/useSetError";
 import InputDatePadronized from "../../components/InputDatePadronized";
 import useSetDate from "../../appointments/hooks/useSetHours";
 import useButtonFetch from "../../appointments/hooks/useButtonFetch";
-import ListCreateComponent from "../../components/listComponent";
-import ListAddedComponent from "../../components/listAddedComponent";
 import CreationSectionPadronized from "../../components/creationSectionPadrozided";
+import dynamic from "next/dynamic";
+const SetPatientComponent = dynamic(
+  () => import("../../components/setPatient")
+);
+const ListCreateComponent = dynamic(
+  () => import("../../components/listComponent")
+);
+const ListAddedComponent = dynamic(
+  () => import("../../components/listAddedComponent")
+);
+const InputFileComponent = dynamic(
+  () => import("../../components/inputFileComponent")
+);
 
 export interface List {
   list: string[] | [];
@@ -64,21 +73,17 @@ export default function CreateTasksContent() {
   };
 
   const verifyInputs = () => {
-    if (inputTitle.length < CONFIG.INPUT_TEXT.MIN) {
+    if (
+      inputTitle.length < CONFIG.INPUT_TEXT.MIN ||
+      inputDescription.length < CONFIG.INPUT_TEXTAREA.MIN
+    ) {
       setError({
-        error: "O título é muito pequeno.",
-        message: `A quantidade mínina é de ${CONFIG.INPUT_TEXT.MIN} caractéres.`,
+        error:
+          "Os itens 'Título' ou 'Descrição' não foram preenchidos corretamente.",
+        message: `Confira a quantidade mínima de caractéres conforme o estipulado.`,
       });
       setFetchState(null);
-      return inputTitle.length <= CONFIG.INPUT_TEXT.MIN;
-    }
-    if (inputDescription.length <= CONFIG.INPUT_TEXTAREA.MIN) {
-      setError({
-        error: "A descrição é muito pequena.",
-        message: `A quantidade mínina é ${CONFIG.INPUT_TEXTAREA.MIN} de  caractéres.`,
-      });
-      setFetchState(null);
-      return inputDescription.length >= CONFIG.INPUT_TEXTAREA.MIN;
+      return false;
     }
     return true;
   };
@@ -128,6 +133,7 @@ export default function CreateTasksContent() {
         if (!response.ok) {
           throw new Error();
         }
+        setError(null);
         setSucess(true);
       } catch (err) {
         console.log(err);
