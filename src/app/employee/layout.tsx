@@ -1,7 +1,7 @@
 import NavbarOfEmployeesComponent from "@/components/sidebar/headerofEmployees";
 import AuthWrapper from "./AuthWrapper";
 
-export default function AdminLayout({
+export default function EmployeeLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -9,7 +9,12 @@ export default function AdminLayout({
   return (
     <section className="w-full h-full relative">
       <NavbarOfEmployeesComponent />
-      <AuthWrapper>{children}</AuthWrapper>
+      <AuthWrapper
+        checkInterval={60000} // valida a cada 1 minuto
+        redirectTo="/login/employee"
+      >
+        {children}
+      </AuthWrapper>
     </section>
   );
 }

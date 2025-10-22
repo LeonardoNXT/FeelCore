@@ -7,6 +7,7 @@ import PatientMainContentComponent from "./components/patientMainContent";
 import PatientMoodDiaryComponent from "./components/moodDiaryPatientComponent";
 import useSetError from "../../appointments/hooks/useSetError";
 import ErrorComponent from "../../appointments/components/errorComponent";
+import TaskOfTheUser from "./components/tasksOfTheUser";
 
 export default function PatientOfEmployeeContent({
   params,
@@ -82,6 +83,7 @@ export default function PatientOfEmployeeContent({
                     CONFIG_PAGE={CONFIG_PAGE}
                   />
                 )}
+                <TaskOfTheUser patient={patient} />
               </motion.section>
             ) : (
               <motion.div
