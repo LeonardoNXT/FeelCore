@@ -12,6 +12,7 @@ export default function EmployeeLayout({
       <AuthWrapper
         checkInterval={60000} // valida a cada 1 minuto
         redirectTo="/login/employee"
+        valideRole="employee"
       >
         {children}
       </AuthWrapper>

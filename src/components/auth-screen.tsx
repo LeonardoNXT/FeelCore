@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import Iridescence from "@/blocks/Backgrounds/Beams/Beams";
 import { AnimatePresence, motion } from "framer-motion";
 import RefreshComponent from "@/app/employee/components/refresh";
@@ -13,7 +12,6 @@ type Redirect = {
 };
 
 export default function AuthScreen({ endpoint }: { endpoint: string }) {
-  const router = useRouter();
   const email = useRef<HTMLInputElement>(null);
   const senha = useRef<HTMLInputElement>(null);
   const button = useRef<HTMLButtonElement>(null);
@@ -49,10 +47,11 @@ export default function AuthScreen({ endpoint }: { endpoint: string }) {
       route: "",
     };
 
-    if (role === "employee" || "patient") {
+    if (role === "employee" || role === "patient") {
       query.route = `/${role}`;
-    } else {
+    } else if (role === "adm") {
       query.route = "/admin";
+      console.log("aqui");
     }
 
     console.log(query.route);

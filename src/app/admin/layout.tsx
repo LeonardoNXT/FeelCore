@@ -6,6 +6,7 @@ import SideBarPage from "@/components/sidebar/links";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
 import RefreshComponent from "../employee/components/refresh";
+import AuthWrapper from "../employee/AuthWrapper";
 
 export default function AdminLayout({
   children,
@@ -73,36 +74,38 @@ export default function AdminLayout({
   }
 
   return (
-    <motion.section
-      className="flex w-full relative min-h-screen"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-    >
-      <SideBarPage
-        onMenuToggle={handleMenuToggle}
-        setHandleLogout={setHandleLogout}
-      />
+    <AuthWrapper valideRole="adm">
+      <motion.section
+        className="flex w-full relative min-h-screen"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      >
+        <SideBarPage
+          onMenuToggle={handleMenuToggle}
+          setHandleLogout={setHandleLogout}
+        />
 
-      <motion.main
-        className={`
+        <motion.main
+          className={`
           flex-1 h-full flex transition-all duration-300
           ${isMobile ? "w-full p-0" : "w-[85%] p-[0.5vw]"}
           ${isMobileMenuOpen ? "ml-0" : "ml-0"}
         `}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-      >
-        <motion.section
-          className="w-full"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
         >
-          {children}
-        </motion.section>
-      </motion.main>
-    </motion.section>
+          <motion.section
+            className="w-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            {children}
+          </motion.section>
+        </motion.main>
+      </motion.section>
+    </AuthWrapper>
   );
 }
