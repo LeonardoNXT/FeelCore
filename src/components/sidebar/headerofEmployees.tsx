@@ -13,7 +13,7 @@ import ErrorComponent from "@/app/employee/appointments/components/errorComponen
 import EmployeeLinksComponent from "./components/EmployeeLinksComponent";
 
 export default function NavbarOfEmployeesComponent() {
-  const { user, clearUser } = useEmployeeStore();
+  const { user, clearUser, setUser } = useEmployeeStore();
   const [mobile, setMobile] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [exitClicked, setExitClicked] = useState<boolean>(false);
@@ -21,6 +21,26 @@ export default function NavbarOfEmployeesComponent() {
   const [notificationOpen, setNotificationOpen] = useState<boolean>(false);
 
   const { setNotifications } = useNotificationApi();
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const response = await fetch("/api/auth/verify", {
+          credentials: "include",
+          method: "POST",
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.msg || "Houve um erro.");
+        }
+        setUser(data[0]);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUser();
+  }, [setUser]);
 
   useEffect(() => {
     let timeoutId: ReturnType<typeof setTimeout>;
@@ -64,7 +84,7 @@ export default function NavbarOfEmployeesComponent() {
       <motion.header
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.3, delay: 1 }}
+        transition={{ duration: 0.3 }}
         className="w-full fixed px-2 md:px-4 z-10 flex justify-center items-stretch"
       >
         {exitClicked && (
