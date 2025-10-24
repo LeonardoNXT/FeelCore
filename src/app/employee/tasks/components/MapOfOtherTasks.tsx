@@ -26,7 +26,7 @@ export default function MapOfOtherTasksComponent({ tasks }: Props) {
                 className="rounded-full border-1 border-[#c7bca2]"
               />
             ) : (
-              <div className="h-[40px] w-[40px] rounded-full bg-[#333] text-[#eee] border-1 border-[#c7bca2]">
+              <div className="h-[40px] w-[40px] rounded-full bg-[#333] text-[14px] text-[#eee] border-3 border-[#c7bca2] flex justify-center items-center">
                 {getInitials(task.intendedFor.name)}
               </div>
             )}

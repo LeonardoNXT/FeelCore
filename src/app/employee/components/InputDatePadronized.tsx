@@ -6,7 +6,8 @@ type Props = {
   summary: string;
   date: string;
   setDate: Dispatch<SetStateAction<string>>;
-  minDate: string;
+  minDate?: string;
+  maxDate?: string;
   hours?: string;
   setHours?: Dispatch<SetStateAction<string>>;
 };
@@ -17,6 +18,7 @@ export default function InputDatePadronized({
   date,
   setDate,
   minDate,
+  maxDate,
   setHours,
   hours,
 }: Props) {
@@ -29,6 +31,7 @@ export default function InputDatePadronized({
           value={date}
           className="px-3 py-2  bg-[#222] border-1 border-[#333] rounded-full text-[#aaa] focus:outline-2 focus:outline-[#b8d7ff] duration-75 focus:text-[#fff] focus:shadow-[#b8d7ff] focus:shadow-lg"
           min={minDate}
+          max={maxDate}
           onChange={(e) => setDate(e.target.value)}
           required
         />

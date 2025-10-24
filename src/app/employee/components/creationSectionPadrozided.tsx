@@ -49,7 +49,7 @@ export default function CreationSectionPadronized({
       )}
 
       <div className="w-full h-full flex justify-center backdrop-blur-2xl backdrop-sepia-50">
-        <div className="max-w-[900px] w-full px-4 md:px-0 py-30 flex items-center flex-col gap-2">
+        <div className="max-w-[900px] min-h-screen w-full px-4 md:px-0 py-30 flex items-center flex-col gap-2">
           {children}
         </div>
       </div>

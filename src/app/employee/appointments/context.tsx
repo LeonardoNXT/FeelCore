@@ -87,7 +87,7 @@ export default function AppointmentsPageContext() {
           <div className="w-full md:flex md:justify-center min-h-screen backdrop-blur-3xl backdrop-sepia-50 relative">
             <div className="w-full md:w-[800px] px-3 py-25 md:py-35">
               <ButtonPushRouteComponent
-                title="Criar agendamento"
+                title="Criar Agendamento"
                 route="/employee/appointments/create"
                 setChangePage={setChangePage}
               />
