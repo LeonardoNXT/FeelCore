@@ -41,12 +41,18 @@ interface ApiResponse {
   message: string;
 }
 
+interface AppointmentsResponse {
+  total: number;
+  message: string;
+}
+
 export default function ContentOverView() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [ativos, setAtivos] = useState<number | 0>(0);
-  const [inativos, setInativos] = useState<number | 0>(0);
+  const [ativos, setAtivos] = useState<number>(0);
+  const [inativos, setInativos] = useState<number>(0);
+  const [totalAppointments, setTotalAppointments] = useState<number>(0);
 
   const getAllEmployees = async () => {
     try {
@@ -69,7 +75,7 @@ export default function ContentOverView() {
 
       const data: ApiResponse = await response.json();
       const sortedAndLimited = data.employees
-        .sort((a, b) => b.patients.length - a.patients.length) // Ordenar
+        .sort((a, b) => b.patients.length - a.patients.length)
         .slice(0, 3);
       setEmployees(sortedAndLimited);
       setAtivos(data.ativos);
@@ -87,8 +93,33 @@ export default function ContentOverView() {
     }
   };
 
+  const getAllAppointments = async () => {
+    try {
+      const response = await fetch("/api/appointments/all", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        const errorData: ApiError = await response.json();
+        throw new Error(
+          `Erro ${response.status}: ${
+            errorData.message || "Falha na requisição"
+          }`
+        );
+      }
+
+      const data: AppointmentsResponse = await response.json();
+      setTotalAppointments(data.total);
+      console.log("Total de agendamentos:", data.total);
+    } catch (err) {
+      console.error("Erro ao buscar agendamentos:", err);
+    }
+  };
+
   useEffect(() => {
     getAllEmployees();
+    getAllAppointments();
   }, []);
 
   useEffect(() => {
@@ -100,7 +131,7 @@ export default function ContentOverView() {
   return (
     <div className="w-full">
       <motion.div
-        className="w-full md:h-[98vh] relative md:rounded-tl-[2vw] md:rounded-[2vw] overflow-hidden"
+        className="w-full md:h-[100vh] 2xl:h-[98vh] relative 2xl:rounded-tl-[2vw] 2xl:rounded-[2vw] overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
@@ -128,7 +159,7 @@ export default function ContentOverView() {
                   Agendamentos
                 </p>
                 <div className="text-[40vw] md:text-[10vw] mb-[10vw] md:mb-0 font-bold leading-[0.9]">
-                  0
+                  {totalAppointments}
                 </div>
               </div>
             </div>
@@ -142,35 +173,31 @@ export default function ContentOverView() {
                 </div>
               </div>
               <div className="grid md:grid-cols-3 place-items-center gap-[2vw] px-[2vw] relative h-auto flex-1">
-                {employees.map(
-                  (
-                    employee // ✅ Parênteses para retorno implícito
-                  ) => (
-                    <div
-                      key={employee._id}
-                      className="md:w-full h-full flex-col flex justify-center items-center"
-                    >
-                      <p className="text-[10vw] md:text-[2vw] mb-[0.1vw]">
-                        {employee.name.split(" ")[0]}
-                      </p>
-                      {employee.avatar ? (
-                        <Image
-                          src={employee.avatar?.url || ""}
-                          alt={`Avatar de ${employee.name}`}
-                          fill
-                          className="rounded-[50%] object-cover aspect-square !relative !w-[80%] !h-auto"
-                        />
-                      ) : (
-                        <div className="w-[80%] aspect-square rounded-full bg-[#111] border-10 text-4xl flex justify-center items-center ">
-                          {getInitials(employee.name)}
-                        </div>
-                      )}
-                      <p className="mt-[3vw] md:mt-[0.7vw] text-[5.5vw] md:text-[1vw] border-1 px-[3vw] md:px-[0.8vw] md:py-[0.15vw] border-[#ffffff5b] rounded-[10vw] md:rounded-[2vw]">
-                        {employee.patients.length}
-                      </p>
-                    </div>
-                  )
-                )}
+                {employees.map((employee) => (
+                  <div
+                    key={employee._id}
+                    className="md:w-full h-full flex-col flex justify-center items-center"
+                  >
+                    <p className="text-[10vw] md:text-[2vw] mb-[0.1vw]">
+                      {employee.name.split(" ")[0]}
+                    </p>
+                    {employee.avatar ? (
+                      <Image
+                        src={employee.avatar?.url || ""}
+                        alt={`Avatar de ${employee.name}`}
+                        fill
+                        className="rounded-[50%] object-cover aspect-square !relative !w-[80%] !h-auto"
+                      />
+                    ) : (
+                      <div className="w-[80%] aspect-square rounded-full bg-[#111] border-10 text-4xl flex justify-center items-center ">
+                        {getInitials(employee.name)}
+                      </div>
+                    )}
+                    <p className="mt-[3vw] md:mt-[0.7vw] text-[5.5vw] md:text-[1vw] border-1 px-[3vw] md:px-[0.8vw] md:py-[0.15vw] border-[#ffffff5b] rounded-[10vw] md:rounded-[2vw]">
+                      {employee.patients.length}
+                    </p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

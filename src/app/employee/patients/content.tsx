@@ -95,7 +95,7 @@ export default function PatientContent() {
               color="#eb7a34"
               title="PDF - Pacientes"
               summary="Aqui você encontra as principais informações relacionadas ao paciente, como dados cadastrais, documentos anexados, observações clínicas e outras informações relevantes. Utilize esta seção para consultar ou atualizar os registros conforme necessário."
-              pdfEndpoint="patients/"
+              pdfEndpoint="/customers/pdf"
             />
           )}
           {patientsReceive && patientsReceive.total > 0 && (

@@ -218,6 +218,7 @@ export default function CadastroLastStep({
                 className="text-[#3f3f3f] text-[15px] px-4 py-2 border-1 border-[#00000046] rounded-2xl flex-1 w-auto font-bold"
                 placeholder="Aniversário"
                 type="date"
+                max={new Date().toISOString().split("T")[0]}
                 value={birthDate}
                 onChange={(e) => setBirthDate(e.target.value)}
                 required
@@ -287,7 +288,7 @@ export default function CadastroLastStep({
             <div className="w-full flex px-2 py-2 justify-between bg-[#ffffff] rounded-[40px] border-1 border-[#f7f7f7]">
               <button
                 type="button"
-                className="px-7 py-4 text-[14px] bg-[#fff] text-[#333] rounded-[60px]  border-1 border-[#f5f5f5]"
+                className="px-7 py-4 text-[14px] bg-[#fff] text-[#333] rounded-[60px]  border-1 border-[#f5f5f5] cursor-pointer duration-200 hover:bg-gray-200"
                 onClick={() => backPage()}
                 disabled={isLoading}
               >
@@ -295,7 +296,7 @@ export default function CadastroLastStep({
               </button>
               <button
                 type="submit"
-                className="px-6 py-3 text-[14px] bg-[#0084ff] border-1 border-[#f5f5f5] text-[#fff] duration-300 rounded-[60px] font-bold disabled:opacity-50"
+                className="px-6 py-3 text-[14px] bg-[#0084ff] border-1 border-[#f5f5f5] text-[#fff] duration-300 rounded-[60px] font-bold disabled:opacity-50 cursor-pointer hover:bg-blue-800"
                 disabled={isLoading}
               >
                 {isLoading ? "Cadastrando..." : "Concluir"}

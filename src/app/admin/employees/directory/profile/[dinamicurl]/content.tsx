@@ -187,7 +187,7 @@ export default function ProfileContent({ employeerId }: any) {
             alt="Imagem do Profissional"
             width={500}
             height={500}
-            className="rounded-full duration-300 absolute bottom-[-25%] md:w-[200px] md:ml-[1vw]"
+            className="rounded-full duration-300 absolute bottom-[-25%] w-[150px] md:w-[200px] md:ml-[1vw]"
           />
         ) : (
           <div className="h-[100px] w-[100px] bg-[#000] rounded-full absolute bottom-[-25%] md:w-[200px] md:h-[200px] md:ml-[1vw] flex justify-center items-center text-4xl border-8 md:border-[20px] border-[#ffffff] md:text-5xl">

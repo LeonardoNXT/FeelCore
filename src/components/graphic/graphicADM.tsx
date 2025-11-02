@@ -25,101 +25,158 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-export const description = "An interactive area chart";
-const chartData = [
-  {
-    date: "2025-05-12",
-    feliz: 100,
-    triste: 60,
-    neutro: 40,
-    furioso: 15,
-    suando: 10,
-    chocado: 30,
-    cansado: 12,
-    fogo: 50,
-  },
-  {
-    date: "2025-05-13",
-    feliz: 90,
-    triste: 55,
-    neutro: 35,
-    furioso: 12,
-    suando: 9,
-    chocado: 28,
-    cansado: 14,
-    fogo: 45,
-  },
-  {
-    date: "2025-05-14",
-    feliz: 95,
-    triste: 70,
-    neutro: 38,
-    furioso: 17,
-    suando: 11,
-    chocado: 32,
-    cansado: 16,
-    fogo: 55,
-  },
-  {
-    date: "2025-05-15",
-    feliz: 85,
-    triste: 65,
-    neutro: 42,
-    furioso: 14,
-    suando: 13,
-    chocado: 27,
-    cansado: 10,
-    fogo: 52,
-  },
-  {
-    date: "2025-05-16",
-    feliz: 105,
-    triste: 50,
-    neutro: 36,
-    furioso: 16,
-    suando: 12,
-    chocado: 35,
-    cansado: 13,
-    fogo: 48,
-  },
-  {
-    date: "2025-05-17",
-    feliz: 92,
-    triste: 58,
-    neutro: 39,
-    furioso: 13,
-    suando: 8,
-    chocado: 31,
-    cansado: 15,
-    fogo: 53,
-  },
-];
+interface MoodEntry {
+  date: string;
+  Feliz?: number;
+  "Muito feliz"?: number;
+  Triste?: number;
+  "Muito triste"?: number;
+  Indiferente?: number;
+  "Com raiva"?: number;
+  Furioso?: number;
+  Cansado?: number;
+  Ansioso?: number;
+  Envergonhado?: number;
+  Péssimo?: number;
+  Animado?: number;
+}
+
+interface EmotionsChartResponse {
+  period: string;
+  data: MoodEntry[];
+  emotions: string[];
+}
 
 const chartConfig = {
   feliz: { label: "Feliz", color: "#FFD700" },
+  "muito-feliz": { label: "Muito Feliz", color: "#FFA500" },
   triste: { label: "Triste", color: "#5DADE2" },
-  neutro: { label: "Neutro", color: "#AAB7B8" },
-  furioso: { label: "Estressante", color: "#E74C3C" },
-  suando: { label: "Cansativo", color: "#85C1E9" },
-  chocado: { label: "Chocante", color: "#F7DC6F" },
-  fogo: { label: "Intenso", color: "#FF4500" },
+  "muito-triste": { label: "Muito Triste", color: "#3498DB" },
+  indiferente: { label: "Indiferente", color: "#AAB7B8" },
+  "com-raiva": { label: "Com Raiva", color: "#E67E22" },
+  furioso: { label: "Furioso", color: "#E74C3C" },
+  cansado: { label: "Cansado", color: "#85C1E9" },
+  ansioso: { label: "Ansioso", color: "#F39C12" },
+  envergonhado: { label: "Envergonhado", color: "#E8DAEF" },
+  pessimo: { label: "Péssimo", color: "#C0392B" },
+  animado: { label: "Animado", color: "#2ECC71" },
 } as const;
 
 type EmotionKey = keyof typeof chartConfig;
 
+// Mapear emoções do backend para chaves do gráfico
+const emotionKeyMap: Record<string, EmotionKey> = {
+  Feliz: "feliz",
+  "Muito feliz": "muito-feliz",
+  Triste: "triste",
+  "Muito triste": "muito-triste",
+  Indiferente: "indiferente",
+  "Com raiva": "com-raiva",
+  Furioso: "furioso",
+  Cansado: "cansado",
+  Ansioso: "ansioso",
+  Envergonhado: "envergonhado",
+  Péssimo: "pessimo",
+  Animado: "animado",
+};
+
 export function ChartAreaInteractive() {
   const [timeRange, setTimeRange] = React.useState("90d");
+  const [chartData, setChartData] = React.useState<MoodEntry[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
 
-  const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
+  React.useEffect(() => {
+    const fetchEmotionsData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch("/api/emotions-chart", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error("Erro ao buscar dados das emoções");
+        }
+
+        const result: EmotionsChartResponse = await response.json();
+        setChartData(result.data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Erro desconhecido");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEmotionsData();
+  }, []);
+
+  const filteredData = React.useMemo(() => {
     const referenceDate = new Date();
     let daysToSubtract = 90;
+
     if (timeRange === "30d") daysToSubtract = 30;
     else if (timeRange === "7d") daysToSubtract = 7;
+
     const startDate = new Date(referenceDate);
     startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
-  });
+
+    return chartData
+      .filter((item) => {
+        const date = new Date(item.date);
+        return date >= startDate;
+      })
+      .map((item) => {
+        const transformedItem: Record<string, string | number> = {
+          date: item.date,
+        };
+
+        // Transformar as chaves das emoções do backend para o formato do gráfico
+        Object.entries(item).forEach(([key, value]) => {
+          if (key !== "date" && typeof value === "number") {
+            const mappedKey = emotionKeyMap[key];
+            if (mappedKey) {
+              transformedItem[mappedKey] = value;
+            }
+          }
+        });
+
+        return transformedItem;
+      });
+  }, [chartData, timeRange]);
+
+  if (loading) {
+    return (
+      <Card className="pt-0">
+        <CardHeader>
+          <CardTitle>Emoções</CardTitle>
+          <CardDescription>Carregando dados...</CardDescription>
+        </CardHeader>
+        <CardContent className="flex items-center justify-center h-[300px]">
+          <div className="text-muted-foreground">Carregando...</div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="pt-0">
+        <CardHeader>
+          <CardTitle>Emoções</CardTitle>
+          <CardDescription>Erro ao carregar dados</CardDescription>
+        </CardHeader>
+        <CardContent className="flex items-center justify-center h-[300px]">
+          <div className="text-destructive">{error}</div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="pt-0">
@@ -148,85 +205,103 @@ export function ChartAreaInteractive() {
         </Select>
       </CardHeader>
       <CardContent className="px-2 pt-3 sm:px-6 sm:pt-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[200px] sm:h-[250px] lg:h-[300px] w-full"
-        >
-          <AreaChart data={filteredData}>
-            <defs>
-              {(Object.keys(chartConfig) as EmotionKey[]).map((key) => (
-                <linearGradient
-                  key={key}
-                  id={`fill-${key}`}
-                  x1="0"
-                  y1="0"
-                  x2="0"
-                  y2="1"
-                >
-                  <stop
-                    offset="5%"
-                    stopColor={chartConfig[key].color}
-                    stopOpacity={0.8}
+        {filteredData.length === 0 ? (
+          <div className="flex items-center justify-center h-[300px]">
+            <div className="text-muted-foreground">
+              Nenhum dado disponível para o período selecionado
+            </div>
+          </div>
+        ) : (
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-[200px] sm:h-[250px] lg:h-[300px] w-full"
+          >
+            <AreaChart data={filteredData}>
+              <defs>
+                {(Object.keys(chartConfig) as EmotionKey[]).map((key) => (
+                  <linearGradient
+                    key={key}
+                    id={`fill-${key}`}
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop
+                      offset="5%"
+                      stopColor={chartConfig[key].color}
+                      stopOpacity={0.8}
+                    />
+                    <stop
+                      offset="95%"
+                      stopColor={chartConfig[key].color}
+                      stopOpacity={0.1}
+                    />
+                  </linearGradient>
+                ))}
+              </defs>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={20}
+                tick={{ fontSize: 12 }}
+                tickFormatter={(value: string) => {
+                  const date = new Date(value);
+                  return date.toLocaleDateString("pt-br", {
+                    month: "short",
+                    day: "numeric",
+                  });
+                }}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={
+                  <ChartTooltipContent
+                    labelFormatter={(value) => {
+                      return new Date(value as string).toLocaleDateString(
+                        "pt-br",
+                        {
+                          month: "short",
+                          day: "numeric",
+                        }
+                      );
+                    }}
+                    indicator="dot"
+                    className="max-w-[200px] text-xs"
                   />
-                  <stop
-                    offset="95%"
-                    stopColor={chartConfig[key].color}
-                    stopOpacity={0.1}
+                }
+              />
+
+              {(Object.keys(chartConfig) as EmotionKey[]).map((key) => {
+                const isZero = filteredData.every(
+                  (d) => !d[key] || d[key] === 0
+                );
+                return (
+                  <Area
+                    key={key}
+                    dataKey={key}
+                    type="natural"
+                    fill={`url(#fill-${key})`}
+                    stroke={chartConfig[key].color}
+                    strokeOpacity={isZero ? 0 : 1}
+                    fillOpacity={isZero ? 0 : 1}
+                    stackId={key}
+                    connectNulls={false}
                   />
-                </linearGradient>
-              ))}
-            </defs>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={20}
-              tick={{ fontSize: 12 }}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString("pt-br", {
-                  month: "short",
-                  day: "numeric",
-                });
-              }}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("pt-br", {
-                      month: "short",
-                      day: "numeric",
-                    });
-                  }}
-                  indicator="dot"
-                  className="max-w-[200px] text-xs"
-                />
-              }
-            />
-            {(Object.keys(chartConfig) as (keyof typeof chartConfig)[]).map(
-              (key) => (
-                <Area
-                  key={key}
-                  dataKey={key}
-                  type="natural"
-                  fill={`url(#fill-${key})`}
-                  stroke={chartConfig[key].color}
-                  stackId="a"
-                />
-              )
-            )}
-            <ChartLegend
-              content={
-                <ChartLegendContent className="flex-wrap justify-center gap-2 text-xs" />
-              }
-              wrapperStyle={{ paddingTop: "10px" }}
-            />
-          </AreaChart>
-        </ChartContainer>
+                );
+              })}
+              <ChartLegend
+                content={
+                  <ChartLegendContent className="flex-wrap justify-center gap-2 text-xs" />
+                }
+                wrapperStyle={{ paddingTop: "10px" }}
+              />
+            </AreaChart>
+          </ChartContainer>
+        )}
       </CardContent>
     </Card>
   );

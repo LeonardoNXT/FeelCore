@@ -16,13 +16,13 @@ export default function ContentENew() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="w-full h-[99.5vh] sm:h-[98vh] rounded-[2vw] relative overflow-hidden border-1 border-[#fff0]"
+      className="w-full h-screen 2xl:h-[98vh]  2xl:rounded-[2vw] relative overflow-hidden 2xl:border-1 border-[#fff0]"
     >
       <Image
         src={"/background5.webp"}
         fill
         alt="background"
-        className="w-full h-full absolute top-0 left-0 rounded-[2vw] brightness-[100%] saturate-0"
+        className="w-full h-full absolute top-0 left-0 2xl:rounded-[2vw] brightness-[100%] saturate-0"
       />
       <div className="w-full h-full bg-[#33333300] backdrop-blur-[30px] rounded-[2vw] relative p-[1vw] flex justify-center items-center">
         {pagina === 1 && <CadastroInicio setPagina={setPagina} />}

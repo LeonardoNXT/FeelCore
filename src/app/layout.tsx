@@ -28,7 +28,11 @@ export default function RootLayout({
   return (
     <html lang="pt-br" className="light" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/app.png" type="image/png" />
+        <link
+          rel="icon"
+          href="https://feelsystem.vercel.app/app.png"
+          type="image/png"
+        />
       </head>
       <body className={`${aeonik.className} antialiased`}>
         <ThemeProvider

@@ -206,7 +206,7 @@ export default function CreateAppointments() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: "spring", stiffness: 300 }}
-                  className="px-4 py-2 bg-[#000] text-[#eee] border-1 rounded-full outline-none focus:ring-2 focus:ring-white/50 min-w-[200px] text-left w-full"
+                  className="px-4 py-2 bg-[#000] text-[#eee] border-1 text-nowrap rounded-full outline-none focus:ring-2 focus:ring-white/50 min-w-[200px] text-left w-full"
                 >
                   {formatDate(selectedDate)}
                 </motion.button>
