@@ -1,6 +1,7 @@
 "use client";
 import { useConsumerStore } from "@/stores/consumesStrore";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -36,6 +37,7 @@ export default function EndingCadastroPatient({
   backPage: () => void;
   id: string | null;
 }) {
+  const router = useRouter();
   const [preview, setPreview] = useState<string | null>(null); // Correção na tipagem
   const [customer, setCustomer] = useState<CustomerState | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -143,15 +145,17 @@ export default function EndingCadastroPatient({
         <div className="mt-5 w-full flex justify-between px-2 py-2 border-1 border-[#cecece69]  rounded-[30px] bg-[#ffffffd3]">
           <button
             type="submit"
-            className="px-7 py-4 text-[14px] bg-[#fff] text-[#333333fb] rounded-[60px]  border-1 border-[#f5f5f5]"
+            className="px-7 py-4 text-[14px] bg-[#fff] text-[#333333fb] rounded-[60px]  border-1 border-[#f5f5f5] cursor-pointer duration-200 hover:bg-gray-200"
+            onClick={() => router.push(`/admin/`)}
           >
             Início
           </button>
           <button
             type="button"
-            className="px-6 py-3 text-[14px] bg-[#0165a7] border-1 border-[#f5f5f5] text-[#fff] duration-300 rounded-[60px] disabled:opacity-50"
+            className="px-6 py-3 text-[14px] bg-[#0165a7] border-1 border-[#f5f5f5] text-[#fff] duration-300 rounded-[60px] disabled:opacity-50 cursor-pointer hover:bg-blue-300"
+            onClick={() => router.push(`/admin/patients/directory/${id}`)}
           >
-            Cadastrar Novamente
+            Continuar modificando
           </button>
         </div>
       </motion.div>

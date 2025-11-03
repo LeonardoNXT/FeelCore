@@ -10,6 +10,7 @@ interface Props {
   summary: string;
   maxLength: number;
   minLength: number;
+  required?: boolean;
 }
 
 export default function InputComponentPadronized({
@@ -21,6 +22,7 @@ export default function InputComponentPadronized({
   typeInput,
   summary,
   placeHolder,
+  required,
 }: Props) {
   const colorLimit = ["text-[#7c2a2a]", "text-[#b8d7ff]", "text-[#333]"];
   const positionsLimit = ["top-1/2 translate-y-[-50%]", "bottom-4"];
@@ -38,7 +40,7 @@ export default function InputComponentPadronized({
     if (inputLength === maxLength) return colorLimit[2];
   }
   return (
-    <BaseCreateBoxComponent title={title} summary={summary}>
+    <BaseCreateBoxComponent title={title} summary={summary} required={required}>
       <div className="pt-2 w-full">
         <div className={`w-full relative ${typeInput == "textarea" && "h-50"}`}>
           {typeInput == "text" ? (
@@ -48,7 +50,7 @@ export default function InputComponentPadronized({
               placeholder={placeHolder}
               maxLength={maxLength}
               onChange={(e) => setInputTitle(e.target.value)}
-              required
+              required={required}
             />
           ) : (
             <textarea
@@ -56,7 +58,7 @@ export default function InputComponentPadronized({
               placeholder={placeHolder}
               maxLength={maxLength}
               onChange={(e) => setInputTitle(e.target.value)}
-              required
+              required={required}
             ></textarea>
           )}
           <div

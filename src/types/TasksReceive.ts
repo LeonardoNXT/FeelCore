@@ -32,7 +32,7 @@ export interface Tasks {
     style: "ordered" | "not ordered";
   };
   title: string;
-  updateAt: string;
+  updatedAt: string;
   _id: string;
 }
 

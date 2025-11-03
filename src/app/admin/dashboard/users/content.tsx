@@ -3,7 +3,6 @@ import { SectionCards } from "@/components/cards/cardsADM";
 import { ChartAreaInteractive } from "@/components/graphic/graphicADM";
 import { ChartPieDonutText } from "@/components/graphic/graphicADMCHARTAGE";
 import { ChartBarInteractive } from "@/components/graphic/graphicADMUSERS";
-import { ChartRadarDefault } from "@/components/graphic/graphicRadar";
 import { motion } from "framer-motion";
 
 export default function ContentDashboardUsers() {
@@ -57,9 +56,6 @@ export default function ContentDashboardUsers() {
 
         {/* Container dos outros gráficos - flex-col em mobile, flex-row em desktop */}
         <div className="w-full lg:w-1/2 flex flex-col lg:flex-row justify-between gap-2">
-          <div className="w-full mb-4 lg:mb-0">
-            <ChartRadarDefault />
-          </div>
           <div className="w-full">
             <ChartPieDonutText />
           </div>

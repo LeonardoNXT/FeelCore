@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
-import { Appointments, useAppointmentsStore } from "@/stores/appointment";
+import { Appointments } from "@/stores/appointment";
 import ButtonPushRouteComponent from "../components/buttonPushRoute";
 import useWarmingBox from "./hooks/useWarmingBox";
 
@@ -31,7 +31,10 @@ const GetAppointmentsComponentPadronized = dynamic(
 );
 
 export default function AppointmentsPageContext() {
-  const { appointments, setAppointments } = useAppointmentsStore();
+  const [appointments, setAppointments] = useState<Appointments[] | null>(null);
+  const [otherAppointments, setOtherAppointments] = useState<
+    Appointments[] | null
+  >(null);
   const { warningBox, setWarningBox, confirmWarmingBox, setConfirmWarmingBox } =
     useWarmingBox();
   const [appointmentPendingSeleted, setAppointmentPendingSeleted] =
@@ -50,10 +53,11 @@ export default function AppointmentsPageContext() {
     fetchApiAppointments();
   }, [setAppointments]);
 
-  const conditionalOfAppointments = appointments.length > 0;
+  useEffect(() => {
+    if (!appointments) return;
 
-  const otherAppointments =
-    conditionalOfAppointments && appointments.filter((_, i) => i > 0);
+    setOtherAppointments(appointments.filter((_, i) => i > 0));
+  }, [appointments]);
 
   return (
     <AnimatePresence>
@@ -87,7 +91,7 @@ export default function AppointmentsPageContext() {
           <div className="w-full md:flex md:justify-center min-h-screen backdrop-blur-3xl backdrop-sepia-50 relative">
             <div className="w-full md:w-[800px] px-3 py-25 md:py-35">
               <ButtonPushRouteComponent
-                title="Criar agendamento"
+                title="Criar Agendamento"
                 route="/employee/appointments/create"
                 setChangePage={setChangePage}
               />
@@ -105,7 +109,7 @@ export default function AppointmentsPageContext() {
                   setConfirm={setConfirmWarmingBox}
                 />
 
-                {conditionalOfAppointments && (
+                {appointments && appointments.length > 0 && (
                   <>
                     <CardPadronizedComponent
                       title="Agendamentos pendentes"
