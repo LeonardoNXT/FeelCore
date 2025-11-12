@@ -3,17 +3,17 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import SideBarPage from "@/components/sidebar/links";
-import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
 import RefreshComponent from "../employee/components/refresh";
 import AuthWrapper from "../employee/AuthWrapper";
+import { Organization } from "@/stores/userStore";
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { user, setUser } = useUserStore();
+  const [user, setUser] = useState<Organization | null>(null);
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -81,10 +81,13 @@ export default function AdminLayout({
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
-        <SideBarPage
-          onMenuToggle={handleMenuToggle}
-          setHandleLogout={setHandleLogout}
-        />
+        {user && (
+          <SideBarPage
+            onMenuToggle={handleMenuToggle}
+            setHandleLogout={setHandleLogout}
+            user={user}
+          />
+        )}
 
         <motion.main
           className={`
