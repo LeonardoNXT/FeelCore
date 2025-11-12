@@ -23,9 +23,11 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
-import { useUserStore } from "@/stores/userStore";
+import { Organization } from "@/stores/userStore";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { getInitials } from "@/app/employee/appointments/components/getInitials";
 
 interface NavItemProps {
   href?: string;
@@ -46,13 +48,15 @@ interface SubNavItemProps {
 interface SideBarPageProps {
   onMenuToggle?: (isOpen: boolean) => void;
   setHandleLogout: Dispatch<SetStateAction<boolean>>;
+  user: Organization;
 }
 
 export default function SideBarPage({
   onMenuToggle,
   setHandleLogout,
+  user,
 }: SideBarPageProps) {
-  const { user } = useUserStore();
+  const router = useRouter();
   const pathname = usePathname();
   const [isDashboardOpen, setIsDashboardOpen] = useState<boolean>(true);
   const [isEmployeesOpen, setIsEmployeesOpen] = useState<boolean>(true);
@@ -383,7 +387,10 @@ export default function SideBarPage({
                     <LogOut className="w-[15px]" />
                     <p className="tracking-wider">Sair</p>
                   </div>
-                  <div className="flex px-3 gap-2 text-[#333] py-1 border-1 border-[#d8d8d8] rounded-full text-[13px] items-center duration-200 hover:bg-[#fff] hover:gap-3 cursor-pointer select-none">
+                  <div
+                    onClick={() => router.push("/admin/config")}
+                    className="flex px-3 gap-2 text-[#333] py-1 border-1 border-[#d8d8d8] rounded-full text-[13px] items-center duration-200 hover:bg-[#fff] hover:gap-3 cursor-pointer select-none"
+                  >
                     <Cog className="w-[15px]" />
                     <p className="tracking-wider">Config.</p>
                   </div>
@@ -396,12 +403,18 @@ export default function SideBarPage({
             >
               <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
                 <span className="text-xs font-medium">
-                  <Image
-                    src={user.avatar}
-                    alt="Avatar do usuário"
-                    fill
-                    className="rounded-[50%] aspect-square !relative"
-                  />
+                  {user.avatar && user.avatar.url ? (
+                    <Image
+                      src={user.avatar?.url}
+                      alt="Avatar do usuário"
+                      fill
+                      className="rounded-[50%] aspect-square !relative"
+                    />
+                  ) : (
+                    <div className="rounded-full aspect-square flex justify-center items-center font-bold">
+                      {getInitials(user.name)}
+                    </div>
+                  )}
                 </span>
               </div>
               <div className="flex-1 min-w-0">

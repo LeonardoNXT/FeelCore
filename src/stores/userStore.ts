@@ -81,7 +81,10 @@ export interface Organization {
   _id: string;
   name: string;
   email: string;
-  avatar: string;
+  avatar?: {
+    url: string;
+    public_id: string;
+  };
   employees: Employee[]; // Array de objetos Employee populados
   customers: Customer[]; // Array de objetos Customer populados
 }
