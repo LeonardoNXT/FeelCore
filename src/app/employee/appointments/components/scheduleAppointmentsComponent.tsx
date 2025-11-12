@@ -4,7 +4,6 @@ import {
   AppointmentsScheduled,
   useAppointmentsScheduleStore,
 } from "@/stores/appointment";
-import { MoveRight } from "lucide-react";
 import CardPadronizedComponent from "./cardPadronized";
 import InsideBoxPadronizedFirshScheduledAppointments from "./boxInsidePadronizedScheduledAppointments";
 import OtherScheduledAppointmentsPadronizedComponent from "./otherAppoitmentsScheduledPadronized";
