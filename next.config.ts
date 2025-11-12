@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://127.0.0.1:3005/:path*",
+        destination: "https://backend-fellsystem.vercel.app/:path*",
       },
     ];
   },
