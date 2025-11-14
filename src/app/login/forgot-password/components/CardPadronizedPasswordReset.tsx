@@ -17,10 +17,10 @@ export default function CardPadronizedPasswordReset({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 1 }}
+      transition={{ duration: 0.3 }}
       className="w-full h-full flex justify-center items-center relative"
     >
-      <div className="w-full md:max-w-[500px]  rounded-4xl bg-[#ffffff34] border-1 border-[#ebebebbb]">
+      <div className="w-full md:max-w-[500px] backdrop-blur-1xl rounded-4xl bg-[#ffffff34] border-1 border-[#ebebebbb]">
         <div className="px-2 py-2 w-full rounded-4xl text-[#333]">
           <p className="px-5 py-2 border-1 w-max rounded-full tracking-widest text-[14px]">
             Etapa {config.progressNumber}/4
