@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Iridescence from "@/blocks/Backgrounds/Beams/Beams";
 import { AnimatePresence, motion } from "framer-motion";
 import RefreshComponent from "@/app/employee/components/refresh";
+import Link from "next/link";
 
 type Role = "employee" | "adm" | "patient";
 
@@ -159,9 +160,15 @@ export default function AuthScreen({ endpoint }: { endpoint: string }) {
                   onInput={validateForm}
                   ref={senha}
                 />
+                <Link
+                  href={"/login/forgot-password"}
+                  className="text-[#585858] hover:text-[#333] duration-300"
+                >
+                  Esqueceu a senha?
+                </Link>
                 <p className="text-sm lg:text-[0.8rem] text-center uppercase mb-4 lg:mb-[10px] text-[#8a8a8a] px-2">
                   Digite todos os dados corretamente para entrar
-                </p>
+                </p>{" "}
                 <button
                   ref={button}
                   disabled={!isFormValid}
