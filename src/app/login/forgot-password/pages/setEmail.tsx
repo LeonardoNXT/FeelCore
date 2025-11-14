@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Pages, UserPasswordFlow } from "../page";
 import CardPadronizedPasswordReset from "../components/CardPadronizedPasswordReset";
 import { motion } from "framer-motion";
+import { Loader2 } from "lucide-react";
 
 export default function SetEmailComponent({
   setPage,
@@ -16,6 +17,7 @@ export default function SetEmailComponent({
 }) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleNext = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -34,6 +36,7 @@ export default function SetEmailComponent({
 
   const forgotPassword = async () => {
     if (!user) return;
+    setLoading(true);
     try {
       const response = await fetch("/api/auth/forgot-password", {
         method: "POST",
@@ -59,6 +62,8 @@ export default function SetEmailComponent({
       const error = err as Error;
       console.log(error.message);
       setError(error.message || "Houve um erro interno.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,13 +99,16 @@ export default function SetEmailComponent({
           <button
             onClick={() => setPage("setRole")}
             className="px-4 py-2 border-1 border-[#eee] text-[#666] rounded-full cursor-pointer"
+            disabled={loading}
           >
             Voltar
           </button>
           <button
             onClick={handleNext}
-            className="px-4 py-2 border-1 border-[#eee] text-[#666] rounded-full cursor-pointer"
+            className="px-4 py-2 border-1 duration-150 hover:bg-gray-100 border-[#eee] text-[#666] rounded-full cursor-pointer flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading}
           >
+            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
             Próximo
           </button>
         </div>

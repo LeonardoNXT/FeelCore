@@ -1,7 +1,6 @@
-/* eslint-disable */
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,23 +28,43 @@ type Props = {
 export function OTPForm({ email, role, className, setPage, ...props }: Props) {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
-  const [resend, setResend] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [countdown, setCountdown] = useState(30);
+  const [canResend, setCanResend] = useState(false);
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else {
+      setCanResend(true);
+    }
+  }, [countdown]);
 
   const resendEmail = async () => {
+    if (!canResend) return;
+
+    setCanResend(false);
+    setCountdown(30);
+
     try {
-      const response = fetch("/api/auth/forgot-password", {
+      const response = await fetch("/api/auth/forgot-password", {
         method: "POST",
-        headers: {
-          "Content-Type": "application-json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email,
           role,
         }),
       });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || "Houve um erro interno");
+      }
     } catch (err) {
+      const error = err as Error;
       console.log(err);
+      setError(error.message);
+      setPage("setRole");
     }
   };
 
@@ -63,12 +82,10 @@ export function OTPForm({ email, role, className, setPage, ...props }: Props) {
     try {
       const res = await fetch("/api/auth/verify-code", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: email, // você recebe o email via props
+          email: email,
           token: otp,
         }),
       });
@@ -79,7 +96,6 @@ export function OTPForm({ email, role, className, setPage, ...props }: Props) {
         return;
       }
 
-      // deu tudo certo
       setPage("setNewPassword");
     } catch (error) {
       const err = error as Error;
@@ -147,14 +163,20 @@ export function OTPForm({ email, role, className, setPage, ...props }: Props) {
           </Button>
 
           <FieldDescription className="text-center">
-            Não recebeu o código?{" "}
-            <button
-              type="button"
-              className="underline"
-              onClick={() => resendEmail()}
-            >
-              Reenviar
-            </button>
+            {canResend ? (
+              <>
+                Não recebeu o código?{" "}
+                <button
+                  type="button"
+                  className="underline cursor-pointer"
+                  onClick={() => resendEmail()}
+                >
+                  Reenviar
+                </button>
+              </>
+            ) : (
+              <>Reenviar código em {countdown}s</>
+            )}
           </FieldDescription>
         </FieldGroup>
       </form>
