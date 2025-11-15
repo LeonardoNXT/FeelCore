@@ -52,49 +52,51 @@ export default function ForgotPassword() {
       </motion.div>
 
       <AnimatePresence mode="wait">
-        {page === "setRole" && (
-          <SetRoleComponent
-            setPage={setpage}
-            setUser={setUser}
-            key={"SetRoleComponent"}
-          />
-        )}
-        {page === "setEmail" && (
-          <SetEmailComponent
-            setPage={setpage}
-            setUser={setUser}
-            user={user}
-            key={"SetEmailComponent"}
-          />
-        )}
-        {page === "setToken" && (
-          <SetTokenComponent
-            setPage={setpage}
-            setUser={setUser}
-            user={user}
-            key={"SetTokenComponent"}
-          />
-        )}
-        {page === "setNewPassword" && (
-          <SetPasswordComponent
-            user={user}
-            key={"setNewPassword"}
-            setPage={setpage}
-          />
-        )}
-        {page === "refreshPage" && user && user.role && (
-          <div className="w-full h-full absolute z-10">
-            <RefreshComponent
-              display="flex"
-              zIndex="10"
-              route={`/login/${routes[user.role] as Route}`}
-              title="Senha alterada com sucesso."
-              auxiliarFunction={() => {
-                setUser(null);
-              }}
+        <div className="w-full h-full px-4 md:px-0">
+          {page === "setRole" && (
+            <SetRoleComponent
+              setPage={setpage}
+              setUser={setUser}
+              key={"SetRoleComponent"}
             />
-          </div>
-        )}
+          )}
+          {page === "setEmail" && (
+            <SetEmailComponent
+              setPage={setpage}
+              setUser={setUser}
+              user={user}
+              key={"SetEmailComponent"}
+            />
+          )}
+          {page === "setToken" && (
+            <SetTokenComponent
+              setPage={setpage}
+              setUser={setUser}
+              user={user}
+              key={"SetTokenComponent"}
+            />
+          )}
+          {page === "setNewPassword" && (
+            <SetPasswordComponent
+              user={user}
+              key={"setNewPassword"}
+              setPage={setpage}
+            />
+          )}
+          {page === "refreshPage" && user && user.role && (
+            <div className="w-full h-full absolute z-10">
+              <RefreshComponent
+                display="flex"
+                zIndex="10"
+                route={`/login/${routes[user.role] as Route}`}
+                title="Senha alterada com sucesso."
+                auxiliarFunction={() => {
+                  setUser(null);
+                }}
+              />
+            </div>
+          )}
+        </div>
       </AnimatePresence>
     </motion.main>
   );
